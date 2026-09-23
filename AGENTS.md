@@ -83,6 +83,44 @@ Regole utili, tutte verificabili sui PDF:
 
 Per rileggere un PDF: `pdftotext -layout "originali/<file>.pdf" -` (pacchetto poppler).
 
+## Delibere della scuola
+
+Qui sta lo stato di ciò che la scuola ha deciso, finché i dati non vivono nelle content collection.
+Quando ci saranno, questa sezione dirà solo quali classi sono deliberate e dove stanno i dati.
+
+- **Classi prime (2026/27), tutte le articolazioni offerte:** le 2 ore settimanali della quota a
+  disposizione (66 annue) vanno tutte a **Scienze sperimentali**, che passa da 4 a 6 ore
+  settimanali (da 132 a 198 annue).
+- **Compresenze delle prime:** non ancora ricevute. Il decreto fissa solo il totale (165 ore annue,
+  5 settimanali, per l'area di indirizzo della prima); la ripartizione tra le discipline la decide
+  la scuola.
+- **Classi dalla seconda alla quinta:** non deliberate.
+
+Nei dati, le ore assegnate dalla quota a disposizione vanno tenute **distinte** da quelle previste
+dal decreto per la disciplina, anche se in tabella si mostrano sommate. Solo così si può
+verificare il monte ore d'ambito e ricostruire in ogni momento il quadro ministeriale "generico"
+della brochure.
+
+## Requisiti di presentazione dei quadri orari
+
+Gran parte di chi visita il sito arriva scansionando il QR code della brochure, quindi **da
+smartphone**. Tutto deve funzionare prima di tutto su schermo stretto e con il tocco: niente
+informazioni raggiungibili solo con l'hover.
+
+- **A colpo d'occhio, una tabella semplice:** discipline e ore settimanali per anno. Nient'altro
+  che la appesantisca.
+- **Le compresenze fanno parte della tabella**, ma con una resa grafica più elegante di un numero
+  tra parentesi. Per esempio, le ore di una disciplina come segmenti, con quelle in compresenza
+  distinte visivamente e spiegate in legenda. Un lettore deve capire subito che sono comprese
+  nelle ore, non aggiunte.
+- **Informazioni su richiesta**, nascoste finché l'utente non le apre:
+  - le discipline che compongono *Scienze sperimentali* (Scienze della Terra, Biologia, Chimica,
+    Fisica);
+  - il monte ore annuo al posto delle ore settimanali;
+  - le note dei decreti, come quella su *Complementi di matematica*.
+- Le classi non ancora deliberate mostrano la quota a disposizione come **da definire**, in modo
+  chiaramente distinto dalle ore assegnate.
+
 ## Invarianti da far verificare alla build
 
 Un errore in un quadro orario finisce davanti alle famiglie. Lo schema dei dati o uno script di
