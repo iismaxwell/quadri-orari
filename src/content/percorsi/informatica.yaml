@@ -14,7 +14,7 @@ anni:
     stato: deliberato
     # Classi prime 2026/27: le 2 ore settimanali della quota vanno a Scienze sperimentali (da 4 a 6).
     quota:
-      scienze-sperimentali: 66
+      scienze-sperimentali: 99
     # Compresenze e ripartizione di Scienze sperimentali: deliberate, numeri non ancora ricevuti.
   2:
     stato: da-definire
