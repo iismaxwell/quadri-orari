@@ -1,18 +1,25 @@
 # Icone degli indirizzi
 
-Icone SVG degli indirizzi, le stesse del linguaggio visivo della scuola e della brochure. Si
-usano nel sito accanto al nome dell'indirizzo o dell'articolazione.
+Icone SVG dei sei indirizzi della scuola, le stesse del linguaggio visivo della scuola e della
+brochure. Un file per indirizzo o articolazione, con il suo slug come nome:
 
-Un file per indirizzo, con lo slug dell'indirizzo come nome:
-
-| File | Indirizzo | Articolazioni pubblicate |
+| File | Percorso | Riforma dei tecnici |
 |---|---|---|
-| `informatica-telecomunicazioni.svg` | Informatica e telecomunicazioni | Informatica, Telecomunicazioni |
-| `chimica-materiali-biotecnologie.svg` | Chimica, materiali e biotecnologie | Biotecnologie ambientali |
-| `meccanica-meccatronica-energia.svg` | Meccanica, meccatronica ed energia | Energia |
+| `informatica.svg` | Tecnico, Informatica e telecomunicazioni: articolazione Informatica | sì |
+| `telecomunicazioni.svg` | Tecnico, Informatica e telecomunicazioni: articolazione Telecomunicazioni | sì |
+| `biotecnologie-ambientali.svg` | Tecnico, Chimica, materiali e biotecnologie: articolazione Biotecnologie ambientali | sì |
+| `energia.svg` | Tecnico, Meccanica, meccatronica ed energia: articolazione Energia | sì |
+| `liceo-scienze-applicate.svg` | Liceo scientifico, opzione Scienze applicate | no |
+| `liceo-economico-sociale.svg` | Liceo delle scienze umane, opzione Economico-sociale | no |
 
-Se un giorno servirà un'icona per singola articolazione, avrà come nome lo slug dell'articolazione
-(es. `telecomunicazioni.svg`); dove manca, si usa l'icona dell'indirizzo.
+Caratteristiche utili per usarle:
 
-Sono file sorgente dell'identità visiva: non vanno ridisegnati né ricolorati a mano. Se il design
-del sito richiede un colore diverso, lo si ottiene da CSS (`currentColor`), non modificando il file.
+- Sono monocromatiche: i tracciati non hanno un colore esplicito, quindi con `fill: currentColor`
+  prendono il colore del testo. Fanno eccezione `biotecnologie-ambientali.svg` e
+  `liceo-economico-sociale.svg`, che hanno alcuni dettagli con `fill:white` esplicito: su fondo
+  scuro vanno verificate.
+- I `viewBox` hanno proporzioni diverse (da 448×512 a 627×384). Per allinearle vanno messe in un
+  contenitore di dimensione fissa con `object-fit`/`preserveAspectRatio`, non ridimensionate una
+  per una.
+- Sono file sorgente dell'identità visiva della scuola: non si ridisegnano. Colori e dimensioni si
+  gestiscono da CSS.

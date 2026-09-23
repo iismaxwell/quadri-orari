@@ -17,6 +17,13 @@ Contenuti: spiegazione della riforma, quadri orari per articolazione, download d
 ministeriali, FAQ e contatti per l'orientamento. I profili in uscita (allegati A-x) **non** si
 pubblicano come contenuto: servono solo come fonte.
 
+**Ambito:** la scuola ha sei indirizzi, quattro tecnici e due licei (Liceo scientifico opzione
+Scienze applicate e Liceo delle scienze umane opzione Economico-sociale). La riforma riguarda
+solo i tecnici, e il sito nasce per loro. Come **ultima fase** si aggiungono anche i quadri orari
+dei licei, così il sito diventa lo strumento di orientamento per tutta la scuola. I licei non
+hanno area di indirizzo flessibile né quota a disposizione: il modello dei dati deve prevedere un
+percorso senza quelle parti fin dall'inizio, senza doverlo rifare.
+
 ## Stack e pubblicazione
 
 - **Astro**, output completamente statico. I dati dei quadri orari stanno in content collections
@@ -97,6 +104,8 @@ Quando ci saranno, questa sezione dirà solo quali classi sono deliberate e dove
   5 settimanali, per l'area di indirizzo della prima); la ripartizione tra le discipline la decide
   la scuola.
 - **Classi dalla seconda alla quinta:** non deliberate.
+- **Licei:** quadri orari non ancora ricevuti. Serve anche sapere se la scuola usa quote di
+  autonomia o potenziamenti rispetto all'ordinamento nazionale.
 
 Nei dati, le ore assegnate dalla quota a disposizione vanno tenute **distinte** da quelle previste
 dal decreto per la disciplina, anche se in tabella si mostrano sommate. Solo così si può
@@ -122,10 +131,28 @@ informazioni raggiungibili solo con l'hover.
   - le note dei decreti, come quella su *Complementi di matematica*.
 - Le classi non ancora deliberate mostrano la quota a disposizione come **da definire**, in modo
   chiaramente distinto dalle ore assegnate.
+- **Filtro per periodo:** controlli "biennio" / "triennio" / "tutti e 5 gli anni". Servono in
+  modalità proiezione e sono utili anche su smartphone, dove biennio o triennio riducono le
+  colonne.
 - **Identità visiva:** quella della brochure. Ogni indirizzo ha la sua icona, già usata dalla
   scuola, in `src/assets/icone-indirizzi/` (convenzioni nel README della cartella).
 - Il brief completo per chi progetta la grafica, con i dati di esempio, è
   `docs/brief-design.md`. Se cambiano i requisiti qui sopra, va aggiornato anche il brief.
+
+### Modalità proiezione
+
+Dalla scheda di ogni indirizzo, un pulsante apre il quadro orario **a tutto schermo come una
+slide**. Si usa durante gli open day, proiettato sui televisori delle aule per i genitori.
+
+- Pensata per un televisore 16:9 guardato da qualche metro: testo grande, nessuno scorrimento.
+  Il quadro deve stare tutto in una schermata anche con 5 anni visibili.
+- Controlli a schermo per biennio / triennio / tutti. Da tastiera si usano le frecce e i tasti
+  pagina, così funzionano anche i telecomandi per presentazioni. I controlli si nascondono quando
+  non servono.
+- Usa la Fullscreen API. Dove non c'è (Safari su iPhone non la supporta per elementi che non
+  siano video), la stessa vista deve comunque occupare tutta la finestra.
+- Ogni vista di proiezione ha un **URL proprio**, che si può aprire e salvare nei preferiti sul
+  PC dell'aula.
 
 ## Invarianti da far verificare alla build
 

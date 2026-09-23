@@ -1,4 +1,4 @@
-# Brief di design — mini-sito "Nuovi istituti tecnici" dell'IIS J.C. Maxwell
+# Brief di design — mini-sito "Quadri orari" dell'IIS J.C. Maxwell
 
 ## 1. Contesto
 
@@ -12,6 +12,13 @@ Il nuovo ordinamento parte nel 2026/27 e la scuola delibera un anno alla volta: 
 solo le **classi prime**, le altre si aggiungeranno negli anni. Il design deve reggere questa
 crescita senza essere rifatto.
 
+La scuola ha **sei indirizzi**: quattro tecnici (Informatica, Telecomunicazioni, Biotecnologie
+ambientali, Energia) e due licei (Liceo scientifico opzione Scienze applicate, Liceo delle scienze
+umane opzione Economico-sociale). La riforma riguarda solo i tecnici, che hanno la priorità. I
+licei si aggiungeranno per ultimi, così il sito servirà all'orientamento di tutta la scuola:
+il design deve prevederli da subito. Il loro quadro orario è più semplice, senza area di
+indirizzo, quota a disposizione o "da definire".
+
 **Pubblico:** famiglie e ragazzi di terza media che scelgono la scuola superiore, più docenti e
 personale in orientamento. Non conoscono il linguaggio dei decreti ministeriali.
 
@@ -24,8 +31,8 @@ deve essere raggiungibile solo con l'hover.
 Il sito deve sembrare la continuazione della brochure. Materiali allegati:
 
 - la **brochure** (PDF o immagini): da qui colori, tipografia e tono;
-- le **icone degli indirizzi** (SVG), una per indirizzo, già usate nella comunicazione della
-  scuola: vanno usate così come sono, al massimo ricolorate;
+- le **sei icone degli indirizzi** (SVG monocromatici), già usate nella comunicazione della
+  scuola: vanno usate così come sono, al massimo ricolorate. Hanno proporzioni diverse tra loro;
 - il **logo** della scuola.
 
 Il tono è istituzionale ma accogliente: deve parlare a un ragazzo di 13 anni e ai suoi genitori,
@@ -34,9 +41,9 @@ non a un ispettore ministeriale.
 ## 3. Pagine
 
 1. **Home.** Cosa cambia con la riforma, in poche frasi e senza burocratese, e la scelta
-   dell'articolazione tramite le icone.
-2. **Pagina di articolazione**, una per ciascuna: Informatica, Telecomunicazioni, Biotecnologie
-   ambientali, Energia. Contiene il quadro orario (sezione 4) e poco altro.
+   dell'indirizzo tramite le sei icone. I tecnici vengono per primi, i licei sono ben distinti.
+2. **Scheda di indirizzo**, una per ciascuno dei sei. Contiene il quadro orario (sezione 4), il
+   pulsante per la modalità proiezione (sezione 5) e poco altro.
 3. **La riforma in breve.** Area generale e area di indirizzo, quota a disposizione della scuola,
    compresenze.
 4. **Documenti.** Download dei decreti ministeriali in PDF.
@@ -95,7 +102,29 @@ dell'anno con tabella a colonna singola, prima colonna fissa con scorrimento ori
 per disciplina o altro. Se una soluzione mostra un anno alla volta, di default si apre la 1ª,
 l'unico anno deliberato.
 
-## 5. Vincoli tecnici
+### Filtro per periodo
+
+Controlli **"Biennio" / "Triennio" / "Tutti e 5"** che mostrano solo le colonne scelte. Sono
+indispensabili nella modalità proiezione e aiutano anche sullo smartphone: biennio e triennio
+hanno due o tre colonne invece di cinque. Può darsi che risolvano da soli il problema dello
+schermo stretto.
+
+## 5. Modalità proiezione
+
+Durante gli open day la scuola proietta i quadri orari sui televisori delle aule, per i genitori.
+Dalla scheda di indirizzo, un pulsante **"A tutto schermo"** apre il quadro come se fosse una
+slide.
+
+- **Schermo:** televisore 16:9 (1920×1080), guardato da 3–6 metri. Testo grande, forte contrasto,
+  nessuno scorrimento: il quadro deve stare in una schermata anche con tutti e 5 gli anni.
+- **Contenuto:** nome e icona dell'indirizzo, quadro orario, compresenze leggibili a distanza. Il
+  resto del sito sparisce.
+- **Controlli:** Biennio / Triennio / Tutti e 5 grandi e chiari, più l'uscita. Si possono
+  comandare anche dalla tastiera o con un telecomando per presentazioni. Quando il mouse è fermo
+  si nascondono, così a schermo resta solo il quadro.
+- **Da valutare:** passare da un indirizzo al successivo senza uscire, come in una presentazione.
+
+## 6. Vincoli tecnici
 
 - Sito **statico** generato con Astro. Il JavaScript serve al massimo per interruttori e
   aperture; meglio se queste funzionano anche con elementi nativi (`<details>`).
@@ -104,18 +133,20 @@ l'unico anno deliberato.
 - Colori, font e spaziature forniti come **design token** (variabili CSS), così si applicano al
   codice senza reinterpretazioni.
 
-## 6. Cosa chiedo
+## 7. Cosa chiedo
 
 1. **Due o tre proposte del quadro orario**, ciascuna su smartphone e desktop, con i dati della
-   sezione 7. Ogni proposta deve mostrare: compresenze, Scienze sperimentali aperta e chiusa, anni
-   "da definire", interruttore settimanali/annue.
-2. Dopo la scelta, **home e pagina di articolazione** nella direzione scelta.
+   sezione 8. Ogni proposta deve mostrare: compresenze, Scienze sperimentali aperta e chiusa, anni
+   "da definire", interruttore settimanali/annue, filtro per periodo.
+2. Dopo la scelta, **home, scheda di indirizzo e modalità proiezione** nella direzione scelta. La
+   proiezione va mostrata sia con "Tutti e 5" sia con "Biennio".
 3. I **design token** della direzione scelta.
 
-## 7. Dati per le proposte
+## 8. Dati per le proposte
 
 Ore **settimanali**, dai decreti ministeriali e dalle delibere della scuola. I numeri sono reali
-salvo dove indicato **ESEMPIO FITTIZIO**. Sono dati per il design, non la fonte del sito.
+salvo dove indicato **ESEMPIO FITTIZIO**. Sono dati per il design, non la fonte del sito. I quadri
+dei licei non sono ancora disponibili: per le proposte bastano i tecnici.
 
 ### Area generale, uguale per tutte le articolazioni
 
