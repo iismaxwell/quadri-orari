@@ -32,7 +32,11 @@ Il sito deve sembrare la continuazione della brochure. Materiali allegati:
 
 - la **brochure** (PDF o immagini): da qui colori, tipografia e tono;
 - le **sei icone degli indirizzi** (SVG monocromatici), già usate nella comunicazione della
-  scuola: vanno usate così come sono, al massimo ricolorate. Hanno proporzioni diverse tra loro;
+  scuola: vanno usate così come sono, al massimo ricolorate. Hanno proporzioni diverse tra loro.
+  Sono già **duotone**: due livelli dello stesso colore (uno pieno, uno più chiaro) incorporati nel
+  file, pensati per prendere `currentColor` dal testo circostante — nessun colore va aggiunto nei
+  file stessi. Lo stesso principio (due toni dello stesso colore) può essere un'ispirazione coerente
+  per distinguere le ore in compresenza nella tabella (sezione 4);
 - il **logo** della scuola.
 
 Il tono è istituzionale ma accogliente: deve parlare a un ragazzo di 13 anni e ai suoi genitori,
