@@ -108,6 +108,9 @@ describe('quota a disposizione', () => {
 
   it('accetta una nuova classe deliberata con tutta la quota assegnata', async () => {
     const d = await datiReali();
+    // Telecomunicazioni condivide il primo biennio con informatica: qui si isola informatica per
+    // non coinvolgere l'invariante sulle articolazioni, che ha i suoi test dedicati più sotto.
+    delete d.percorsi.telecomunicazioni;
     informatica(d).anni[2] = { stato: 'deliberato', quota: { 'scienze-sperimentali': 66 } };
     expect(verificaDati(d)).toEqual([]);
   });
@@ -141,6 +144,8 @@ describe('ore settimanali intere (multipli di 33)', () => {
 describe('compresenze', () => {
   it('accetta compresenze che sommano al totale del decreto', async () => {
     const d = await datiReali();
+    // Isola informatica dal confronto col primo biennio di telecomunicazioni (vedi sopra).
+    delete d.percorsi.telecomunicazioni;
     informatica(d).anni[1].compresenze = { ...COMPRESENZE_PRIMA_FITTIZIE };
     expect(verificaDati(d)).toEqual([]);
   });
@@ -159,6 +164,8 @@ describe('compresenze', () => {
 
   it('conta le ore di quota tra quelle della disciplina', async () => {
     const d = await datiReali();
+    // Isola informatica dal confronto col primo biennio di telecomunicazioni (vedi sopra).
+    delete d.percorsi.telecomunicazioni;
     // 5 ore in compresenza su 6 di Scienze sperimentali (4 del decreto + 2 della quota).
     informatica(d).anni[1].compresenze = { 'scienze-sperimentali': 165 };
     expect(verificaDati(d)).toEqual([]);
@@ -180,6 +187,8 @@ describe('compresenze', () => {
 describe('ripartizioni', () => {
   it('accetta una ripartizione che somma alle ore della disciplina, quota compresa', async () => {
     const d = await datiReali();
+    // Isola informatica dal confronto col primo biennio di telecomunicazioni (vedi sopra).
+    delete d.percorsi.telecomunicazioni;
     informatica(d).anni[1].ripartizioni = { 'scienze-sperimentali': [...RIPARTIZIONE_PRIMA_FITTIZIA] };
     expect(verificaDati(d)).toEqual([]);
   });

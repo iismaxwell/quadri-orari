@@ -1,0 +1,26 @@
+# Tecnico, indirizzo Meccanica, meccatronica ed energia, articolazione Energia.
+# Qui stanno solo le scelte della scuola; le ore del decreto sono negli ordinamenti richiamati.
+# Ore annue, come nei decreti: 33 ore annue = 1 ora settimanale.
+tipo: tecnico
+nome: Energia
+indirizzo: Meccanica, meccatronica ed energia
+icona: energia
+ordine: 4
+areaGenerale: area-generale
+areaIndirizzo: c9-energia
+
+anni:
+  1:
+    stato: deliberato
+    # Classi prime 2026/27: le 2 ore settimanali della quota vanno a Scienze sperimentali (da 4 a 6).
+    quota:
+      scienze-sperimentali: 66
+    # Compresenze e ripartizione di Scienze sperimentali: deliberate, numeri non ancora ricevuti.
+  2:
+    stato: da-definire
+  3:
+    stato: da-definire
+  4:
+    stato: da-definire
+  5:
+    stato: da-definire

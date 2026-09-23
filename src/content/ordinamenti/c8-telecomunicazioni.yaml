@@ -1,0 +1,97 @@
+# Allegato C-8 — Quadro orario dell'area di indirizzo flessibile, articolazione Telecomunicazioni.
+# Ore annue, ricopiate dal PDF; colonne dalla 1ª alla 5ª. 33 ore annue = 1 ora settimanale.
+# Le discipline in comune con altri allegati usano lo stesso id (per esempio scienze-sperimentali).
+# Stesso indirizzo di c8-informatica: il primo biennio è identico (verificato alla build).
+area: indirizzo
+allegato: C-8
+titolo: Area di indirizzo flessibile
+fonte: All. C8 - TECNOLOGICO Quadro orario INFORMATICA + articolazioni DEF-signed.pdf
+settore: Tecnologico-ambientale
+indirizzo: Informatica e telecomunicazioni
+articolazione: Telecomunicazioni
+
+ambiti:
+  - id: scienze-sperimentali
+    nome: Scienze sperimentali
+    monteOre: { primoBiennio: 297 }
+  - id: tecnologie-di-base
+    nome: Tecnologie di base
+    monteOre: { primoBiennio: 198 }
+  - id: elementi-di-base
+    nome: Elementi di base dell’indirizzo
+    monteOre: { primoBiennio: 264 }
+  - id: elementi-caratterizzanti
+    nome: Elementi caratterizzanti l’indirizzo
+    monteOre: { secondoBiennio: 924, quintoAnno: 297 }
+
+discipline:
+  - id: scienze-sperimentali
+    nome: Scienze sperimentali
+    ambito: scienze-sperimentali
+    ore: [132, 165, 0, 0, 0]
+    note: [scienze-sperimentali]
+  - id: tecnologie-rappresentazione-grafica
+    nome: Tecnologie e tecniche di rappresentazione grafica
+    ambito: tecnologie-di-base
+    ore: [99, 99, 0, 0, 0]
+  - id: informatica-reti
+    nome: Informatica e reti di comunicazione
+    ambito: elementi-di-base
+    ore: [132, 132, 0, 0, 0]
+  - id: sistemi-reti
+    nome: Sistemi e reti
+    ambito: elementi-caratterizzanti
+    ore: [0, 0, 99, 99, 66]
+  - id: tecnologie-progettazione-sistemi
+    nome: Tecnologie e progettazione di sistemi informatici e di telecomunicazioni
+    ambito: elementi-caratterizzanti
+    ore: [0, 0, 66, 66, 66]
+  - id: telecomunicazioni
+    nome: Telecomunicazioni
+    ambito: elementi-caratterizzanti
+    ore: [0, 0, 198, 198, 165]
+  - id: informatica
+    nome: Informatica
+    ambito: elementi-caratterizzanti
+    ore: [0, 0, 66, 66, 0]
+  - id: complementi-matematica
+    nome: Complementi di matematica
+    ambito: elementi-caratterizzanti
+    ore: [0, 0, 33, 33, 0]
+    note: [complementi-matematica]
+
+# Riga "Quota del curricolo a disposizione della scuola": la assegnano le delibere, nei percorsi.
+quota:
+  ore: [66, 66, 99, 99, 231]
+  monteOre: { primoBiennio: 132, secondoBiennio: 198, quintoAnno: 231 }
+
+# Riga "di cui in compresenza": comprese nelle ore dell'area, non in aggiunta.
+compresenza:
+  ore: [165, 165, 264, 297, 297]
+  monteOre: { primoBiennio: 330, secondoBiennio: 561, quintoAnno: 297 }
+
+# Riga "Totale Area di indirizzo flessibile" (quota compresa).
+totali: [429, 462, 561, 561, 528]
+monteOreTotale: { primoBiennio: 891, secondoBiennio: 1122, quintoAnno: 528 }
+
+note:
+  - id: scienze-sperimentali
+    testo: >-
+      L’ambito delle Scienze sperimentali comprende più insegnamenti (Scienze della Terra,
+      Biologia, Chimica, Fisica) ed è da considerarsi disciplina unica. L’obiettivo primario delle
+      scienze sperimentali è quello di promuovere la padronanza del metodo scientifico, favorendo
+      anche la consapevolezza ambientale degli studenti attraverso lo studio di temi che li
+      collegano alla vita quotidiana e al mondo del lavoro. L’approccio alle Scienze sperimentali,
+      pertanto, è basato su una didattica che collega i diversi insegnamenti attraverso un
+      linguaggio comune e, sul piano metodologico, propone attività interdisciplinari. Tenendo
+      conto delle specificità dei diversi indirizzi e delle diverse articolazioni, e degli
+      eventuali insegnamenti di ambito scientifico presenti negli elementi di base del quadro
+      orario, le istituzioni scolastiche programmeranno le attività in modo da privilegiare i
+      contenuti e le aree scientifiche più coerenti con i profili di uscita.
+  - id: complementi-matematica
+    testo: >-
+      La disciplina Complementi di matematica è assegnata al medesimo insegnante di Matematica.
+      La programmazione delle attività didattiche di Complementi di matematica deve risultare
+      pienamente integrata sia con le discipline dell’area di indirizzo flessibile, sia con la
+      disciplina Matematica dell’area di istruzione generale nazionale. Le due discipline
+      costituiscono insegnamento con unica valutazione espressa negli scrutini periodici e finali.

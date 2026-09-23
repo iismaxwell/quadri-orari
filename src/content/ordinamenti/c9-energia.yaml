@@ -1,0 +1,97 @@
+# Allegato C-9 — Quadro orario dell'area di indirizzo flessibile, articolazione Energia.
+# Ore annue, ricopiate dal PDF; colonne dalla 1ª alla 5ª. 33 ore annue = 1 ora settimanale.
+# Le discipline in comune con altri allegati usano lo stesso id (per esempio scienze-sperimentali).
+# Nessun'altra articolazione dello stesso indirizzo è offerta dalla scuola.
+area: indirizzo
+allegato: C-9
+titolo: Area di indirizzo flessibile
+fonte: All. C9 - TECNOLOGICO Quadro orario MECCANICA + articolazioni DEF-signed.pdf
+settore: Tecnologico-ambientale
+indirizzo: Meccanica, meccatronica ed energia
+articolazione: Energia
+
+ambiti:
+  - id: scienze-sperimentali
+    nome: Scienze sperimentali
+    monteOre: { primoBiennio: 297 }
+  - id: tecnologie-di-base
+    nome: Tecnologie di base
+    monteOre: { primoBiennio: 198 }
+  - id: elementi-di-base
+    nome: Elementi di base dell’indirizzo
+    monteOre: { primoBiennio: 264 }
+  - id: elementi-caratterizzanti
+    nome: Elementi caratterizzanti l’indirizzo
+    monteOre: { secondoBiennio: 924, quintoAnno: 297 }
+
+discipline:
+  - id: scienze-sperimentali
+    nome: Scienze sperimentali
+    ambito: scienze-sperimentali
+    ore: [132, 165, 0, 0, 0]
+    note: [scienze-sperimentali]
+  - id: tecnologie-informazione-comunicazione
+    nome: Tecnologie dell’informazione e della comunicazione
+    ambito: tecnologie-di-base
+    ore: [99, 0, 0, 0, 0]
+  - id: tecnologie-rappresentazione-grafica
+    nome: Tecnologie e tecniche di rappresentazione grafica
+    ambito: tecnologie-di-base
+    ore: [0, 99, 0, 0, 0]
+  - id: fondamenti-meccanica-disegno
+    nome: Fondamenti di meccanica ed elementi di disegno
+    ambito: elementi-di-base
+    ore: [66, 66, 0, 0, 0]
+  - id: elettrotecnica-elettronica-meccatronica
+    nome: Elementi di elettrotecnica ed elettronica per la meccatronica
+    ambito: elementi-di-base
+    ore: [0, 66, 0, 0, 0]
+  - id: tecnologie-materiali
+    nome: Tecnologie dei materiali
+    ambito: elementi-di-base
+    ore: [66, 0, 0, 0, 0]
+  - id: impianti-macchine-sistemi-energia
+    nome: Impianti, macchine e sistemi automatici per l’energia
+    ambito: elementi-caratterizzanti
+    ore: [0, 0, 198, 198, 165]
+  - id: gestione-progetti-disegno-manutenzione-impianti
+    nome: Gestione dei progetti, disegno e manutenzione di impianti
+    ambito: elementi-caratterizzanti
+    ore: [0, 0, 132, 132, 132]
+  - id: meccanica-applicata-macchine
+    nome: Meccanica applicata alle macchine
+    ambito: elementi-caratterizzanti
+    ore: [0, 0, 66, 66, 0]
+  - id: tecnologie-materiali-tecniche-produzione
+    nome: Tecnologie dei materiali e tecniche di produzione
+    ambito: elementi-caratterizzanti
+    ore: [0, 0, 66, 66, 0]
+
+# Riga "Quota del curricolo a disposizione della scuola": la assegnano le delibere, nei percorsi.
+quota:
+  ore: [66, 66, 99, 99, 231]
+  monteOre: { primoBiennio: 132, secondoBiennio: 198, quintoAnno: 231 }
+
+# Riga "di cui in compresenza": comprese nelle ore dell'area, non in aggiunta.
+compresenza:
+  ore: [165, 165, 264, 297, 297]
+  monteOre: { primoBiennio: 330, secondoBiennio: 561, quintoAnno: 297 }
+
+# Riga "Totale Area di indirizzo flessibile" (quota compresa).
+totali: [429, 462, 561, 561, 528]
+monteOreTotale: { primoBiennio: 891, secondoBiennio: 1122, quintoAnno: 528 }
+
+note:
+  - id: scienze-sperimentali
+    testo: >-
+      L’ambito delle Scienze sperimentali comprende più insegnamenti (Scienze della Terra,
+      Biologia, Chimica, Fisica) ed è da considerarsi disciplina unica. L’obiettivo primario delle
+      scienze sperimentali è quello di promuovere la padronanza del metodo scientifico, favorendo
+      anche la consapevolezza ambientale degli studenti attraverso lo studio di temi che li
+      collegano alla vita quotidiana e al mondo del lavoro. L’approccio alle Scienze sperimentali,
+      pertanto, è basato su una didattica che collega i diversi insegnamenti attraverso un
+      linguaggio comune e, sul piano metodologico, propone attività interdisciplinari. Tenendo
+      conto delle specificità dei diversi indirizzi e delle diverse articolazioni, e degli
+      eventuali insegnamenti di ambito scientifico presenti negli elementi di base del quadro
+      orario, le istituzioni scolastiche programmeranno le attività in modo da privilegiare i
+      contenuti e le aree scientifiche più coerenti con i profili di uscita.

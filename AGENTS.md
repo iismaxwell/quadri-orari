@@ -171,8 +171,8 @@ sotto.
 I dati deliberati stanno nei file di `src/content/percorsi/`. Qui si tiene il riepilogo di ciò che
 la scuola ha deciso e di ciò che manca.
 
-- **Nei dati:** Informatica. Telecomunicazioni, Biotecnologie ambientali ed Energia non ci sono
-  ancora.
+- **Nei dati:** tutte e quattro le articolazioni offerte (Informatica, Telecomunicazioni,
+  Biotecnologie ambientali, Energia).
 - **Classi prime (2026/27), tutte le articolazioni offerte:** le 2 ore settimanali della quota a
   disposizione (66 annue) vanno tutte a **Scienze sperimentali**, che passa da 4 a 6 ore
   settimanali (da 132 a 198 annue).

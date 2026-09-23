@@ -1,0 +1,27 @@
+# Tecnico, indirizzo Informatica e telecomunicazioni, articolazione Telecomunicazioni.
+# Qui stanno solo le scelte della scuola; le ore del decreto sono negli ordinamenti richiamati.
+# Ore annue, come nei decreti: 33 ore annue = 1 ora settimanale.
+# Stesso indirizzo di informatica.yaml: il primo biennio deve restare identico (verificato alla build).
+tipo: tecnico
+nome: Telecomunicazioni
+indirizzo: Informatica e telecomunicazioni
+icona: telecomunicazioni
+ordine: 2
+areaGenerale: area-generale
+areaIndirizzo: c8-telecomunicazioni
+
+anni:
+  1:
+    stato: deliberato
+    # Classi prime 2026/27: le 2 ore settimanali della quota vanno a Scienze sperimentali (da 4 a 6).
+    quota:
+      scienze-sperimentali: 66
+    # Compresenze e ripartizione di Scienze sperimentali: deliberate, numeri non ancora ricevuti.
+  2:
+    stato: da-definire
+  3:
+    stato: da-definire
+  4:
+    stato: da-definire
+  5:
+    stato: da-definire
