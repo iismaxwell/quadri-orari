@@ -119,7 +119,9 @@ slide.
   nessuno scorrimento: il quadro deve stare in una schermata anche con tutti e 5 gli anni.
 - **Contenuto:** nome e icona dell'indirizzo, quadro orario, compresenze leggibili a distanza. Il
   resto del sito sparisce.
-- **Controlli:** Biennio / Triennio / Tutti e 5 grandi e chiari, più l'uscita. Si possono
+- **Controlli:** Biennio / Triennio / Tutti e 5 grandi e chiari, più l'uscita. I televisori sono
+  interattivi, quindi i controlli si toccano direttamente sullo schermo e devono avere bersagli
+  ampi. Si possono
   comandare anche dalla tastiera o con un telecomando per presentazioni. Quando il mouse è fermo
   si nascondono, così a schermo resta solo il quadro.
 - **Da valutare:** passare da un indirizzo al successivo senza uscire, come in una presentazione.

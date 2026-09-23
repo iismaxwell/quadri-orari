@@ -146,9 +146,11 @@ slide**. Si usa durante gli open day, proiettato sui televisori delle aule per i
 
 - Pensata per un televisore 16:9 guardato da qualche metro: testo grande, nessuno scorrimento.
   Il quadro deve stare tutto in una schermata anche con 5 anni visibili.
-- Controlli a schermo per biennio / triennio / tutti. Da tastiera si usano le frecce e i tasti
-  pagina, così funzionano anche i telecomandi per presentazioni. I controlli si nascondono quando
-  non servono.
+- Controlli a schermo per biennio / triennio / tutti. I televisori delle aule sono **interattivi**
+  (touch), quindi i controlli devono essere grandi e comodi da toccare stando in piedi davanti
+  allo schermo. Da tastiera si usano le frecce e i tasti pagina, così funzionano anche i
+  telecomandi per presentazioni. I controlli si nascondono quando non servono.
+- I PC delle aule sono sempre connessi: non serve una versione offline.
 - Usa la Fullscreen API. Dove non c'è (Safari su iPhone non la supporta per elementi che non
   siano video), la stessa vista deve comunque occupare tutta la finestra.
 - Ogni vista di proiezione ha un **URL proprio**, che si può aprire e salvare nei preferiti sul
