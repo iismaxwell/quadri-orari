@@ -18,9 +18,7 @@ Caratteristiche utili per usarle:
   `fill-opacity:0.4`. Nessun tracciato ha un colore esplicito, quindi con `fill: currentColor`
   prendono il colore del testo, su fondo chiaro come su fondo scuro. Nei file non vanno aggiunti
   colori espliciti.
-- `energia.svg` ha solo il livello al 40% (la cornice): manca il livello pieno. Va sostituita con
-  un'esportazione completa.
-- I `viewBox` hanno proporzioni diverse (da 448×512 a 627×384). Per allinearle vanno messe in un
+- I `viewBox` hanno proporzioni diverse (da 448×512 a 640×512). Per allinearle vanno messe in un
   contenitore di dimensione fissa con `object-fit`/`preserveAspectRatio`, non ridimensionate una
   per una.
 - Sono file sorgente dell'identità visiva della scuola: non si ridisegnano. Colori e dimensioni si
