@@ -223,7 +223,9 @@ informazioni raggiungibili solo con l'hover.
   modalità proiezione e sono utili anche su smartphone, dove biennio o triennio riducono le
   colonne.
 - **Identità visiva:** quella della brochure. Ogni indirizzo ha la sua icona, già usata dalla
-  scuola, in `src/assets/icone-indirizzi/` (convenzioni nel README della cartella).
+  scuola, in `src/assets/icone-indirizzi/` (convenzioni nel README della cartella). Il logo della
+  scuola, in tre varianti, è in `src/assets/loghi/`; il favicon già pronto (da favicon.io) è in
+  `src/assets/favicon/` — entrambi con il proprio README.
 - Il brief completo per chi progetta la grafica, con i dati di esempio, è
   `docs/brief-design.md`. Se cambiano i requisiti qui sopra, va aggiornato anche il brief.
 

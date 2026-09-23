@@ -37,7 +37,14 @@ Il sito deve sembrare la continuazione della brochure. Materiali allegati:
   file, pensati per prendere `currentColor` dal testo circostante — nessun colore va aggiunto nei
   file stessi. Lo stesso principio (due toni dello stesso colore) può essere un'ispirazione coerente
   per distinguere le ore in compresenza nella tabella (sezione 4);
-- il **logo** della scuola.
+- il **logo** della scuola, in tre varianti raster (PNG, sfondo trasparente): un marchio circolare
+  da solo, uno esteso con la scritta "Istituto di Istruzione Superiore J.C. Maxwell" in grigio
+  scuro (`#231f20`) per sfondi chiari, e lo stesso esteso con la scritta in bianco per sfondi
+  scuri o colorati. Il rosso del marchio (`#ee3335`) è lo stesso nelle tre varianti: può essere un
+  punto di partenza per il colore principale, da confermare o correggere con la brochure;
+- un **favicon già pronto** (set completo per browser, iOS e Android): la proposta non deve
+  disegnarne uno nuovo, ma può proporre un colore del tema (`theme_color`) coerente con la
+  direzione scelta.
 
 Il tono è istituzionale ma accogliente: deve parlare a un ragazzo di 13 anni e ai suoi genitori,
 non a un ispettore ministeriale.
