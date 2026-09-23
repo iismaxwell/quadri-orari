@@ -166,6 +166,15 @@ autonomia, né discipline che non sono nell'ordinamento: se la scuola ne usa, lo
 ore assegnate, convertite in annue. Poi `npm run verifica-dati`, e si aggiorna la sezione qui
 sotto.
 
+## Pagine di contenuto
+
+Testi del sito che non sono quadri orari (riforma in breve, FAQ, contatti…) stanno nella content
+collection `pagine`, un file Markdown per pagina in `src/content/pagine/`, schema in
+`content.config.ts`: `titolo`, `descrizione`, `ordine` e `bozza` (booleano). Una pagina resta
+`bozza: true` finché Marco non ne ha rivisto il testo. Ogni affermazione sulla riforma deve venire
+dai decreti in `originali/`; quello che non si può verificare così si segna nel testo come
+`[DA COMPLETARE: …]`.
+
 ## Delibere della scuola
 
 I dati deliberati stanno nei file di `src/content/percorsi/`. Qui si tiene il riepilogo di ciò che
