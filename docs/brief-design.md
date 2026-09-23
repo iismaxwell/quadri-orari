@@ -28,9 +28,11 @@ deve essere raggiungibile solo con l'hover.
 
 ## 2. Identità visiva
 
-Il sito deve sembrare la continuazione della brochure. Materiali allegati:
+Il logo e le icone sono materiali fissi, da usare così come sono. Il resto — palette, tipografia,
+stile grafico — è **aperto**: nessuna brochure allegata di proposito, per lasciare libertà
+creativa piena su questa parte, invece di vincolarla a un materiale esistente che non convince
+del tutto. Materiali allegati:
 
-- la **brochure** (PDF o immagini): da qui colori, tipografia e tono;
 - le **sei icone degli indirizzi** (SVG monocromatici), già usate nella comunicazione della
   scuola: vanno usate così come sono, al massimo ricolorate. Hanno proporzioni diverse tra loro.
   Sono già **duotone**: due livelli dello stesso colore (uno pieno, uno più chiaro) incorporati nel
@@ -40,8 +42,9 @@ Il sito deve sembrare la continuazione della brochure. Materiali allegati:
 - il **logo** della scuola, in tre varianti raster (PNG, sfondo trasparente): un marchio circolare
   da solo, uno esteso con la scritta "Istituto di Istruzione Superiore J.C. Maxwell" in grigio
   scuro (`#231f20`) per sfondi chiari, e lo stesso esteso con la scritta in bianco per sfondi
-  scuri o colorati. Il rosso del marchio (`#ee3335`) è lo stesso nelle tre varianti: può essere un
-  punto di partenza per il colore principale, da confermare o correggere con la brochure;
+  scuri o colorati. Il rosso del marchio (`#ee3335`) è lo stesso nelle tre varianti e comparirà
+  comunque, ovunque il logo venga usato: la palette proposta deve poterci convivere, ma non deve
+  necessariamente essere costruita intorno a lui — altri colori guida sono benvenuti;
 - un **favicon già pronto** (set completo per browser, iOS e Android): la proposta non deve
   disegnarne uno nuovo, ma può proporre un colore del tema (`theme_color`) coerente con la
   direzione scelta.
