@@ -91,6 +91,8 @@ Quando ci saranno, questa sezione dirà solo quali classi sono deliberate e dove
 - **Classi prime (2026/27), tutte le articolazioni offerte:** le 2 ore settimanali della quota a
   disposizione (66 annue) vanno tutte a **Scienze sperimentali**, che passa da 4 a 6 ore
   settimanali (da 132 a 198 annue).
+- **Ripartizione interna di Scienze sperimentali nelle prime:** deliberata (ore di Scienze della
+  Terra, Biologia, Chimica e Fisica), numeri non ancora ricevuti.
 - **Compresenze delle prime:** non ancora ricevute. Il decreto fissa solo il totale (165 ore annue,
   5 settimanali, per l'area di indirizzo della prima); la ripartizione tra le discipline la decide
   la scuola.
@@ -114,12 +116,16 @@ informazioni raggiungibili solo con l'hover.
   distinte visivamente e spiegate in legenda. Un lettore deve capire subito che sono comprese
   nelle ore, non aggiunte.
 - **Informazioni su richiesta**, nascoste finché l'utente non le apre:
-  - le discipline che compongono *Scienze sperimentali* (Scienze della Terra, Biologia, Chimica,
-    Fisica);
+  - la ripartizione di *Scienze sperimentali* tra Scienze della Terra, Biologia, Chimica e Fisica,
+    con le ore di ciascuna dove la scuola le ha deliberate;
   - il monte ore annuo al posto delle ore settimanali;
   - le note dei decreti, come quella su *Complementi di matematica*.
 - Le classi non ancora deliberate mostrano la quota a disposizione come **da definire**, in modo
   chiaramente distinto dalle ore assegnate.
+- **Identità visiva:** quella della brochure. Ogni indirizzo ha la sua icona, già usata dalla
+  scuola, in `src/assets/icone-indirizzi/` (convenzioni nel README della cartella).
+- Il brief completo per chi progetta la grafica, con i dati di esempio, è
+  `docs/brief-design.md`. Se cambiano i requisiti qui sopra, va aggiornato anche il brief.
 
 ## Invarianti da far verificare alla build
 
