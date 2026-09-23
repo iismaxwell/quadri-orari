@@ -5,8 +5,7 @@ ordine: 4
 bozza: true
 ---
 
-Per informazioni generali sulla scuola: [www.jcmaxwell.edu.it](https://www.jcmaxwell.edu.it/).
+- Orientamento: [orientamento@jcmaxwell.it](mailto:orientamento@jcmaxwell.it)
+- Segreteria: [maxwel@jcmaxwell.it](mailto:maxwel@jcmaxwell.it)
 
-[DA COMPLETARE: nome e contatti (email, telefono) del referente per l'orientamento; orari dello
-sportello o del ricevimento dedicato alle famiglie; date e modalità degli open day; eventuali
-contatti separati per ciascun indirizzo tecnico.]
+Per informazioni generali sulla scuola: [www.jcmaxwell.edu.it](https://www.jcmaxwell.edu.it/).

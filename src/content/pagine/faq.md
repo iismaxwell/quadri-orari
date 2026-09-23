@@ -12,16 +12,16 @@ tutte e quattro le articolazioni tecniche della scuola.
 
 ### Il sabato si va a scuola?
 
-[DA COMPLETARE: non è un'informazione che si trova nei decreti — dipende da come la scuola
-organizza l'orario settimanale. Chiedere a chi si occupa dell'orario delle lezioni.]
+No: nella nostra scuola le lezioni non si tengono mai di sabato.
 
 ### Cosa cambia rispetto a prima?
 
-[DA COMPLETARE: per rispondere con precisione servirebbe confrontare il nuovo quadro orario con
-quello che questa scuola applica oggi alle classi in corso, che questa bozza non ha. Quello che
-sappiamo con certezza dai decreti: il nuovo quadro dà alla scuola una quota di ore libere più ampia
-da assegnare autonomamente (fino a 7 ore settimanali nel quinto anno). Se serve un confronto più
-dettagliato, va fatto con chi conosce il quadro orario attuale.]
+[DA COMPLETARE: per rispondere con precisione servirebbe confrontare il nuovo quadro orario (Decreto
+ministeriale n. 29 del 19 febbraio 2026) con quello che questa scuola applica oggi alle classi in
+corso, che questa bozza non ha. Quello che sappiamo con certezza dal decreto: il nuovo quadro dà
+alla scuola una quota di ore libere più ampia da assegnare autonomamente (fino a 7 ore settimanali
+nel quinto anno). Se serve un confronto più dettagliato, va fatto con chi conosce il quadro orario
+attuale.]
 
 ### Cosa si studia nell'area comune a tutti gli indirizzi?
 
@@ -67,8 +67,8 @@ devono ancora arrivare.]
 
 ### Chi è già iscritto in una classe successiva alla prima cambia programma?
 
-[DA COMPLETARE: da verificare con il testo del decreto — vedi la nota nella pagina "La riforma in
-breve".]
+No. Il decreto si applica alle classi prime a partire dal 2026/2027: chi è già iscritto in una
+classe successiva prosegue con il percorso già iniziato.
 
 ### Dove trovo i quadri orari ufficiali del Ministero?
 

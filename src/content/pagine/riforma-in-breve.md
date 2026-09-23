@@ -9,11 +9,8 @@ Dall'anno scolastico 2026/2027 le classi prime degli istituti tecnici seguono un
 nuovo. Riguarda i quattro indirizzi tecnici della scuola — **Informatica**, **Telecomunicazioni**,
 **Biotecnologie ambientali** ed **Energia** — non i licei.
 
-[DA COMPLETARE: qui andrebbe il riferimento normativo preciso (numero e data del decreto). Nella
-ricerca fatta per questa bozza risulta il Decreto ministeriale n. 29 del 19 febbraio 2026,
-"Revisione dell'assetto ordinamentale degli istituti tecnici", nell'ambito della Missione 4 del
-PNRR — ma il testo del decreto non è ancora in `originali/`, solo i suoi allegati B, C-4, C-8 e
-C-9. Conferma il riferimento e valuta se aggiungere il decreto stesso ai documenti scaricabili.]
+Il riferimento è il **Decreto ministeriale n. 29 del 19 febbraio 2026**, che ridefinisce indirizzi,
+articolazioni, quadri orari e risultati di apprendimento degli istituti tecnici.
 
 ## Come è fatto il quadro orario
 
@@ -62,7 +59,7 @@ articolazioni delle prime.]
 
 ## Chi è già iscritto
 
-[DA COMPLETARE: da fonti esterne (non ancora da `originali/`) risulta che le classi già avviate
-prima del 2026/27 proseguono con l'ordinamento con cui sono partite, fino alla fine del ciclo —
-cioè il cambiamento riguarda solo le nuove classi prime, una alla volta. Da confermare con il testo
-del decreto prima di pubblicarlo.]
+Il decreto (art. 9, comma 1) stabilisce che le sue norme si applicano alle classi prime a partire
+dall'anno scolastico 2026/2027. Chi è già iscritto in una classe successiva alla prima prosegue
+quindi il percorso con cui l'ha iniziato: il cambiamento riguarda solo le nuove classi prime, una
+alla volta.

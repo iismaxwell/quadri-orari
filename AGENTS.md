@@ -67,13 +67,14 @@ Fonti in `originali/`. Sono decreti firmati digitalmente dal Ministero: sono la 
 riferimento e si pubblicano come download così come sono. Solo il nome del file può cambiare
 (meglio senza spazi).
 
-| Allegato | Contenuto |
+| Documento | Contenuto |
 |---|---|
-| B | Area di istruzione generale nazionale, uguale per tutti gli indirizzi |
-| C-4 | Chimica, materiali e biotecnologie: area di indirizzo flessibile |
-| C-8 | Informatica e telecomunicazioni: area di indirizzo flessibile |
-| C-9 | Meccanica, meccatronica ed energia: area di indirizzo flessibile |
-| A-4, A-8, A-9 | Profilo e risultati di apprendimento (solo fonte) |
+| DM 29 del 19 febbraio 2026 | Decreto che ridefinisce indirizzi, articolazioni, quadri orari e risultati di apprendimento degli istituti tecnici; gli allegati B, A-4, A-8, A-9 (sotto) e C-4/C-8/C-9 ne fanno parte. Si applica alle classi prime dall'a.s. 2026/2027 (art. 9, comma 1): chi è già iscritto prosegue col percorso iniziato. |
+| Allegato B | Area di istruzione generale nazionale, uguale per tutti gli indirizzi |
+| Allegato C-4 | Chimica, materiali e biotecnologie: area di indirizzo flessibile |
+| Allegato C-8 | Informatica e telecomunicazioni: area di indirizzo flessibile |
+| Allegato C-9 | Meccanica, meccatronica ed energia: area di indirizzo flessibile |
+| Allegati A-4, A-8, A-9 | Profilo e risultati di apprendimento (solo fonte) |
 
 **Articolazioni offerte dalla scuola**, le uniche da pubblicare: *Informatica* e
 *Telecomunicazioni* (C-8), *Biotecnologie ambientali* (C-4), *Energia* (C-9). Gli allegati
