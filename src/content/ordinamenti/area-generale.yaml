@@ -1,0 +1,65 @@
+# Allegato B — Quadro orario dell'area di istruzione generale nazionale.
+# Uguale per tutti gli indirizzi tecnici: i percorsi lo richiamano con `areaGenerale: area-generale`.
+# Ore annue, ricopiate dal PDF; colonne dalla 1ª alla 5ª. 33 ore annue = 1 ora settimanale.
+area: generale
+allegato: B
+titolo: Area di istruzione generale nazionale
+fonte: All. B - Quadro orario AREA ISTRUZIONE GENERALE NAZIONALE-signed.pdf
+
+ambiti:
+  - id: linguistico
+    nome: Linguistico
+    monteOre: { primoBiennio: 462, secondoBiennio: 462, quintoAnno: 198 }
+  - id: matematico
+    nome: Matematico
+    monteOre: { primoBiennio: 264, secondoBiennio: 198, quintoAnno: 99 }
+  - id: storico-geografico
+    nome: Storico-geografico
+    monteOre: { primoBiennio: 165, secondoBiennio: 132, quintoAnno: 66 }
+  - id: giuridico-economico
+    nome: Giuridico-economico
+    monteOre: { primoBiennio: 132 }
+  - id: scienze-motorie
+    nome: Scienze motorie
+    monteOre: { primoBiennio: 132, secondoBiennio: 132, quintoAnno: 66 }
+  - id: religione
+    nome: RC o attività alternative
+    monteOre: { primoBiennio: 66, secondoBiennio: 66, quintoAnno: 33 }
+
+discipline:
+  - id: lingua-italiana
+    nome: Lingua italiana
+    ambito: linguistico
+    ore: [132, 132, 132, 132, 99]
+  - id: lingua-inglese
+    nome: Lingua inglese
+    ambito: linguistico
+    ore: [99, 99, 99, 99, 99]
+  - id: matematica
+    nome: Matematica
+    ambito: matematico
+    ore: [132, 132, 99, 99, 99]
+  - id: storia
+    nome: Storia
+    ambito: storico-geografico
+    ore: [66, 66, 66, 66, 66]
+  - id: geografia
+    nome: Geografia
+    ambito: storico-geografico
+    ore: [33, 0, 0, 0, 0]
+  - id: diritto-economia
+    nome: Diritto ed economia
+    ambito: giuridico-economico
+    ore: [66, 66, 0, 0, 0]
+  - id: scienze-motorie
+    nome: Scienze motorie
+    ambito: scienze-motorie
+    ore: [66, 66, 66, 66, 66]
+  - id: religione
+    nome: Religione cattolica o attività alternative
+    ambito: religione
+    ore: [33, 33, 33, 33, 33]
+
+# Riga "Totale Area istruzione generale nazionale".
+totali: [627, 594, 495, 495, 462]
+monteOreTotale: { primoBiennio: 1221, secondoBiennio: 990, quintoAnno: 462 }

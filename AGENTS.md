@@ -26,12 +26,30 @@ percorso senza quelle parti fin dall'inizio, senza doverlo rifare.
 
 ## Stack e pubblicazione
 
-- **Astro**, output completamente statico. I dati dei quadri orari stanno in content collections
-  validate da schema, non nei template.
+- **Astro 7**, output completamente statico, TypeScript strict. I dati dei quadri orari stanno in
+  content collections validate da schema, non nei template (vedi "Dati dei quadri orari").
+- Node ≥ 22.12. **TypeScript resta alla 6** finché `@astrojs/check` non supporta la 7; **Vitest
+  resta alla 4** perché la 5 non supporta le versioni dispari di Node (25).
+- `site` si imposta con la variabile d'ambiente `SITE_URL` (predefinito
+  `https://iismaxwell.github.io`); `base` è fisso.
 - **Ore mostrate come settimanali**, con il monte ore annuo visibile a richiesta.
 - **Pubblicazione:** GitHub Pages (`https://iismaxwell.github.io/quadri-orari/`) e deploy
   automatico, tramite GitHub Action, verso `www.jcmaxwell.it/quadri-orari/`. Le credenziali
   dell'hosting stanno nei secrets dell'organizzazione `iismaxwell`, mai nel repo.
+
+## Comandi
+
+```bash
+npm ci                  # installa le dipendenze
+npm run verifica-dati   # controlla i dati dei quadri orari; stampa una riga per percorso
+npm test                # test unitari (Vitest): tests/**/*.test.ts
+npx astro check         # controllo dei tipi
+npm run build           # esegue prima verifica-dati, poi genera dist/
+npm run dev             # server di sviluppo
+SITE_URL=https://www.jcmaxwell.it npm run build   # build per jcmaxwell.it
+```
+
+I test end-to-end, quando ci saranno, useranno il suffisso `.spec.ts`, che Vitest ignora.
 
 ## Vincoli che non si vedono dal codice
 
@@ -90,11 +108,71 @@ Regole utili, tutte verificabili sui PDF:
 
 Per rileggere un PDF: `pdftotext -layout "originali/<file>.pdf" -` (pacchetto poppler).
 
+## Dati dei quadri orari
+
+Quello che dice il decreto e quello che decide la scuola stanno in file separati. Tutte le ore sono
+**annue**, come nei decreti: 1 ora settimanale = 33 ore annue.
+
+| Dove | Cosa |
+|---|---|
+| `src/content/ordinamenti/*.yaml` | Trascrizione di una tabella di un decreto. `area: generale` (All. B, una sola per tutti i tecnici), `indirizzo` (All. C-x, una per articolazione) o `liceo`. Le delibere non la toccano. |
+| `src/content/percorsi/*.yaml` | Un file per ogni indirizzo mostrato sul sito, con le sole scelte della scuola. Lo slug è il nome del file. |
+| `src/dati/schema.ts` | Forma dei dati (Zod). La usano `src/content.config.ts`, lo script e i test. |
+| `src/dati/verifiche.ts` | Le invarianti: funzioni pure che restituiscono l'elenco degli errori. |
+| `src/dati/quadro.ts` | `componiQuadro`: il quadro completo di un percorso per l'interfaccia, in sola lettura. |
+| `src/dati/astro.ts` | `getQuadro(slug)` e `getPercorsi()` per le pagine. Verificano i dati prima di restituirli. |
+| `src/dati/carica.ts` | Lettura dei file YAML da Node, per lo script e i test. |
+| `scripts/verifica-dati.ts` | Lo script di `npm run verifica-dati`. |
+| `tests/dati/` | Test delle invarianti, con un caso negativo per ciascuna. |
+
+**Ordinamenti.** Le ore di ogni disciplina sono un elenco di cinque numeri, dalla 1ª alla 5ª come
+le colonne del PDF; 0 vale "cella vuota". Si ricopiano dal PDF anche le righe di totale, quota a
+disposizione e compresenza, e i monte ore d'ambito: sono una partita doppia, e la verifica si
+accorge se un numero ricopiato male non torna con i totali. Le note riportano il testo integrale
+del decreto. Una disciplina presente in più allegati usa sempre lo stesso id (per esempio
+`scienze-sperimentali`).
+
+**Percorsi tecnici.** Richiamano `areaGenerale` e `areaIndirizzo` e hanno un blocco per ognuna
+delle cinque classi:
+
+```yaml
+anni:
+  1:
+    stato: deliberato              # oppure da-definire
+    quota: { scienze-sperimentali: 66 }                       # ore della quota a disposizione
+    compresenze: { scienze-sperimentali: 66, … }              # facoltativo
+    ripartizioni:                                             # facoltativo
+      scienze-sperimentali: [{ nome: Fisica, ore: 66 }, …]
+```
+
+**Percorsi dei licei.** Richiamano un solo ordinamento (`quadro`), senza ambiti, quota a
+disposizione, compresenze né stato di delibera. Per ogni classe possono avere un `potenziamento`
+(ore che la scuola aggiunge a discipline dell'ordinamento, alzando il totale della classe) e
+delle `ripartizioni`. Lo schema non prevede ancora ore spostate tra discipline con la quota di
+autonomia, né discipline che non sono nell'ordinamento: se la scuola ne usa, lo schema va esteso.
+
+**Regole decise per i dati**, verificate alla build:
+- una classe `deliberato` ha tutta la quota a disposizione assegnata; una classe `da-definire` non
+  ne ha nessuna ora;
+- la quota va solo a discipline dell'area di indirizzo;
+- le compresenze riguardano solo l'area di indirizzo. Per ogni classe si inseriscono tutte
+  insieme, e la loro somma è il totale "di cui in compresenza" del decreto. Per ogni disciplina
+  non superano le sue ore, quota compresa;
+- ogni parte di una ripartizione è un numero intero di ore settimanali, e la somma delle parti
+  è pari alle ore della disciplina, quota compresa;
+- le articolazioni dello stesso indirizzo hanno lo stesso primo biennio, decreto e delibere.
+
+**Per registrare una delibera** si modifica solo il file del percorso: `stato: deliberato` e le
+ore assegnate, convertite in annue. Poi `npm run verifica-dati`, e si aggiorna la sezione qui
+sotto.
+
 ## Delibere della scuola
 
-Qui sta lo stato di ciò che la scuola ha deciso, finché i dati non vivono nelle content collection.
-Quando ci saranno, questa sezione dirà solo quali classi sono deliberate e dove stanno i dati.
+I dati deliberati stanno nei file di `src/content/percorsi/`. Qui si tiene il riepilogo di ciò che
+la scuola ha deciso e di ciò che manca.
 
+- **Nei dati:** Informatica. Telecomunicazioni, Biotecnologie ambientali ed Energia non ci sono
+  ancora.
 - **Classi prime (2026/27), tutte le articolazioni offerte:** le 2 ore settimanali della quota a
   disposizione (66 annue) vanno tutte a **Scienze sperimentali**, che passa da 4 a 6 ore
   settimanali (da 132 a 198 annue).
@@ -166,3 +244,9 @@ controllo eseguito prima della build devono far fallire la build se:
   decreto;
 - un'ora della quota a disposizione risulta assegnata in una classe non ancora deliberata;
 - un'ora annua non è multiplo di 33, cioè le ore settimanali non sono intere.
+
+Le invarianti stanno in `src/dati/verifiche.ts` e girano con `npm run verifica-dati`, che `npm run
+build` esegue prima di tutto. Insieme a queste si verificano anche le regole elencate in "Dati dei
+quadri orari" e l'esistenza dei file richiamati (PDF in `originali/`, icone). Ogni invariante ha un
+test con dati volutamente sbagliati in `tests/dati/verifiche.test.ts`. Chi aggiunge un'invariante
+aggiunge anche il suo caso negativo.
