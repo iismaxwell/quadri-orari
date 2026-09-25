@@ -1,0 +1,125 @@
+---
+/** Scheda di indirizzo: una pagina per ogni file di src/content/percorsi/. */
+import Base from '../layouts/Base.astro';
+import Icona from '../components/Icona.astro';
+import QuadroOrario from '../components/QuadroOrario.astro';
+import { getPercorsi, getQuadro } from '../dati/astro';
+import { vistaQuadro } from '../dati/vista';
+
+export async function getStaticPaths() {
+  const percorsi = await getPercorsi();
+  return percorsi.map(({ slug }) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const vista = vistaQuadro(await getQuadro(slug));
+// La rotta di proiezione arriva con F7.
+const proiezione = `${import.meta.env.BASE_URL}proiezione/${slug}/`;
+---
+
+<Base
+  titolo={`${vista.nome}: quadro orario — IIS J.C. Maxwell`}
+  descrizione={`Il quadro orario di ${vista.nome} all'IIS J.C. Maxwell, con le scelte già deliberate dalla scuola.`}
+  accento={vista.icona}
+>
+  <div class="scheda">
+    <QuadroOrario vista={vista}>
+      <div class="scheda__titolo" slot="titolo">
+        <Icona nome={vista.icona} class="scheda__icona" />
+        <div class="scheda__nomi">
+          <h1>{vista.nome}</h1>
+          <p>{vista.sottotitolo}</p>
+          <a class="scheda__proiezione" href={proiezione} data-segue-periodo>A tutto schermo</a>
+        </div>
+      </div>
+    </QuadroOrario>
+  </div>
+</Base>
+
+<style>
+  .scheda {
+    max-width: var(--larghezza-max);
+    margin-inline: auto;
+    padding: 10px var(--margine) 0;
+  }
+
+  .scheda__titolo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .scheda__titolo :global(.scheda__icona) {
+    display: block;
+    width: 42px;
+    height: 34px;
+    color: var(--accento);
+  }
+
+  .scheda__nomi {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-titoli);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--tenue);
+  }
+
+  /* La proiezione serve sui televisori e sui PC delle aule, non sullo smartphone. */
+  .scheda__proiezione {
+    display: none;
+  }
+
+  @media (min-width: 960px) {
+    .scheda {
+      padding: 48px var(--margine-largo) 16px;
+    }
+
+    .scheda__titolo {
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .scheda__titolo :global(.scheda__icona) {
+      width: 72px;
+      height: 58px;
+      flex: none;
+    }
+
+    .scheda__nomi {
+      gap: 4px;
+    }
+
+    h1 {
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -0.015em;
+    }
+
+    p {
+      font-size: 15px;
+    }
+
+    .scheda__proiezione {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      min-height: var(--tocco);
+      font-size: 15px;
+      font-weight: 700;
+    }
+  }
+</style>

@@ -84,6 +84,10 @@ come un numero tra parentesi. Un'idea di partenza, da superare se ne trovi di mi
 di una disciplina come segmenti o pallini, con quelle in compresenza distinte e spiegate in
 legenda. Chi guarda deve capire che le compresenze stanno dentro le ore, non sopra.
 
+**Scelta fatta** (proposta unificata, `docs/design/`): una barretta per ogni ora settimanale, con
+compresenza, scelta della scuola e quota da definire distinte e spiegate in legenda. Barrette e
+legenda compaiono con l'interruttore "Dettaglio ore", spento di default.
+
 ### Informazioni su richiesta
 
 Nascoste finché l'utente non le apre con un tocco:
@@ -118,7 +122,7 @@ l'unico anno deliberato.
 
 ### Filtro per periodo
 
-Controlli **"Biennio" / "Triennio" / "Tutti e 5"** che mostrano solo le colonne scelte. Sono
+Controlli **"Biennio" / "Triennio" / "Quinquennio"** che mostrano solo le colonne scelte. Sono
 indispensabili nella modalità proiezione e aiutano anche sullo smartphone: biennio e triennio
 hanno due o tre colonne invece di cinque. Può darsi che risolvano da soli il problema dello
 schermo stretto.
@@ -133,7 +137,7 @@ slide.
   nessuno scorrimento: il quadro deve stare in una schermata anche con tutti e 5 gli anni.
 - **Contenuto:** nome e icona dell'indirizzo, quadro orario, compresenze leggibili a distanza. Il
   resto del sito sparisce.
-- **Controlli:** Biennio / Triennio / Tutti e 5 grandi e chiari, più l'uscita. I televisori sono
+- **Controlli:** Biennio / Triennio / Quinquennio grandi e chiari, più l'uscita. I televisori sono
   interattivi, quindi i controlli si toccano direttamente sullo schermo e devono avere bersagli
   ampi. Si possono
   comandare anche dalla tastiera o con un telecomando per presentazioni. Quando il mouse è fermo
@@ -155,7 +159,7 @@ slide.
    sezione 8. Ogni proposta deve mostrare: compresenze, Scienze sperimentali aperta e chiusa, anni
    "da definire", interruttore settimanali/annue, filtro per periodo.
 2. Dopo la scelta, **home, scheda di indirizzo e modalità proiezione** nella direzione scelta. La
-   proiezione va mostrata sia con "Tutti e 5" sia con "Biennio".
+   proiezione va mostrata sia con "Quinquennio" sia con "Biennio".
 3. I **design token** della direzione scelta.
 
 ## 8. Dati per le proposte

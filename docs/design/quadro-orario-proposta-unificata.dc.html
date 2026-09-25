@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#e6e5e1;-webkit-font-smoothing:antialiased}
+a{color:oklch(0.47 0.15 262)}a:hover{color:oklch(0.26 0.05 262)}
+button{font:inherit;cursor:pointer}
+</style>
+</helmet>
+<section data-screen-label="Proposta unificata — quadro orario" style="padding:64px;display:flex;flex-direction:column;gap:32px;font-family:'Instrument Sans',sans-serif;color:#222">
+<div style="display:flex;flex-direction:column;gap:8px;max-width:900px">
+<div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#666">IIS J.C. Maxwell · Quadri orari · Proposta unificata</div>
+<h1 style="margin:0;font-size:40px;font-weight:600;letter-spacing:-.01em">Il meglio delle tre direzioni</h1>
+<p style="margin:0;font-size:17px;line-height:1.5;color:#555;text-wrap:pretty">Tabella editoriale (numeri grandi, mobile a colonna fissa + scroll) come base. I pallini sono spariti: il dettaglio delle ore (compresenza, scelta della scuola, da definire) è una barretta opzionale, spenta di default — si accende col toggle "Dettaglio ore". Periodo e unità di misura sono in una riga sopra la tabella su desktop, così la colonna delle materie non si schiaccia. "Tutti e 5" è diventato "Quinquennio". L'accento di colore segue l'indirizzo (qui: Informatica, blu) — cambialo dai Tweaks. Il colore di LSA resta da definire: per ora uso un ciano provvisorio.</p>
+</div>
+<div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap">
+
+<!-- MOBILE -->
+<div data-screen-label="proposta unificata — smartphone" style="width:375px;flex:none;background:{{ vals.pageBg }};border:10px solid #1b1b1f;border-radius:44px;overflow:hidden;color:{{ vals.ink }};font-family:'Instrument Sans',sans-serif">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:18px 18px 12px">
+<img src="assets/logo-esteso.png" alt="IIS J.C. Maxwell" style="height:34px;width:auto;display:block">
+</div>
+<div style="padding:10px 18px 4px;display:flex;flex-direction:column;gap:8px">
+<span style="display:block;width:42px;height:34px;background:{{ vals.accentBg }};-webkit-mask:url(assets/icone/informatica.svg) left center/contain no-repeat;mask:url(assets/icone/informatica.svg) left center/contain no-repeat;transition:background .25s"></span>
+<h2 style="margin:0;font-family:'Newsreader',serif;font-size:32px;font-weight:600;line-height:1.05;letter-spacing:-.01em">Informatica</h2>
+<span style="font-size:13px;color:{{ vals.muted }}">Istituto tecnico · Informatica e telecomunicazioni</span>
+</div>
+
+<div style="padding:16px 18px 8px;display:flex;flex-direction:column;gap:10px">
+<div style="position:relative;display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid {{ vals.accentBg }};border-radius:999px;overflow:hidden">
+<div style="position:absolute;top:0;left:0;height:100%;width:33.333%;background:{{ vals.accentBg }};border-radius:999px;transform:translateX({{ m.perIdxPct }});transition:transform .3s cubic-bezier(.4,0,.2,1)"></div>
+<sc-for list="{{ m.perBtns }}" as="b" hint-placeholder-count="3"><button onClick="{{ b.onClick }}" aria-pressed="{{ b.on }}" style="position:relative;z-index:1;min-height:42px;border:0;background:transparent;font-size:14px;font-weight:700;color:{{ b.fg }};transition:color .3s">{{ b.label }}</button></sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<button onClick="{{ m.toggleUnit }}" role="switch" aria-checked="{{ m.annual }}" style="display:flex;align-items:center;justify-content:space-between;min-height:40px;border:0;background:transparent;padding:0;color:inherit;font-size:14px"><span>Ore annue</span><span style="width:44px;height:26px;border-radius:999px;background:{{ m.unitTrackBg }};position:relative;display:block;transition:background .25s"><span style="position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transform:translateX({{ m.unitKnobX }});transition:transform .25s cubic-bezier(.4,0,.2,1)"></span></span></button>
+<button onClick="{{ m.toggleBars }}" role="switch" aria-checked="{{ m.bars }}" style="display:flex;align-items:center;justify-content:space-between;min-height:40px;border:0;background:transparent;padding:0;color:inherit;font-size:14px"><span>Dettaglio ore</span><span style="width:44px;height:26px;border-radius:999px;background:{{ m.barsTrackBg }};position:relative;display:block;transition:background .25s"><span style="position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transform:translateX({{ m.barsKnobX }});transition:transform .25s cubic-bezier(.4,0,.2,1)"></span></span></button>
+</div>
+</div>
+
+<div style="overflow:hidden;max-height:{{ m.legendMaxH }};opacity:{{ m.legendOp }};transition:max-height .3s ease,opacity .25s ease">
+<div style="padding:6px 18px 10px;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:{{ vals.muted }}">
+<span style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:15px;border-radius:1.5px;background:{{ vals.accentBg }}"></span>ora singola</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:15px;border-radius:1.5px;background:linear-gradient(180deg,{{ vals.accentBg }} 50%,{{ vals.accentSoft }} 50%);box-shadow:inset 0 0 0 1.5px {{ vals.accentBg }}"></span>compresenza</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:15px;border-radius:1.5px;background:{{ vals.accentDark }}"></span>scelta della scuola</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:15px;border-radius:1.5px;box-shadow:inset 0 0 0 1.5px #9a968d;background:repeating-linear-gradient(45deg,transparent 0 2px,#c7c2b7 2px 4px)"></span>da definire</span>
+</div>
+</div>
+
+<div style="overflow-x:auto;border-top:1px solid {{ vals.border }}">
+<div role="table" aria-label="Quadro orario Informatica" style="width:max-content;min-width:100%;padding-bottom:12px">
+<div role="row" style="display:grid;grid-template-columns:{{ m.cols }};border-bottom:1.5px solid {{ vals.ink }}">
+<span role="columnheader" style="position:sticky;left:0;z-index:2;background:{{ vals.pageBg }};padding:12px 8px 10px 18px;font-size:12px;color:{{ vals.muted }};box-shadow:1px 0 0 {{ vals.border }}">{{ m.unitLbl }}</span>
+<sc-for list="{{ m.years }}" as="y" hint-placeholder-count="5"><span role="columnheader" style="padding:12px 0 10px;text-align:center;font-family:'Newsreader',serif;font-size:19px;font-weight:600">{{ y.label }}</span></sc-for>
+</div>
+<div style="display:grid;grid-template-columns:{{ m.cols }}"><span style="position:sticky;left:0;background:{{ vals.pageBg }};padding:14px 8px 4px 18px;font-family:'Newsreader',serif;font-style:italic;font-size:16px;box-shadow:1px 0 0 {{ vals.border }}">Area generale</span></div>
+<sc-for list="{{ m.gen }}" as="row" hint-placeholder-count="8">
+<div role="row" style="display:grid;grid-template-columns:{{ m.cols }};border-bottom:1px solid {{ vals.border }};background:transparent;transition:background .15s" style-hover="background:#f2f0eb">
+<span role="rowheader" style="position:sticky;left:0;z-index:2;background:{{ vals.pageBg }};padding:10px 8px 10px 18px;font-size:13px;line-height:1.25;box-shadow:1px 0 0 {{ vals.border }}">{{ row.name }}</span>
+<sc-for list="{{ row.cells }}" as="cell"><div role="cell" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 2px">
+<sc-if value="{{ cell.full }}"><span style="font-family:'Newsreader',serif;font-size:21px;line-height:1">{{ cell.num }}</span></sc-if>
+<sc-if value="{{ cell.empty }}"><span style="color:{{ vals.faint }}">·</span></sc-if>
+<div style="overflow:hidden;max-height:{{ m.barsMaxH }};opacity:{{ m.barsOp }};transition:max-height .25s ease,opacity .2s ease"><div style="display:flex;gap:2px;padding-top:2px">
+<sc-for list="{{ cell.pips }}" as="p"><sc-if value="{{ p.h }}"><span style="width:6px;height:14px;border-radius:1.5px;flex:none;background:{{ vals.accentBg }}"></span></sc-if><sc-if value="{{ p.c }}"><span style="width:6px;height:14px;border-radius:1.5px;flex:none;background:linear-gradient(180deg,{{ vals.accentBg }} 50%,{{ vals.accentSoft }} 50%);box-shadow:inset 0 0 0 1px {{ vals.accentBg }}"></span></sc-if><sc-if value="{{ p.s }}"><span style="width:6px;height:14px;border-radius:1.5px;flex:none;background:{{ vals.accentDark }}"></span></sc-if><sc-if value="{{ p.d }}"><span style="width:6px;height:14px;border-radius:1.5px;flex:none;box-shadow:inset 0 0 0 1px #9a968d;background:repeating-linear-gradient(45deg,transparent 0 2px,#c7c2b7 2px 4px)"></span></sc-if></sc-for>
+</div></div>
+</div></sc-for>
+</div>
+</sc-for>
+<div role="row" style="display:grid;grid-template-columns:{{ m.cols }};font-weight:700"><span style="position:sticky;left:0;background:{{ vals.pageBg }};padding:10px 8px 10px 18px;font-size:13px;box-shadow:1px 0 0 {{ vals.border }}">Totale area</span><sc-for list="{{ m.totGen }}" as="t"><span style="text-align:center;padding:10px 0;font-family:'Newsreader',serif;font-size:19px;font-weight:600">{{ t.num }}</span></sc-for></div>
+<div style="display:grid;grid-template-columns:{{ m.cols }}"><span style="position:sticky;left:0;background:{{ vals.pageBg }};padding:14px 8px 4px 18px;font-family:'Newsreader',serif;font-style:italic;font-size:16px;box-shadow:1px 0 0 {{ vals.border }}">Area di indirizzo</span></div>
+<sc-for list="{{ m.ind }}" as="row" hint-placeholder-count="6">
+<div role="row" style="display:grid;grid-template-columns:{{ m.cols }};border-bottom:1px solid {{ vals.border }};background:transparent;transition:background .15s" style-hover="background:#f2f0eb">
+<div role="rowheader" style="position:sticky;left:0;z-index:2;background:{{ vals.pageBg }};padding:10px 8px 10px 18px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;box-shadow:1px 0 0 {{ vals.border }}">
+<span style="font-size:13px;line-height:1.25">{{ row.name }}</span>
+<sc-if value="{{ row.sci }}"><button onClick="{{ m.toggleSci }}" aria-expanded="{{ m.sciOpen }}" style="border:0;background:transparent;padding:4px 0;min-height:32px;color:{{ vals.accentBg }};font-size:12px;font-weight:700;text-decoration:underline;text-underline-offset:3px">{{ m.sciLbl }}</button></sc-if>
+<sc-if value="{{ row.hasNote }}"><button onClick="{{ m.toggleNote }}" aria-expanded="{{ m.noteOpen }}" style="border:0;background:transparent;padding:4px 0;min-height:32px;color:{{ vals.accentBg }};font-size:12px;font-weight:700;text-decoration:underline;text-underline-offset:3px">Nota</button></sc-if>
+</div>
+<sc-for list="{{ row.cells }}" as="cell"><div role="cell" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 2px">
+<sc-if value="{{ cell.full }}"><span style="font-family:'Newsreader',serif;font-size:21px;line-height:1">{{ cell.num }}</span></sc-if>
+<sc-if value="{{ cell.tbd }}"><span style="font-family:'Newsreader',serif;font-size:19px;font-style:italic;color:{{ vals.muted }};line-height:1">{{ cell.num }}</span></sc-if>
+<sc-if value="{{ cell.assigned }}"><span style="font-size:10px;line-height:1.15;text-align:center;color:{{ vals.muted }};font-weight:600">→ scienze</span></sc-if>
+<sc-if value="{{ cell.empty }}"><span style="color:{{ vals.faint }}">·</span></sc-if>
+<sc-if value="{{ cell.notOffered }}"><span style="font-size:10px;font-style:italic;color:{{ vals.faint }};text-align:center;line-height:1.15">non<br>attiva</span></sc-if>
+<div style="overflow:hidden;max-height:{{ m.barsMaxH }};opacity:{{ m.barsOp }};transition:max-height .25s ease,opacity .2s ease"><div style="display:flex;gap:2px;padding-top:2px">
+<sc-for list="{{ cell.pips }}" as="p"><sc-if value="{{ p.h }}"><span style="width:6px;height:14px;border-radius:1.5px;flex:none;background:{{ vals.accentBg }}"></span></sc-if><sc-if value="{{ p.c }}"><span style="width:6px;height:14px;border-radius:1.5px;flex:none;background:linear-gradient(180deg,{{ vals.accentBg }} 50%,{{ vals.accentSoft }} 50%);box-shadow:inset 0 0 0 1px {{ vals.accentBg }}"></span></sc-if><sc-if value="{{ p.s }}"><span style="width:6px;height:14px;border-radius:1.5px;flex:none;background:{{ vals.accentDark }}"></span></sc-if><sc-if value="{{ p.d }}"><span style="width:6px;height:14px;border-radius:1.5px;flex:none;box-shadow:inset 0 0 0 1px #9a968d;background:repeating-linear-gradient(45deg,transparent 0 2px,#c7c2b7 2px 4px)"></span></sc-if></sc-for>
+</div></div>
+</div></sc-for>
+</div>
+<sc-if value="{{ row.showSub }}"><sc-for list="{{ m.sciSub }}" as="sr"><div role="row" style="display:grid;grid-template-columns:{{ m.cols }};background:{{ vals.accentSoft }};border-bottom:1px solid {{ vals.border }}"><span role="rowheader" style="position:sticky;left:0;background:{{ vals.accentSoft }};padding:8px 8px 8px 30px;font-size:12px;box-shadow:1px 0 0 {{ vals.border }}">{{ sr.name }}</span><sc-for list="{{ sr.cells }}" as="c"><span role="cell" style="text-align:center;padding:8px 0;font-family:'Newsreader',serif;font-size:16px">{{ c.txt }}</span></sc-for></div></sc-for></sc-if>
+<sc-if value="{{ row.showNote }}"><div style="background:{{ vals.accentSoft }};border-bottom:1px solid {{ vals.border }}"><p style="position:sticky;left:0;margin:0;padding:10px 18px;width:339px;box-sizing:border-box;font-size:12px;line-height:1.45">{{ row.note }}</p></div></sc-if>
+</sc-for>
+<div role="row" style="display:grid;grid-template-columns:{{ m.cols }};font-weight:700"><span style="position:sticky;left:0;background:{{ vals.pageBg }};padding:10px 8px 10px 18px;font-size:13px;box-shadow:1px 0 0 {{ vals.border }}">Totale area</span><sc-for list="{{ m.totInd }}" as="t"><span style="text-align:center;padding:10px 0;font-family:'Newsreader',serif;font-size:19px;font-weight:600">{{ t.num }}</span></sc-for></div>
+<div role="row" style="display:grid;grid-template-columns:{{ m.cols }};border-top:1.5px solid {{ vals.ink }}"><span style="position:sticky;left:0;background:{{ vals.pageBg }};padding:12px 8px 12px 18px;font-size:14px;font-weight:700;box-shadow:1px 0 0 {{ vals.border }}">Totale</span><sc-for list="{{ m.tot }}" as="t"><span style="text-align:center;padding:10px 0;font-family:'Newsreader',serif;font-size:24px;font-weight:600;color:{{ vals.accentBg }}">{{ t.num }}</span></sc-for></div>
+</div>
+</div>
+<sc-if value="{{ m.scrolls }}"><div style="padding:0 18px 22px;font-size:11px;color:{{ vals.muted }}">Scorri di lato per vedere tutti gli anni →</div></sc-if>
+</div>
+
+<!-- DESKTOP -->
+<div data-screen-label="proposta unificata — desktop" style="width:1200px;flex:none;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08),0 20px 50px rgba(0,0,0,.12);background:{{ vals.pageBg }};color:{{ vals.ink }};font-family:'Instrument Sans',sans-serif">
+<div style="height:36px;background:#dcdad5;display:flex;align-items:center;gap:8px;padding:0 14px"><span style="width:11px;height:11px;border-radius:50%;background:#bdbab3"></span><span style="width:11px;height:11px;border-radius:50%;background:#bdbab3"></span><span style="width:11px;height:11px;border-radius:50%;background:#bdbab3"></span><span style="margin-left:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#666">quadri.jcmaxwell.edu.it/informatica</span></div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:20px 72px;border-bottom:1px solid {{ vals.border }}">
+<img src="assets/logo-esteso.png" alt="IIS J.C. Maxwell" style="height:48px;width:auto;display:block">
+<div style="display:flex;gap:28px;font-size:15px"><span>Indirizzi</span><span>La riforma in breve</span><span>Documenti</span><span>FAQ e contatti</span></div>
+</div>
+<div style="padding:48px 72px 64px;display:flex;flex-direction:column;gap:28px">
+
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+<div style="display:flex;align-items:center;gap:20px">
+<span style="display:block;width:72px;height:58px;flex:none;background:{{ vals.accentBg }};-webkit-mask:url(assets/icone/informatica.svg) center/contain no-repeat;mask:url(assets/icone/informatica.svg) center/contain no-repeat;transition:background .25s"></span>
+<div style="display:flex;flex-direction:column;gap:4px"><h2 style="margin:0;font-family:'Newsreader',serif;font-size:42px;font-weight:600;line-height:1;letter-spacing:-.015em">Informatica</h2><span style="font-size:15px;color:{{ vals.muted }}">Istituto tecnico · Informatica e telecomunicazioni</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+<div style="position:relative;display:flex;border:1.5px solid {{ vals.accentBg }};border-radius:999px;overflow:hidden">
+<div style="position:absolute;top:0;left:0;height:100%;width:33.333%;background:{{ vals.accentBg }};transform:translateX({{ d.perIdxPct }});transition:transform .3s cubic-bezier(.4,0,.2,1)"></div>
+<sc-for list="{{ d.perBtns }}" as="b" hint-placeholder-count="3"><button onClick="{{ b.onClick }}" aria-pressed="{{ b.on }}" style="position:relative;z-index:1;min-height:44px;min-width:108px;border:0;background:transparent;font-size:15px;font-weight:700;color:{{ b.fg }};transition:color .3s">{{ b.label }}</button></sc-for>
+</div>
+<button onClick="{{ d.toggleUnit }}" role="switch" aria-checked="{{ d.annual }}" style="display:flex;align-items:center;gap:10px;min-height:44px;border:0;background:transparent;padding:0;color:inherit;font-size:15px"><span>Ore annue</span><span style="width:44px;height:26px;border-radius:999px;background:{{ d.unitTrackBg }};position:relative;display:block;transition:background .25s"><span style="position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transform:translateX({{ d.unitKnobX }});transition:transform .25s cubic-bezier(.4,0,.2,1)"></span></span></button>
+<button onClick="{{ d.toggleBars }}" role="switch" aria-checked="{{ d.bars }}" style="display:flex;align-items:center;gap:10px;min-height:44px;border:0;background:transparent;padding:0;color:inherit;font-size:15px"><span>Dettaglio ore</span><span style="width:44px;height:26px;border-radius:999px;background:{{ d.barsTrackBg }};position:relative;display:block;transition:background .25s"><span style="position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transform:translateX({{ d.barsKnobX }});transition:transform .25s cubic-bezier(.4,0,.2,1)"></span></span></button>
+</div>
+</div>
+
+<div style="overflow:hidden;max-height:{{ d.legendMaxH }};opacity:{{ d.legendOp }};transition:max-height .3s ease,opacity .25s ease">
+<div style="display:flex;flex-wrap:wrap;gap:10px 28px;font-size:13px;padding:14px 20px;border-radius:12px;background:{{ vals.accentSoft }}">
+<span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:18px;flex:none;border-radius:1.5px;background:{{ vals.accentBg }}"></span>ora singola a settimana</span>
+<span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:18px;flex:none;border-radius:1.5px;background:linear-gradient(180deg,{{ vals.accentBg }} 50%,{{ vals.accentSoft }} 50%);box-shadow:inset 0 0 0 1.5px {{ vals.accentBg }}"></span>in compresenza: due docenti</span>
+<span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:18px;flex:none;border-radius:1.5px;background:{{ vals.accentDark }}"></span>scelta della scuola</span>
+<span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:18px;flex:none;border-radius:1.5px;box-shadow:inset 0 0 0 1.5px #9a968d;background:repeating-linear-gradient(45deg,transparent 0 2px,#c7c2b7 2px 4px)"></span>quota della scuola, da definire</span>
+</div>
+</div>
+
+<div role="table" aria-label="Quadro orario Informatica">
+<div role="row" style="display:grid;grid-template-columns:{{ d.cols }};border-bottom:1.5px solid {{ vals.ink }};align-items:end">
+<span role="columnheader" style="padding:0 0 12px;font-size:14px;color:{{ vals.muted }}">{{ d.unitLbl }}</span>
+<sc-for list="{{ d.years }}" as="y" hint-placeholder-count="5"><div role="columnheader" style="padding:0 0 10px;text-align:center;display:flex;flex-direction:column;gap:2px"><span style="font-family:'Newsreader',serif;font-size:27px;font-weight:600;line-height:1">{{ y.label }}</span><span style="font-size:12px;color:{{ vals.muted }}">{{ y.cap }}</span></div></sc-for>
+</div>
+<div style="padding:22px 0 6px;font-family:'Newsreader',serif;font-style:italic;font-size:22px">Area generale</div>
+<sc-for list="{{ d.gen }}" as="row" hint-placeholder-count="8">
+<div role="row" style="display:grid;grid-template-columns:{{ d.cols }};border-bottom:1px solid {{ vals.border }};align-items:center;background:transparent;transition:background .15s" style-hover="background:#f2f0eb">
+<span role="rowheader" style="padding:11px 0;font-size:16px">{{ row.name }}</span>
+<sc-for list="{{ row.cells }}" as="cell"><div role="cell" style="display:flex;align-items:center;justify-content:center;gap:8px">
+<sc-if value="{{ cell.full }}"><span style="font-family:'Newsreader',serif;font-size:23px">{{ cell.num }}</span></sc-if>
+<sc-if value="{{ cell.empty }}"><span style="color:{{ vals.faint }}">·</span></sc-if>
+<div style="overflow:hidden;width:{{ d.barsMaxW }};opacity:{{ d.barsOp }};transition:width .25s ease,opacity .2s ease"><div style="display:flex;gap:3px">
+<sc-for list="{{ cell.pips }}" as="p"><sc-if value="{{ p.h }}"><span style="width:8px;height:18px;border-radius:1.5px;flex:none;background:{{ vals.accentBg }}"></span></sc-if></sc-for>
+</div></div>
+</div></sc-for>
+</div>
+</sc-for>
+<div role="row" style="display:grid;grid-template-columns:{{ d.cols }};font-weight:700;align-items:center"><span style="padding:12px 0">Totale area generale</span><sc-for list="{{ d.totGen }}" as="t"><span style="text-align:center;font-family:'Newsreader',serif;font-size:23px;font-weight:600">{{ t.num }}</span></sc-for></div>
+<div style="padding:22px 0 6px;font-family:'Newsreader',serif;font-style:italic;font-size:22px">Area di indirizzo</div>
+<sc-for list="{{ d.ind }}" as="row" hint-placeholder-count="6">
+<div role="row" style="display:grid;grid-template-columns:{{ d.cols }};border-bottom:1px solid {{ vals.border }};align-items:center;background:transparent;transition:background .15s" style-hover="background:#f2f0eb">
+<div role="rowheader" style="padding:12px 16px 12px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+<span style="font-size:16px;line-height:1.3">{{ row.name }}</span>
+<sc-if value="{{ row.sci }}"><button onClick="{{ d.toggleSci }}" aria-expanded="{{ d.sciOpen }}" style="border:0;background:transparent;padding:0;color:{{ vals.accentBg }};font-size:14px;font-weight:700;text-decoration:underline;text-underline-offset:3px">{{ d.sciLbl }}</button></sc-if>
+<sc-if value="{{ row.hasNote }}"><button onClick="{{ d.toggleNote }}" aria-expanded="{{ d.noteOpen }}" style="border:0;background:transparent;padding:0;color:{{ vals.accentBg }};font-size:14px;font-weight:700;text-decoration:underline;text-underline-offset:3px">Nota</button></sc-if>
+</div>
+<sc-for list="{{ row.cells }}" as="cell"><div role="cell" style="display:flex;align-items:center;justify-content:center;gap:8px">
+<sc-if value="{{ cell.full }}"><span style="font-family:'Newsreader',serif;font-size:23px;line-height:1">{{ cell.num }}</span></sc-if>
+<sc-if value="{{ cell.tbd }}"><span style="font-family:'Newsreader',serif;font-size:21px;font-style:italic;color:{{ vals.muted }};line-height:1">{{ cell.num }}</span></sc-if>
+<sc-if value="{{ cell.assigned }}"><span style="font-size:13px;line-height:1.25;text-align:center;color:{{ vals.muted }};font-style:italic">assegnata<br>alle scienze ↑</span></sc-if>
+<sc-if value="{{ cell.empty }}"><span style="color:{{ vals.faint }}">·</span></sc-if>
+<sc-if value="{{ cell.notOffered }}"><span style="font-size:13px;font-style:italic;color:{{ vals.faint }}">non attiva</span></sc-if>
+<div style="overflow:hidden;width:{{ d.barsMaxW }};height:18px;opacity:{{ d.barsOp }};transition:width .25s ease,opacity .2s ease"><div style="display:flex;gap:3px">
+<sc-for list="{{ cell.pips }}" as="p"><sc-if value="{{ p.h }}"><span style="width:8px;height:18px;border-radius:1.5px;flex:none;background:{{ vals.accentBg }}"></span></sc-if><sc-if value="{{ p.c }}"><span style="width:8px;height:18px;border-radius:1.5px;flex:none;background:linear-gradient(180deg,{{ vals.accentBg }} 50%,{{ vals.accentSoft }} 50%);box-shadow:inset 0 0 0 1.5px {{ vals.accentBg }}"></span></sc-if><sc-if value="{{ p.s }}"><span style="width:8px;height:18px;border-radius:1.5px;flex:none;background:{{ vals.accentDark }}"></span></sc-if><sc-if value="{{ p.d }}"><span style="width:8px;height:18px;border-radius:1.5px;flex:none;box-shadow:inset 0 0 0 1px #9a968d;background:repeating-linear-gradient(45deg,transparent 0 2px,#c7c2b7 2px 4px)"></span></sc-if></sc-for>
+</div></div>
+</div></sc-for>
+</div>
+<sc-if value="{{ row.showSub }}"><div style="display:grid;grid-template-columns:{{ d.cols }};padding:14px 16px;margin:8px -16px;border-radius:12px;background:{{ vals.accentSoft }};align-items:start">
+<span style="font-size:14px;line-height:1.45;padding-right:24px;text-wrap:pretty">Una disciplina, quattro materie. La scuola ha deciso quante ore dare a ciascuna.</span>
+<sc-for list="{{ d.sciCells }}" as="sc"><div style="display:flex;flex-direction:column;gap:6px;align-items:center">
+<sc-if value="{{ sc.y1 }}"><sc-for list="{{ d.sciItems }}" as="it"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;font-size:13px"><span>{{ it.name }}</span><span style="font-family:'DM Mono',monospace;font-weight:500">{{ it.num }}</span></div></sc-for></sc-if>
+<sc-if value="{{ sc.y2 }}"><span style="font-size:13px;color:{{ vals.muted }};text-align:center">ripartizione<br>da definire</span></sc-if>
+</div></sc-for>
+</div></sc-if>
+<sc-if value="{{ row.showNote }}"><div style="padding:12px 16px;margin:8px -16px;border-radius:12px;background:{{ vals.accentSoft }};font-size:15px;line-height:1.5">{{ row.note }}</div></sc-if>
+</sc-for>
+<div role="row" style="display:grid;grid-template-columns:{{ d.cols }};font-weight:700;align-items:center"><span style="padding:12px 0">Totale area di indirizzo</span><sc-for list="{{ d.totInd }}" as="t"><span style="text-align:center;font-family:'Newsreader',serif;font-size:23px;font-weight:600">{{ t.num }}</span></sc-for></div>
+<div role="row" style="display:grid;grid-template-columns:{{ d.cols }};border-top:1.5px solid {{ vals.ink }};align-items:center;margin-top:6px;padding-top:6px"><span style="padding:14px 0;font-size:18px;font-weight:700">Totale {{ d.unitLbl }}</span><sc-for list="{{ d.tot }}" as="t"><span style="text-align:center;font-family:'Newsreader',serif;font-size:34px;font-weight:600;color:{{ vals.accentBg }}">{{ t.num }}</span></sc-for></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;indirizzo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;informatica&quot;,&quot;options&quot;:[&quot;informatica&quot;,&quot;les&quot;,&quot;energia&quot;,&quot;telecomunicazioni&quot;,&quot;biotecnologie&quot;,&quot;lsa&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+const ORD = ['1ª', '2ª', '3ª', '4ª', '5ª'];
+const PER_KEYS = ['biennio', 'triennio', 'quinquennio'];
+const PER_LABELS = ['Biennio', 'Triennio', 'Quinquennio'];
+const PER = { biennio: [1, 2], triennio: [3, 4, 5], quinquennio: [1, 2, 3, 4, 5] };
+const GEN = [
+  ['Lingua italiana', [4, 4, 4, 4, 3]],
+  ['Lingua inglese', [3, 3, 3, 3, 3]],
+  ['Matematica', [4, 4, 3, 3, 3]],
+  ['Storia', [2, 2, 2, 2, 2]],
+  ['Geografia', [1, 0, 0, 0, 0]],
+  ['Diritto ed economia', [2, 2, 0, 0, 0]],
+  ['Scienze motorie', [2, 2, 2, 2, 2]],
+  ['Religione cattolica o attività alternative', [1, 1, 1, 1, 1]],
+].map(([name, h]) => ({ name, h }));
+const IND = [
+  { name: 'Scienze sperimentali', h: [6, 5, 0, 0, 0], co: [2], school: [2], sci: true },
+  { name: 'Tecnologie e tecniche di rappresentazione grafica', h: [3, 3, 0, 0, 0], co: [1] },
+  { name: 'Informatica e reti di comunicazione', h: [4, 4, 0, 0, 0], co: [2] },
+  { name: 'Sistemi e reti', h: [0, 0, 3, 3, 2] },
+  { name: 'Tecnologie e progettazione di sistemi informatici e di telecomunicazioni', h: [0, 0, 2, 2, 2] },
+  { name: 'Informatica', h: [0, 0, 6, 6, 5] },
+  { name: 'Telecomunicazioni', h: [0, 0, 2, 2, 0] },
+  { name: 'Complementi di matematica', h: [0, 0, 1, 1, 0], note: 'Esempio di nota del decreto: nel secondo biennio integra Matematica con strumenti utili all’indirizzo. Il testo definitivo va ripreso dall’allegato ministeriale.' },
+  { name: 'Quota a disposizione della scuola', h: [0, 0, 0, 0, 0], tbd: [0, 2, 3, 3, 7], quota: true },
+];
+const T_GEN = [19, 18, 15, 15, 14], T_IND = [13, 14, 17, 17, 16], T_ALL = [32, 32, 32, 32, 30];
+const SCI = [['Fisica', 2], ['Chimica', 2], ['Biologia', 1], ['Scienze della Terra', 1]];
+const ACCENTS = {
+  informatica: { bg: 'oklch(0.47 0.15 262)', soft: 'oklch(0.94 0.02 262)', text: '#fff', dark: 'oklch(0.30 0.10 262)' },
+  les: { bg: 'oklch(0.50 0.19 25)', soft: 'oklch(0.94 0.03 25)', text: '#fff', dark: 'oklch(0.32 0.14 25)' },
+  energia: { bg: 'oklch(0.83 0.18 100)', soft: 'oklch(0.96 0.04 100)', text: 'oklch(0.26 0.03 100)', dark: 'oklch(0.48 0.13 80)' },
+  telecomunicazioni: { bg: 'oklch(0.62 0.19 45)', soft: 'oklch(0.95 0.04 45)', text: '#fff', dark: 'oklch(0.40 0.15 45)' },
+  biotecnologie: { bg: 'oklch(0.48 0.13 150)', soft: 'oklch(0.93 0.03 150)', text: '#fff', dark: 'oklch(0.30 0.10 150)' },
+  lsa: { bg: 'oklch(0.52 0.12 200)', soft: 'oklch(0.94 0.025 200)', text: '#fff', dark: 'oklch(0.32 0.09 200)' },
+};
+const rep = (n, t) => Array.from({ length: Math.max(0, n) }, () => ({ h: t === 'h', c: t === 'c', s: t === 's', d: t === 'd' }));
+const base = { per: 'quinquennio', unit: 'w', bars: false, sci: false, note: false };
+
+class Component extends DCLogic {
+  state = { m: { ...base }, d: { ...base, sci: true, note: true } };
+  set(k, p) { this.setState(s => ({ [k]: { ...s[k], ...p } })); }
+
+  view(k, accent) {
+    const s = this.state[k], mobile = k === 'm';
+    const years = PER[s.per];
+    const annual = s.unit === 'a', f = annual ? 33 : 1, n = years.length;
+    const perIdx = PER_KEYS.indexOf(s.per);
+    const btn = (label, on, fn) => ({ label, on, onClick: fn, fg: on ? accent.text : 'inherit' });
+    const cell = (r, y, area) => {
+      const i = y - 1, h = r.h[i] || 0, tbd = (r.tbd || [])[i] || 0, co = (r.co || [])[i] || 0, sc = (r.school || [])[i] || 0;
+      const c = { y, yl: ORD[i], full: false, empty: false, notOffered: false, tbd: false, assigned: false, pips: [], num: '' };
+      if (r.quota && y === 1) return { ...c, assigned: true };
+      if (tbd) return { ...c, tbd: true, num: String(tbd * f), pips: rep(tbd, 'd') };
+      if (!h) return area === 'ind' ? { ...c, notOffered: true } : { ...c, empty: true, num: '·' };
+      return { ...c, full: true, num: String(h * f), pips: [...rep(h - sc - co, 'h'), ...rep(co, 'c'), ...rep(sc, 's')] };
+    };
+    const rows = (list, area) => list.filter(r => years.some(y => r.h[y - 1] || (r.tbd || [])[y - 1] || (r.quota && y === 1)))
+      .map(r => ({ name: r.name, sci: !!r.sci, hasNote: !!r.note, note: r.note || '', showSub: !!r.sci && s.sci, showNote: !!r.note && s.note, cells: years.map(y => cell(r, y, area)) }));
+    const tots = a => years.map(y => ({ num: String(a[y - 1] * f) }));
+    const yearW = mobile ? 72 : ({ 2: 170, 3: 150, 5: 132 }[n] || 130);
+    const cols = mobile ? `130px repeat(${n}, ${yearW}px)` : `minmax(260px,1fr) repeat(${n}, ${yearW}px)`;
+    return {
+      years: years.map(y => ({ label: ORD[y - 1], cap: y === 1 ? 'deliberata' : 'quota da definire' })),
+      cols, scrolls: mobile && n > 3,
+      perBtns: PER_KEYS.map((p, i) => btn(PER_LABELS[i], s.per === p, () => this.set(k, { per: p }))),
+      perIdxPct: `${perIdx * 100}%`,
+      unitLbl: annual ? 'ore all’anno' : 'ore a settimana',
+      annual, toggleUnit: () => this.set(k, { unit: annual ? 'w' : 'a' }),
+      unitTrackBg: annual ? accent.bg : 'oklch(0.85 0.01 0)', unitKnobX: annual ? '18px' : '0px',
+      bars: s.bars, toggleBars: () => this.set(k, { bars: !s.bars }),
+      barsTrackBg: s.bars ? accent.bg : 'oklch(0.85 0.01 0)', barsKnobX: s.bars ? '18px' : '0px',
+      barsMaxH: s.bars ? '20px' : '0px', barsOp: s.bars ? 1 : 0,
+      barsMaxW: s.bars ? '82px' : '0px',
+      legendMaxH: s.bars ? '200px' : '0px', legendOp: s.bars ? 1 : 0,
+      gen: rows(GEN, 'gen'), ind: rows(IND, 'ind'),
+      totGen: tots(T_GEN), totInd: tots(T_IND), tot: tots(T_ALL),
+      sciOpen: s.sci, toggleSci: () => this.set(k, { sci: !s.sci }),
+      sciLbl: s.sci ? 'Nascondi le materie' : 'Vedi le 4 materie',
+      noteOpen: s.note, toggleNote: () => this.set(k, { note: !s.note }),
+      sciItems: SCI.map(([name, h]) => ({ name, num: String(h * f) })),
+      sciCells: years.map(y => ({ y1: y === 1, y2: y === 2 })),
+      sciSub: SCI.map(([name, h]) => ({ name, cells: years.map(y => y === 1 ? { txt: String(h * f) } : y === 2 ? { txt: 'da def.' } : { txt: '' }) })),
+    };
+  }
+
+  renderVals() {
+    const indirizzo = this.props.indirizzo ?? 'informatica';
+    const accent = ACCENTS[indirizzo] || ACCENTS.informatica;
+    return {
+      vals: { accentBg: accent.bg, accentSoft: accent.soft, accentDark: accent.dark, pageBg: '#fbfaf8', ink: '#1f2023', muted: '#6b6d72', faint: '#b9b6b1', border: '#e4e2df' },
+      m: this.view('m', accent), d: this.view('d', accent),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

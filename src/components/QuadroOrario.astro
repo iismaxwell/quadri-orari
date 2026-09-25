@@ -1,0 +1,1029 @@
+---
+/**
+ * Il quadro orario di un percorso, come nella "proposta unificata" di docs/design/.
+ *
+ * Tutto l'HTML è generato alla build, con entrambe le unità e tutti gli anni: lo script in fondo
+ * cambia solo attributi (`data-periodo`, `data-unita`, `data-dettaglio`, `hidden`) e il CSS
+ * mostra la combinazione scelta. Senza JavaScript si vede il quadro completo in ore settimanali.
+ */
+import Ore from './Ore.astro';
+import { ANNI } from '../dati/schema';
+import { ETICHETTE_FILTRI, FILTRI, FILTRO_PREDEFINITO, type Filtro } from '../dati/filtri';
+import { inParole, type CellaVista, type QuadroVista, type RigaVista } from '../dati/vista';
+
+interface Props {
+  vista: QuadroVista;
+}
+
+const { vista } = Astro.props;
+const filtri = Object.keys(FILTRI) as Filtro[];
+const nelFiltro = (r: RigaVista, f: Filtro) =>
+  r.anni.some((anno) => (FILTRI[f] as readonly number[]).includes(anno)) ? 'si' : 'no';
+const filtriRiga = (r: RigaVista) => ({ 'data-biennio': nelFiltro(r, 'biennio'), 'data-triennio': nelFiltro(r, 'triennio') });
+const colonne = ANNI.length + 1;
+const id = (r: RigaVista, parte: string) => `${vista.slug}-${r.id}-${parte}`;
+const tacche = (c: CellaVista) => (c.tipo === 'ore' || c.tipo === 'da-definire' ? c.tacche : []);
+---
+
+<section class="quadro" data-quadro data-periodo={FILTRO_PREDEFINITO} data-unita="settimanali" data-dettaglio="no">
+  <div class="quadro__testa">
+    <slot name="titolo" />
+    <div class="quadro__controlli">
+      <div class="filtro" role="group" aria-label="Anni da mostrare">
+        <span class="filtro__pillola" aria-hidden="true"></span>
+        {
+          filtri.map((f) => (
+            <button type="button" data-filtro={f} aria-pressed={f === FILTRO_PREDEFINITO ? 'true' : 'false'}>
+              {ETICHETTE_FILTRI[f]}
+            </button>
+          ))
+        }
+      </div>
+      <button type="button" class="interruttore" role="switch" aria-checked="false" data-interruttore="unita">
+        <span>Ore annue</span><span class="interruttore__binario" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="interruttore" role="switch" aria-checked="false" data-interruttore="dettaglio">
+        <span>Dettaglio ore</span><span class="interruttore__binario" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="legenda">
+    <ul class="legenda__voci">
+      <li><span class="tacca tacca--singola" aria-hidden="true"></span>ora singola a settimana</li>
+      {
+        vista.legenda.compresenza && (
+          <li>
+            <span class="tacca tacca--compresenza" aria-hidden="true" />
+            in compresenza: due docenti
+          </li>
+        )
+      }
+      {
+        vista.legenda.scuola && (
+          <li>
+            <span class="tacca tacca--scuola" aria-hidden="true" />
+            scelta della scuola
+          </li>
+        )
+      }
+      {
+        vista.legenda.daDefinire && (
+          <li>
+            <span class="tacca tacca--da-definire" aria-hidden="true" />
+            quota della scuola, da definire
+          </li>
+        )
+      }
+    </ul>
+  </div>
+
+  <div class="quadro__scorrimento">
+    <table class="tabella">
+      <caption class="sr-only">
+        Quadro orario di {vista.nome}, in <span data-u="s">ore a settimana</span><span data-u="a">ore all’anno</span>
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col" class="col-disc tabella__unita">
+            <span data-u="s">ore a settimana</span><span data-u="a">ore all’anno</span>
+          </th>
+          {
+            vista.anni.map((a) => (
+              <th scope="col" data-anno={a.anno}>
+                <span class="tabella__anno">{a.etichetta}</span>
+                {a.didascalia && <span class="tabella__didascalia">{a.didascalia}</span>}
+              </th>
+            ))
+          }
+        </tr>
+      </thead>
+      {
+        vista.aree.map((area) => (
+          <tbody>
+            {area.titolo && (
+              <tr class="titolo-area">
+                <th scope="rowgroup" class="col-disc">
+                  {area.titolo}
+                </th>
+                {ANNI.map((anno) => (
+                  <td data-anno={anno} />
+                ))}
+              </tr>
+            )}
+            {area.righe.map((r) => (
+              <>
+                <tr class="disciplina" {...filtriRiga(r)}>
+                  <th scope="row" class="col-disc">
+                    <span class="disciplina__nome">{r.nome}</span>
+                    {(r.ripartizione || r.note.length > 0) && (
+                      <span class="disciplina__azioni">
+                        {r.ripartizione && (
+                          <button
+                            type="button"
+                            class="espandi"
+                            data-espandi
+                            aria-expanded="false"
+                            aria-controls={[...r.ripartizione.materie.map((_, i) => id(r, `materia-${i}`)), id(r, 'materie')].join(' ')}
+                            data-aperto="Nascondi le materie"
+                            data-chiuso={`Vedi le ${r.ripartizione.materie.length} materie`}
+                          >
+                            Vedi le {r.ripartizione.materie.length} materie
+                          </button>
+                        )}
+                        {r.note.length > 0 && (
+                          <button type="button" class="espandi" data-espandi aria-expanded="false" aria-controls={id(r, 'nota')}>
+                            Nota
+                          </button>
+                        )}
+                      </span>
+                    )}
+                  </th>
+                  {r.celle.map((c, i) => (
+                    <td data-anno={i + 1} class:list={['cella', `cella--${c.tipo}`]}>
+                      <div class="cella__dentro">
+                        {c.tipo === 'ore' && (
+                          <span class="cella__numero">
+                            <Ore {...c} />
+                            {(c.compresenza ?? 0) > 0 && <span class="sr-only">, di cui {c.compresenza} a settimana in compresenza</span>}
+                            {c.scuola > 0 && <span class="sr-only">, di cui {c.scuola} a settimana scelte dalla scuola</span>}
+                          </span>
+                        )}
+                        {c.tipo === 'da-definire' && (
+                          <span class="cella__numero">
+                            <Ore {...c} />
+                            <span class="sr-only"> da definire</span>
+                          </span>
+                        )}
+                        {c.tipo === 'assegnata' && (
+                          <span class="cella__testo">
+                            <span class="solo-stretto" aria-hidden="true">assegnata ↑</span>
+                            <span class="solo-largo" aria-hidden="true">assegnata a<br />{c.a.join(', ')} ↑</span>
+                            <span class="sr-only">assegnata a {c.a.join(', ')}</span>
+                          </span>
+                        )}
+                        {c.tipo === 'vuota' && (
+                          <span class="cella__vuota">
+                            <span aria-hidden="true">·</span>
+                            <span class="sr-only">nessuna ora</span>
+                          </span>
+                        )}
+                        {c.tipo === 'non-attiva' && <span class="cella__testo cella__non-attiva">non attiva</span>}
+                        {tacche(c).length > 0 && (
+                          <span class="tacche" aria-hidden="true">
+                            {tacche(c).map((t) => (
+                              <span class={`tacca tacca--${t}`} />
+                            ))}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+                {r.ripartizione &&
+                  r.ripartizione.materie.map((materia, m) => (
+                    <tr class="sotto sotto--riga" id={id(r, `materia-${m}`)} hidden {...filtriRiga(r)}>
+                      <th scope="row" class="col-disc">
+                        {materia}
+                      </th>
+                      {r.ripartizione!.celle.map((c, i) => {
+                        const ore = c.tipo === 'ore' ? c.materie.find((x) => x.nome === materia) : undefined;
+                        return (
+                          <td data-anno={i + 1}>
+                            {ore && <Ore {...ore} />}
+                            {c.tipo === 'da-definire' && 'da def.'}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                {r.ripartizione && (
+                  <tr class="sotto sotto--pannello" id={id(r, 'materie')} hidden {...filtriRiga(r)}>
+                    <th scope="row" class="col-disc">
+                      Una disciplina, {inParole(r.ripartizione.materie.length)} materie. La scuola ha deciso quante ore
+                      dare a ciascuna.
+                    </th>
+                    {r.ripartizione.celle.map((c, i) => (
+                      <td data-anno={i + 1}>
+                        {c.tipo === 'ore' && (
+                          <ul class="materie">
+                            {c.materie.map((m) => (
+                              <li>
+                                <span>{m.nome}</span>
+                                <span class="materie__ore">
+                                  <Ore {...m} />
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                        {c.tipo === 'da-definire' && (
+                          <span class="materie__da-definire">
+                            ripartizione
+                            <br />
+                            da definire
+                          </span>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                )}
+                {r.note.length > 0 && (
+                  <tr class="sotto sotto--nota" id={id(r, 'nota')} hidden {...filtriRiga(r)}>
+                    <td colspan={colonne} data-colspan>
+                      <div class="nota">
+                        {r.note.map((n) => (
+                          <p>{n}</p>
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </>
+            ))}
+            <tr class="totale-area">
+              <th scope="row" class="col-disc">
+                <span class="solo-stretto">Totale area</span>
+                <span class="solo-largo">{area.titoloTotale}</span>
+              </th>
+              {area.totali.map((t, i) => (
+                <td data-anno={i + 1}>
+                  <Ore {...t} />
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        ))
+      }
+      <tfoot>
+        <tr class="totale">
+          <th scope="row" class="col-disc">
+            Totale <span class="solo-largo"><span data-u="s">ore a settimana</span><span data-u="a">ore all’anno</span></span>
+          </th>
+          {
+            vista.totali.map((t, i) => (
+              <td data-anno={i + 1}>
+                <Ore {...t} />
+              </td>
+            ))
+          }
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <p class="quadro__scorri" aria-hidden="true">Scorri di lato per vedere tutti gli anni →</p>
+</section>
+
+<script>
+  import { avviaQuadri } from '../scripts/quadro-orario';
+  avviaQuadri();
+</script>
+
+<style is:global>
+  /* ---------- Controlli ---------- */
+
+  .quadro__testa {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .quadro__controlli {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .filtro {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1.5px solid var(--accento-forte);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 2px;
+  }
+
+  .filtro__pillola {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(100% / 3);
+    border-radius: 999px;
+    background: var(--accento);
+    transition: transform 0.3s var(--curva);
+  }
+
+  .quadro[data-periodo='triennio'] .filtro__pillola {
+    transform: translateX(100%);
+  }
+
+  .quadro[data-periodo='quinquennio'] .filtro__pillola {
+    transform: translateX(200%);
+  }
+
+  .filtro button {
+    position: relative;
+    min-height: 42px;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 700;
+    transition: color 0.3s;
+  }
+
+  .filtro button[aria-pressed='true'] {
+    color: var(--accento-su);
+  }
+
+  .filtro button:focus-visible {
+    outline-offset: -4px;
+    border-radius: 999px;
+  }
+
+  .interruttore {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 40px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 14px;
+  }
+
+  .interruttore__binario {
+    position: relative;
+    flex: none;
+    width: 44px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--spento);
+    transition: background 0.25s;
+  }
+
+  .interruttore__binario::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+    transition: transform 0.25s var(--curva);
+  }
+
+  .interruttore[aria-checked='true'] .interruttore__binario {
+    background: var(--accento-forte);
+  }
+
+  .interruttore[aria-checked='true'] .interruttore__binario::after {
+    transform: translateX(18px);
+  }
+
+  /* ---------- Unità e dettaglio ---------- */
+
+  .quadro[data-unita='settimanali'] [data-u='a'],
+  .quadro[data-unita='annue'] [data-u='s'] {
+    display: none;
+  }
+
+  .legenda {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      grid-template-rows 0.3s ease,
+      opacity 0.25s ease,
+      visibility 0.3s;
+  }
+
+  .quadro[data-dettaglio='si'] .legenda {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .legenda__voci {
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    color: var(--tenue);
+  }
+
+  .quadro[data-dettaglio='si'] .legenda__voci {
+    padding: 14px 0 10px;
+  }
+
+  .legenda__voci li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tacche {
+    display: flex;
+    gap: 2px;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition:
+      max-height 0.25s ease,
+      max-width 0.25s ease,
+      opacity 0.2s ease,
+      visibility 0.25s;
+  }
+
+  .quadro[data-dettaglio='si'] .tacche {
+    max-height: 20px;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .tacca {
+    flex: none;
+    width: 6px;
+    height: 14px;
+    border-radius: 1.5px;
+  }
+
+  .tacca--singola {
+    background: var(--accento-forte);
+  }
+
+  .tacca--compresenza {
+    background: linear-gradient(180deg, var(--accento-forte) 50%, var(--accento-tenue) 50%);
+    box-shadow: inset 0 0 0 1px var(--accento-forte);
+  }
+
+  .tacca--scuola {
+    background: var(--accento-scuro);
+  }
+
+  .tacca--da-definire {
+    box-shadow: inset 0 0 0 1px var(--tratteggio-bordo);
+    background: repeating-linear-gradient(45deg, transparent 0 2px, var(--tratteggio) 2px 4px);
+  }
+
+  .legenda .tacca {
+    height: 15px;
+  }
+
+  /* ---------- Tabella ---------- */
+
+  .quadro {
+    --w-disc: 130px;
+    --w-anno: 72px;
+    --n: 5;
+  }
+
+  .quadro[data-periodo='biennio'] {
+    --n: 2;
+  }
+
+  .quadro[data-periodo='triennio'] {
+    --n: 3;
+  }
+
+  .quadro[data-periodo='biennio'] [data-anno='3'],
+  .quadro[data-periodo='biennio'] [data-anno='4'],
+  .quadro[data-periodo='biennio'] [data-anno='5'],
+  .quadro[data-periodo='triennio'] [data-anno='1'],
+  .quadro[data-periodo='triennio'] [data-anno='2'],
+  .quadro[data-periodo='biennio'] tr[data-biennio='no'],
+  .quadro[data-periodo='triennio'] tr[data-triennio='no'] {
+    display: none;
+  }
+
+  .quadro__scorrimento {
+    /* Contiene i testi .sr-only (position: absolute), che altrimenti allargherebbero la pagina. */
+    position: relative;
+    margin: 8px calc(-1 * var(--margine)) 0;
+    overflow-x: auto;
+    border-top: 1px solid var(--bordo);
+  }
+
+  .tabella {
+    table-layout: fixed;
+    width: max(100%, calc(var(--w-disc) + var(--n) * var(--w-anno)));
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 12px;
+  }
+
+  .tabella th,
+  .tabella td {
+    padding: 0;
+    font-weight: inherit;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .tabella .col-disc {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    width: var(--w-disc);
+    padding: 10px 8px 10px var(--margine);
+    background: var(--carta);
+    box-shadow: 1px 0 0 var(--bordo);
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.25;
+  }
+
+  .tabella thead th {
+    padding-block: 12px 10px;
+    border-bottom: 1.5px solid var(--inchiostro);
+  }
+
+  .tabella thead th[data-anno] {
+    width: var(--w-anno);
+  }
+
+  .tabella__unita {
+    font-size: 12px !important;
+    color: var(--tenue);
+    vertical-align: bottom !important;
+  }
+
+  .tabella__anno {
+    display: block;
+    font-family: var(--font-titoli);
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .tabella__didascalia {
+    /* Su schermo stretto resta solo per i lettori di schermo: la dice già la riga della quota. */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .titolo-area th {
+    padding-block: 14px 4px !important;
+    font-family: var(--font-titoli);
+    font-style: italic;
+    font-size: 16px !important;
+  }
+
+  .disciplina > * {
+    border-bottom: 1px solid var(--bordo);
+  }
+
+  .disciplina th {
+    display: table-cell;
+  }
+
+  .disciplina__nome {
+    display: block;
+  }
+
+  .disciplina__azioni {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 12px;
+  }
+
+  .espandi {
+    min-height: 32px;
+    padding: 4px 0;
+    border: 0;
+    background: transparent;
+    color: var(--accento-forte);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .cella__dentro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 2px;
+  }
+
+  .cella__numero {
+    font-family: var(--font-titoli);
+    font-size: 21px;
+    line-height: 1;
+  }
+
+  .cella--da-definire .cella__numero {
+    font-size: 19px;
+    font-style: italic;
+    color: var(--tenue);
+  }
+
+  .cella__testo {
+    font-size: 10px;
+    line-height: 1.15;
+    color: var(--tenue);
+  }
+
+  .cella--assegnata .cella__testo {
+    font-weight: 600;
+  }
+
+  .cella__non-attiva {
+    font-style: italic;
+  }
+
+  .cella__vuota {
+    color: var(--debole);
+  }
+
+  .quadro[data-dettaglio='si'] .tacche {
+    padding-top: 2px;
+  }
+
+  .sotto > * {
+    background: var(--accento-tenue);
+    border-bottom: 1px solid var(--bordo);
+  }
+
+  .sotto--riga th {
+    padding-left: calc(var(--margine) + 12px) !important;
+    font-size: 12px !important;
+  }
+
+  .sotto--riga td {
+    padding-block: 8px;
+    font-family: var(--font-titoli);
+    font-size: 16px;
+  }
+
+  .sotto--pannello {
+    display: none;
+  }
+
+  .nota {
+    position: sticky;
+    left: 0;
+    width: min(100%, 100vw);
+    padding: 10px var(--margine);
+    text-align: left;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .nota p {
+    margin: 0;
+  }
+
+  .nota p + p {
+    margin-top: 8px;
+  }
+
+  .totale-area > * {
+    padding-block: 10px !important;
+    font-weight: 700;
+  }
+
+  .totale-area td,
+  .totale td {
+    font-family: var(--font-titoli);
+    font-weight: 600;
+    font-size: 19px;
+  }
+
+  .totale > * {
+    padding-block: 12px !important;
+    border-top: 1.5px solid var(--inchiostro);
+    font-weight: 700;
+    font-size: 14px !important;
+  }
+
+  .totale td {
+    font-size: 24px !important;
+    color: var(--accento-forte);
+  }
+
+  .quadro__scorri {
+    margin: 0 0 10px;
+    font-size: 11px;
+    color: var(--tenue);
+  }
+
+  .quadro:not([data-periodo='quinquennio']) .quadro__scorri {
+    display: none;
+  }
+
+  .solo-largo {
+    display: none;
+  }
+
+  /* ---------- Tablet: più spazio, stessa struttura ---------- */
+
+  @media (min-width: 600px) {
+    .quadro {
+      --w-disc: 220px;
+      --w-anno: 88px;
+    }
+
+    .quadro__controlli {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 20px;
+    }
+
+    .filtro {
+      grid-template-columns: repeat(3, minmax(108px, auto));
+      margin-bottom: 0;
+    }
+
+    .interruttore {
+      justify-content: flex-start;
+      min-height: var(--tocco);
+    }
+  }
+
+  /* ---------- Desktop ---------- */
+
+  @media (min-width: 960px) {
+    .quadro {
+      --w-anno: 132px;
+    }
+
+    .quadro[data-periodo='triennio'] {
+      --w-anno: 150px;
+    }
+
+    .quadro[data-periodo='biennio'] {
+      --w-anno: 170px;
+    }
+
+    .quadro__testa {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .filtro button {
+      min-height: var(--tocco);
+      font-size: 15px;
+    }
+
+    .interruttore {
+      font-size: 15px;
+    }
+
+    .legenda__voci {
+      gap: 10px 28px;
+      font-size: 13px;
+      color: var(--inchiostro);
+    }
+
+    .quadro[data-dettaglio='si'] .legenda__voci {
+      margin-top: 28px;
+      padding: 14px 20px;
+      border-radius: var(--raggio);
+      background: var(--accento-tenue);
+    }
+
+    .legenda__voci li {
+      gap: 10px;
+    }
+
+    .legenda .tacca {
+      width: 8px;
+      height: 18px;
+    }
+
+    .quadro__scorrimento {
+      margin: 28px 0 0;
+      border-top: 0;
+    }
+
+    .tabella {
+      width: 100%;
+    }
+
+    .tabella .col-disc {
+      position: static;
+      width: auto;
+      padding: 11px 16px 11px 0;
+      box-shadow: none;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .tabella thead th {
+      padding-block: 0 10px;
+    }
+
+    .tabella__unita {
+      font-size: 14px !important;
+      padding-bottom: 12px !important;
+    }
+
+    .tabella__anno {
+      font-size: 27px;
+    }
+
+    .tabella__didascalia {
+      position: static;
+      display: block;
+      width: auto;
+      height: auto;
+      margin-top: 2px;
+      clip-path: none;
+      font-size: 12px;
+      color: var(--tenue);
+    }
+
+    .titolo-area th {
+      padding-block: 22px 6px !important;
+      font-size: 22px !important;
+    }
+
+    .disciplina__nome {
+      display: inline;
+      margin-right: 12px;
+    }
+
+    .disciplina__azioni {
+      display: inline-flex;
+      vertical-align: baseline;
+    }
+
+    .espandi {
+      min-height: 0;
+      padding: 0;
+      font-size: 14px;
+    }
+
+    .cella__dentro {
+      flex-direction: row;
+      gap: 0;
+      padding: 8px 0;
+    }
+
+    .cella__numero {
+      font-size: 23px;
+    }
+
+    .cella--da-definire .cella__numero {
+      font-size: 21px;
+    }
+
+    .cella__testo {
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .cella--assegnata .cella__testo {
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .tacche {
+      gap: 3px;
+      max-height: none;
+      max-width: 0;
+    }
+
+    .quadro[data-dettaglio='si'] .tacche {
+      max-height: none;
+      max-width: 82px;
+      margin-left: 8px;
+      padding-top: 0;
+    }
+
+    .tacca {
+      width: 8px;
+      height: 18px;
+    }
+
+    .sotto--riga {
+      display: none;
+    }
+
+    .sotto--pannello {
+      display: table-row;
+    }
+
+    .sotto--pannello > * {
+      padding: 14px 0 !important;
+      vertical-align: top;
+      border-bottom: 0;
+    }
+
+    .sotto--pannello th {
+      padding: 14px 24px 14px 16px !important;
+      font-size: 14px !important;
+      line-height: 1.45 !important;
+      text-wrap: pretty;
+      border-radius: var(--raggio) 0 0 var(--raggio);
+    }
+
+    .materie {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 0;
+      padding: 0 12px;
+      list-style: none;
+      font-size: 13px;
+    }
+
+    .materie li {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .materie__ore {
+      font-family: var(--font-cifre);
+      font-weight: 500;
+    }
+
+    .materie__da-definire {
+      font-size: 13px;
+      color: var(--tenue);
+    }
+
+    .sotto--nota td {
+      border-bottom: 0;
+      background: transparent;
+    }
+
+    .nota {
+      position: static;
+      width: auto;
+      margin: 8px 0;
+      padding: 12px 16px;
+      border-radius: var(--raggio);
+      background: var(--accento-tenue);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .totale-area > * {
+      padding-block: 12px !important;
+    }
+
+    .totale-area td {
+      font-size: 23px;
+    }
+
+    .totale > * {
+      padding-block: 14px !important;
+      font-size: 18px !important;
+    }
+
+    .totale td {
+      font-size: 34px !important;
+    }
+
+    .quadro__scorri {
+      display: none;
+    }
+
+    .solo-stretto {
+      display: none;
+    }
+
+    .solo-largo {
+      display: inline;
+    }
+  }
+
+  @media (min-width: 960px) and (max-width: 1199px) {
+    .quadro[data-periodo='quinquennio'] {
+      --w-anno: 116px;
+    }
+  }
+
+  @media (hover: hover) and (min-width: 960px) {
+    .disciplina > * {
+      transition: background 0.15s;
+    }
+
+    .disciplina:hover > * {
+      background: var(--carta-hover);
+    }
+  }
+</style>

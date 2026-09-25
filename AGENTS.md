@@ -33,6 +33,7 @@ percorso senza quelle parti fin dall'inizio, senza doverlo rifare.
 - `site` si imposta con la variabile d'ambiente `SITE_URL` (predefinito
   `https://iismaxwell.github.io`); `base` è fisso.
 - **Ore mostrate come settimanali**, con il monte ore annuo visibile a richiesta.
+- **Font ospitati dal sito** (pacchetti Fontsource), niente Google Fonts né altre CDN.
 - **Pubblicazione:** GitHub Pages (`https://iismaxwell.github.io/quadri-orari/`) e deploy
   automatico, tramite GitHub Action, verso `www.jcmaxwell.it/quadri-orari/`. Le credenziali
   dell'hosting stanno nei secrets dell'organizzazione `iismaxwell`, mai nel repo.
@@ -46,10 +47,13 @@ npm test                # test unitari (Vitest): tests/**/*.test.ts
 npx astro check         # controllo dei tipi
 npm run build           # esegue prima verifica-dati, poi genera dist/
 npm run dev             # server di sviluppo
+npx playwright test     # test end-to-end (tests/e2e/*.spec.ts) sul dist/ già costruito
 SITE_URL=https://www.jcmaxwell.it npm run build   # build per jcmaxwell.it
 ```
 
-I test end-to-end, quando ci saranno, useranno il suffisso `.spec.ts`, che Vitest ignora.
+I test end-to-end usano il suffisso `.spec.ts`, che Vitest ignora, e girano su `astro preview`
+(porta 4322, avviato da Playwright). La prima volta serve `npx playwright install chromium`. La CI
+li esegue dopo la build.
 
 ## Vincoli che non si vedono dal codice
 
@@ -209,19 +213,26 @@ informazioni raggiungibili solo con l'hover.
 - **A colpo d'occhio, una tabella semplice:** discipline e ore settimanali per anno. Nient'altro
   che la appesantisca.
 - **Le compresenze fanno parte della tabella**, ma con una resa grafica più elegante di un numero
-  tra parentesi. Per esempio, le ore di una disciplina come segmenti, con quelle in compresenza
-  distinte visivamente e spiegate in legenda. Un lettore deve capire subito che sono comprese
-  nelle ore, non aggiunte.
+  tra parentesi: le ore di una disciplina come barrette, una per ora settimanale, con quelle in
+  compresenza, quelle scelte dalla scuola e la quota da definire distinte e spiegate in legenda.
+  Un lettore deve capire subito che sono comprese nelle ore, non aggiunte. Per tenere pulita la
+  tabella, barrette e legenda compaiono con l'interruttore **"Dettaglio ore"**, spento di default.
 - **Informazioni su richiesta**, nascoste finché l'utente non le apre:
   - la ripartizione di *Scienze sperimentali* tra Scienze della Terra, Biologia, Chimica e Fisica,
     con le ore di ciascuna dove la scuola le ha deliberate;
   - il monte ore annuo al posto delle ore settimanali;
   - le note dei decreti, come quella su *Complementi di matematica*.
+
+  Un dato non ancora comunicato dalla scuola (compresenze, ripartizione) non si mostra affatto:
+  il pulsante "Vedi le materie" e le barrette di compresenza compaiono da soli quando il dato
+  entra nel file del percorso.
 - Le classi non ancora deliberate mostrano la quota a disposizione come **da definire**, in modo
   chiaramente distinto dalle ore assegnate.
-- **Filtro per periodo:** controlli "biennio" / "triennio" / "tutti e 5 gli anni". Servono in
-  modalità proiezione e sono utili anche su smartphone, dove biennio o triennio riducono le
-  colonne.
+- **Filtro per periodo:** controlli **Biennio / Triennio / Quinquennio** (default Quinquennio).
+  Servono in modalità proiezione e sono utili anche su smartphone, dove biennio o triennio
+  riducono le colonne. Il periodo scelto va nell'URL (`?periodo=biennio`).
+- **Contrasto AA** per testo e controlli, anche con i colori d'accento degli indirizzi (vedi i
+  commenti in `src/styles/token.css`).
 - **Identità visiva:** logo e icone sono fissi, il resto (palette, tipografia) è aperto — Marco ha
   scelto di non vincolare il design alla brochure esistente, per lasciare libertà creativa a
   Claude Design. Ogni indirizzo ha la sua icona, già usata dalla scuola, in
@@ -230,6 +241,21 @@ informazioni raggiungibili solo con l'hover.
   `src/assets/favicon/` — entrambi con il proprio README.
 - Il brief completo per chi progetta la grafica, con i dati di esempio, è
   `docs/brief-design.md`. Se cambiano i requisiti qui sopra, va aggiornato anche il brief.
+- Il **design scelto** è in `docs/design/`, con un README che elenca come è stato tradotto nel
+  sito e dove se ne discosta. Per ora copre quadro orario e scheda di indirizzo.
+
+### Dove sta l'interfaccia
+
+| Dove | Cosa |
+|---|---|
+| `src/styles/token.css` | Design token: colori, font, spazi, accento per indirizzo (`data-accento`). |
+| `src/styles/base.css` | Stili di base comuni a tutte le pagine. |
+| `src/layouts/Base.astro` | Header con il logo, footer, font. |
+| `src/components/Icona.astro` | Icona di un indirizzo, inline con `currentColor`. |
+| `src/dati/vista.ts` | `vistaQuadro`: dal quadro di `componiQuadro` a ciò che la tabella mostra (celle "non attive", barrette, ripartizioni). Funzione pura, testata in `tests/dati/vista.test.ts`. |
+| `src/dati/filtri.ts` | I tre periodi del filtro. Senza dipendenze, perché lo usa anche lo script del browser. |
+| `src/components/QuadroOrario.astro` | La tabella, con controlli e legenda. Tutto l'HTML è generato alla build, in entrambe le unità e per tutti gli anni; `src/scripts/quadro-orario.ts` cambia solo attributi. |
+| `src/pages/[slug].astro` | Scheda di indirizzo, una per percorso (`/quadri-orari/informatica/`…). |
 
 ### Modalità proiezione
 
@@ -238,7 +264,7 @@ slide**. Si usa durante gli open day, proiettato sui televisori delle aule per i
 
 - Pensata per un televisore 16:9 guardato da qualche metro: testo grande, nessuno scorrimento.
   Il quadro deve stare tutto in una schermata anche con 5 anni visibili.
-- Controlli a schermo per biennio / triennio / tutti. I televisori delle aule sono **interattivi**
+- Controlli a schermo per Biennio / Triennio / Quinquennio. I televisori delle aule sono **interattivi**
   (touch), quindi i controlli devono essere grandi e comodi da toccare stando in piedi davanti
   allo schermo. Da tastiera si usano le frecce e i tasti pagina, così funzionano anche i
   telecomandi per presentazioni. I controlli si nascondono quando non servono.

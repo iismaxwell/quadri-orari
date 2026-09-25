@@ -1,0 +1,88 @@
+/*
+ * Design token della proposta scelta con Claude Design (docs/design/, "proposta unificata").
+ * I valori vengono dal design; dove il design non raggiungeva il contrasto AA richiesto da
+ * AGENTS.md è indicato accanto al token.
+ */
+:root {
+  /* Superfici e testo */
+  --carta: #fbfaf8;
+  --carta-hover: #f2f0eb;
+  --inchiostro: #1f2023;
+  --tenue: #6b6d72;
+  --debole: #b9b6b1; /* solo segni decorativi: 1.9:1, non usarlo per il testo */
+  --bordo: #e4e2df;
+  --spento: oklch(0.85 0.01 0); /* binario dell'interruttore spento */
+  --tratteggio: #c7c2b7;
+  --tratteggio-bordo: #9a968d;
+
+  /* Tipografia */
+  --font-testo: 'Instrument Sans Variable', system-ui, sans-serif;
+  --font-titoli: 'Newsreader Variable', Georgia, serif;
+  --font-cifre: 'DM Mono', ui-monospace, monospace;
+
+  /* Spazi e forme */
+  --margine: 18px;
+  --margine-largo: 72px;
+  --larghezza-max: 1200px;
+  --raggio: 12px;
+  --tocco: 44px; /* bersaglio minimo dei controlli */
+
+  --curva: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /*
+   * Accento dell'indirizzo, impostato con data-accento. Cinque ruoli:
+   * --accento        colore del marchio: icona, pillola del filtro;
+   * --accento-su     testo sopra --accento;
+   * --accento-forte  testo, link, bordi e tacche sulla carta (≥ 4.5:1, AA);
+   * --accento-tenue  sfondo di legenda, ripartizioni e note;
+   * --accento-scuro  tacche delle ore scelte dalla scuola.
+   */
+  --accento: oklch(0.47 0.15 262);
+  --accento-su: #fff;
+  --accento-forte: var(--accento);
+  --accento-tenue: oklch(0.94 0.02 262);
+  --accento-scuro: oklch(0.3 0.1 262);
+}
+
+[data-accento='informatica'] {
+  --accento: oklch(0.47 0.15 262);
+  --accento-tenue: oklch(0.94 0.02 262);
+  --accento-scuro: oklch(0.3 0.1 262);
+}
+
+/* Design: oklch(0.62 0.19 45). Scurito a 0.57 perché il bianco sopra e il testo sulla carta
+   arrivino ad AA (erano 3.9:1 e 3.8:1). */
+[data-accento='telecomunicazioni'] {
+  --accento: oklch(0.57 0.18 45);
+  --accento-tenue: oklch(0.95 0.04 45);
+  --accento-scuro: oklch(0.4 0.15 45);
+}
+
+[data-accento='biotecnologie-ambientali'] {
+  --accento: oklch(0.48 0.13 150);
+  --accento-tenue: oklch(0.93 0.03 150);
+  --accento-scuro: oklch(0.3 0.1 150);
+}
+
+/* Il giallo del design ha 1.6:1 sulla carta: resta per icona e pillola, mentre testo e tacche
+   usano l'ocra del design (6.3:1) e le ore della scuola un ocra più scuro. */
+[data-accento='energia'] {
+  --accento: oklch(0.83 0.18 100);
+  --accento-su: oklch(0.26 0.03 100);
+  --accento-forte: oklch(0.48 0.13 80);
+  --accento-tenue: oklch(0.96 0.04 100);
+  --accento-scuro: oklch(0.34 0.09 80);
+}
+
+/* Licei (F10). Il ciano di Scienze applicate è provvisorio anche nel design. */
+[data-accento='liceo-economico-sociale'] {
+  --accento: oklch(0.5 0.19 25);
+  --accento-tenue: oklch(0.94 0.03 25);
+  --accento-scuro: oklch(0.32 0.14 25);
+}
+
+[data-accento='liceo-scienze-applicate'] {
+  --accento: oklch(0.52 0.12 200);
+  --accento-tenue: oklch(0.94 0.025 200);
+  --accento-scuro: oklch(0.32 0.09 200);
+}

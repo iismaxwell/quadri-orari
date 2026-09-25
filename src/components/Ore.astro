@@ -1,0 +1,11 @@
+---
+/** Un numero di ore in entrambe le unità: il CSS mostra quella scelta con l'interruttore. */
+interface Props {
+  settimanali: number;
+  annue: number;
+}
+
+const { settimanali, annue } = Astro.props;
+---
+
+<span data-u="s">{settimanali}</span><span data-u="a">{annue}</span>

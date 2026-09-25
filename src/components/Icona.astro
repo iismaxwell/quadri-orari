@@ -1,0 +1,31 @@
+---
+/**
+ * Icona di un indirizzo, inserita inline così prende `currentColor` e conserva i due toni
+ * (vedi src/assets/icone-indirizzi/README.md). Decorativa: accanto c'è sempre il nome.
+ */
+interface Props {
+  nome: string;
+  class?: string;
+}
+
+const file = import.meta.glob<string>('../assets/icone-indirizzi/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+const { nome, class: classe } = Astro.props;
+const sorgente = file[`../assets/icone-indirizzi/${nome}.svg`];
+if (!sorgente) throw new Error(`Icona "${nome}" inesistente in src/assets/icone-indirizzi/`);
+
+// Tiene solo l'elemento <svg>: via prologo XML, doctype e dimensioni fisse (le dà il CSS).
+const svg = sorgente
+  .slice(sorgente.indexOf('<svg'))
+  .replace(/\s(width|height)="[^"]*"/g, '')
+  .replace(
+    '<svg',
+    `<svg class="${['icona', classe].filter(Boolean).join(' ')}" fill="currentColor" aria-hidden="true" focusable="false" preserveAspectRatio="xMinYMid meet"`,
+  );
+---
+
+<Fragment set:html={svg} />

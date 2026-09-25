@@ -2,6 +2,7 @@
 CLAUDE.md
 CLAUDE.local.md
 .claude/settings.local.json
+.claude/launch.json
 
 # Astro / Node
 node_modules/
@@ -15,3 +16,7 @@ dist/
 
 # Piano di lavoro privato di Marco
 PIANO.md
+
+# Playwright
+test-results/
+playwright-report/

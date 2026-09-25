@@ -1,6 +1,10 @@
 ---
 // Pagina provvisoria: sostituita in F6 dalla home definitiva.
 // Serve perché il QR code della brochure punta già qui.
+import { getPercorsi } from '../dati/astro';
+
+const percorsi = await getPercorsi();
+const base = import.meta.env.BASE_URL;
 ---
 
 <!doctype html>
@@ -21,6 +25,9 @@
         Questa pagina è in costruzione. Presto qui troverai i quadri orari delle articolazioni
         tecniche dell'IIS "J.C. Maxwell", con le scelte già deliberate dalla scuola.
       </p>
+      <ul>
+        {percorsi.map(({ slug, percorso }) => <li><a href={`${base}${slug}/`}>{percorso.nome}</a></li>)}
+      </ul>
       <p><a href="https://www.jcmaxwell.edu.it/">Torna al sito della scuola</a></p>
     </main>
   </body>
