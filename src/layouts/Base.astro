@@ -1,7 +1,8 @@
 ---
 /**
- * Layout comune: header con il logo, contenuto, footer. Favicon, meta Open Graph e menu di
- * navigazione arrivano con le pagine di contenuto (F6).
+ * Layout comune: header con il logo e il menu del sito, contenuto, footer, meta Open Graph.
+ * Il menu unisce la collection `pagine` (src/content/pagine/) con la voce "Documenti", che non è
+ * un testo ma l'elenco dei PDF di public/documenti/ (vedi src/pages/documenti.astro).
  */
 import '@fontsource-variable/instrument-sans/wght.css';
 import '@fontsource-variable/newsreader/opsz.css';
@@ -9,6 +10,8 @@ import '@fontsource-variable/newsreader/opsz-italic.css';
 import '@fontsource/dm-mono/500.css';
 import '../styles/base.css';
 import logo from '../assets/loghi/logo-esteso.png';
+import logoBadge from '../assets/loghi/logo-badge.png';
+import { getPagine } from '../dati/astro';
 
 interface Props {
   titolo: string;
@@ -19,6 +22,18 @@ interface Props {
 
 const { titolo, descrizione, accento } = Astro.props;
 const base = import.meta.env.BASE_URL;
+
+const pagine = await getPagine();
+const voci = [
+  ...pagine.map((p) => ({ slug: p.id, titolo: p.data.titolo, ordine: p.data.ordine })),
+  { slug: 'documenti', titolo: 'Documenti', ordine: 2 },
+].sort((a, b) => a.ordine - b.ordine);
+
+const percorso = Astro.url.pathname;
+const sonoIndirizzi = percorso !== base && !voci.some((v) => percorso === `${base}${v.slug}/`);
+
+const immagine = new URL(logoBadge.src, Astro.site);
+const canonico = new URL(percorso, Astro.site);
 ---
 
 <!doctype html>
@@ -28,6 +43,15 @@ const base = import.meta.env.BASE_URL;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{titolo}</title>
     <meta name="description" content={descrizione} />
+    <link rel="canonical" href={canonico} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:site_name" content="IIS J.C. Maxwell — Quadri orari" />
+    <meta property="og:title" content={titolo} />
+    <meta property="og:description" content={descrizione} />
+    <meta property="og:url" content={canonico} />
+    <meta property="og:image" content={immagine} />
+    <meta name="twitter:card" content="summary" />
   </head>
   <body data-accento={accento}>
     <a class="salta" href="#contenuto">Vai al contenuto</a>
@@ -35,6 +59,16 @@ const base = import.meta.env.BASE_URL;
       <a href={base} class="testata__logo">
         <img src={logo.src} width={logo.width} height={logo.height} alt="IIS J.C. Maxwell — Quadri orari" />
       </a>
+      <nav class="menu" aria-label="Sezioni del sito">
+        <a href={base} aria-current={sonoIndirizzi ? 'page' : undefined}>Indirizzi</a>
+        {
+          voci.map((v) => (
+            <a href={`${base}${v.slug}/`} aria-current={percorso === `${base}${v.slug}/` ? 'page' : undefined}>
+              {v.titolo}
+            </a>
+          ))
+        }
+      </nav>
     </header>
     <main id="contenuto">
       <slot />
@@ -65,17 +99,49 @@ const base = import.meta.env.BASE_URL;
   }
 
   .testata {
-    padding: 18px var(--margine) 12px;
+    padding-top: 18px;
   }
 
   .testata__logo {
     display: inline-block;
+    padding: 0 var(--margine) 12px;
   }
 
   .testata img {
     display: block;
     height: 34px;
     width: auto;
+  }
+
+  .menu {
+    display: flex;
+    gap: 4px 20px;
+    margin: 0;
+    padding: 0 var(--margine) 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .menu a {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tocco);
+    color: var(--tenue);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+  }
+
+  .menu a:hover {
+    color: var(--inchiostro);
+  }
+
+  .menu a[aria-current='page'] {
+    color: var(--accento-forte);
+    border-bottom-color: var(--accento-forte);
   }
 
   .piede {
@@ -92,12 +158,32 @@ const base = import.meta.env.BASE_URL;
 
   @media (min-width: 960px) {
     .testata {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px 32px;
       padding: 20px var(--margine-largo);
       border-bottom: 1px solid var(--bordo);
     }
 
+    .testata__logo {
+      padding: 0;
+    }
+
     .testata img {
       height: 48px;
+    }
+
+    .menu {
+      gap: 8px 28px;
+      padding: 0;
+      overflow: visible;
+    }
+
+    .menu a {
+      min-height: 0;
+      font-size: 15px;
     }
 
     .piede {

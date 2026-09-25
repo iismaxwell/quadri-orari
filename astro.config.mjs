@@ -1,5 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
+import { domandeEspandibili } from './src/markdown/domande-espandibili.ts';
 
 // Lo stesso output va su GitHub Pages e su www.jcmaxwell.it: cambia solo `site`.
 // `base` è stampato nel QR code della brochure e non si cambia (vedi AGENTS.md).
@@ -9,5 +11,8 @@ export default defineConfig({
   output: 'static',
   build: {
     format: 'directory',
+  },
+  markdown: {
+    processor: unified({ rehypePlugins: [domandeEspandibili] }),
   },
 });

@@ -1,0 +1,180 @@
+---
+/**
+ * PDF ministeriali così come pubblicati dal Ministero (vedi AGENTS.md, "Dominio: come si leggono
+ * i quadri orari"). I file stanno in public/documenti/, copiati identici dagli originali in F2.
+ */
+import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const documenti = [
+  {
+    file: 'All.-B-area-istruzione-generale-nazionale.pdf',
+    titolo: 'Allegato B',
+    descrizione: 'Area di istruzione generale, uguale per tutti gli indirizzi tecnici.',
+  },
+  {
+    file: 'All.-C8-informatica-telecomunicazioni.pdf',
+    titolo: 'Allegato C-8',
+    descrizione: 'Area di indirizzo di Informatica e telecomunicazioni: articolazioni Informatica e Telecomunicazioni.',
+  },
+  {
+    file: 'All.-C4-chimica-materiali-biotecnologie.pdf',
+    titolo: 'Allegato C-4',
+    descrizione: 'Area di indirizzo di Chimica, materiali e biotecnologie: articolazione Biotecnologie ambientali.',
+  },
+  {
+    file: 'All.-C9-meccanica-meccatronica-energia.pdf',
+    titolo: 'Allegato C-9',
+    descrizione: 'Area di indirizzo di Meccanica, meccatronica ed energia: articolazione Energia.',
+  },
+];
+---
+
+<Base
+  titolo="Documenti — IIS J.C. Maxwell"
+  descrizione="I quadri orari ministeriali della riforma degli istituti tecnici, in PDF, così come pubblicati dal Ministero."
+>
+  <article class="documenti">
+    <h1>Documenti</h1>
+    <p class="intro">
+      Gli allegati del <strong>Decreto ministeriale n. 29 del 19 febbraio 2026</strong> con i quadri orari, firmati
+      digitalmente dal Ministero e pubblicati così come sono.
+    </p>
+    <ul class="elenco">
+      {
+        documenti.map((d) => (
+          <li>
+            <a class="voce" href={`${base}documenti/${d.file}`}>
+              <span class="voce__testo">
+                <span class="voce__titolo">{d.titolo}</span>
+                <span class="voce__descrizione">{d.descrizione}</span>
+              </span>
+              <span class="voce__pdf" aria-hidden="true">
+                PDF
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
+</Base>
+
+<style>
+  .documenti {
+    max-width: 68ch;
+    margin-inline: auto;
+    padding: 10px var(--margine) 48px;
+  }
+
+  h1 {
+    margin: 0 0 12px;
+    font-family: var(--font-titoli);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .intro {
+    margin: 0 0 28px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--tenue);
+  }
+
+  .intro strong {
+    color: var(--inchiostro);
+    font-weight: 600;
+  }
+
+  .elenco {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .voce {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: var(--tocco);
+    padding: 14px 16px;
+    border: 1px solid var(--bordo);
+    border-radius: var(--raggio);
+    text-decoration: none;
+    transition:
+      border-color 0.15s,
+      background 0.15s;
+  }
+
+  .voce:hover {
+    background: var(--carta-hover);
+    border-color: var(--accento);
+  }
+
+  .voce__testo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .voce__titolo {
+    font-family: var(--font-titoli);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--inchiostro);
+  }
+
+  .voce__descrizione {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--tenue);
+  }
+
+  .voce__pdf {
+    flex: none;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--accento-tenue);
+    color: var(--accento-forte);
+    font-family: var(--font-cifre);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  @media (min-width: 960px) {
+    .documenti {
+      padding: 48px var(--margine-largo) 64px;
+    }
+
+    h1 {
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -0.015em;
+    }
+
+    .intro {
+      font-size: 18px;
+    }
+
+    .voce {
+      padding: 18px 22px;
+    }
+
+    .voce__titolo {
+      font-size: 19px;
+    }
+
+    .voce__descrizione {
+      font-size: 14px;
+    }
+  }
+</style>

@@ -180,6 +180,20 @@ collection `pagine`, un file Markdown per pagina in `src/content/pagine/`, schem
 dai decreti in `originali/`; quello che non si può verificare così si segna nel testo come
 `[DA COMPLETARE: …]`.
 
+Ogni file diventa una pagina da sola tramite `src/pages/[pagina].astro`, in ordine di `ordine`
+nel menu di `src/layouts/Base.astro`. Una pagina `bozza: true` si pubblica comunque, con un avviso
+"Bozza" in testa: il testo, `[DA COMPLETARE: …]` compreso, resta visibile finché Marco non lo
+rivede.
+
+I titoli di terzo livello (`###`) di una pagina diventano `<details>/<summary>` espandibili,
+tramite il plugin rehype `src/markdown/domande-espandibili.ts` (registrato in
+`astro.config.mjs`, `markdown.processor`): è così che le domande di `faq.md` si aprono una per
+volta. Le altre pagine, che non hanno titoli di terzo livello, non ne sono toccate.
+
+**Documenti** (`src/pages/documenti.astro`) non è una pagina della collection: è l'elenco, scritto
+a mano, dei PDF ministeriali di `public/documenti/` (vedi "Dominio: come si leggono i quadri
+orari"). Nel menu ha `ordine: 2`, tra "La riforma in breve" e "Domande frequenti".
+
 ## Delibere della scuola
 
 I dati deliberati stanno nei file di `src/content/percorsi/`. Qui si tiene il riepilogo di ciò che
@@ -250,12 +264,17 @@ informazioni raggiungibili solo con l'hover.
 |---|---|
 | `src/styles/token.css` | Design token: colori, font, spazi, accento per indirizzo (`data-accento`). |
 | `src/styles/base.css` | Stili di base comuni a tutte le pagine. |
-| `src/layouts/Base.astro` | Header con il logo, footer, font. |
+| `src/layouts/Base.astro` | Header con logo e menu del sito, footer, font, meta Open Graph. Il menu unisce `getPagine()` (collection `pagine`) con la voce "Documenti". |
 | `src/components/Icona.astro` | Icona di un indirizzo, inline con `currentColor`. |
 | `src/dati/vista.ts` | `vistaQuadro`: dal quadro di `componiQuadro` a ciò che la tabella mostra (celle "non attive", barrette, ripartizioni). Funzione pura, testata in `tests/dati/vista.test.ts`. |
 | `src/dati/filtri.ts` | I tre periodi del filtro. Senza dipendenze, perché lo usa anche lo script del browser. |
 | `src/components/QuadroOrario.astro` | La tabella, con controlli e legenda. Tutto l'HTML è generato alla build, in entrambe le unità e per tutti gli anni; `src/scripts/quadro-orario.ts` cambia solo attributi. |
+| `src/pages/index.astro` | Home: introduzione alla riforma e scelta dell'indirizzo, con le icone. |
 | `src/pages/[slug].astro` | Scheda di indirizzo, una per percorso (`/quadri-orari/informatica/`…). |
+| `src/pages/[pagina].astro` | Una pagina per ogni file di `src/content/pagine/` (vedi "Pagine di contenuto"). |
+| `src/pages/documenti.astro` | Elenco dei PDF ministeriali di `public/documenti/`. |
+| `src/pages/404.astro` | Pagina non trovata. |
+| `src/markdown/domande-espandibili.ts` | Plugin rehype che trasforma i titoli di terzo livello in `<details>` (le domande della FAQ). |
 
 ### Modalità proiezione
 

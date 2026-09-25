@@ -1,34 +1,209 @@
 ---
-// Pagina provvisoria: sostituita in F6 dalla home definitiva.
-// Serve perché il QR code della brochure punta già qui.
+/** Home: introduzione alla riforma e scelta dell'indirizzo. I licei arrivano con F10. */
+import Base from '../layouts/Base.astro';
+import Icona from '../components/Icona.astro';
 import { getPercorsi } from '../dati/astro';
 
 const percorsi = await getPercorsi();
 const base = import.meta.env.BASE_URL;
 ---
 
-<!doctype html>
-<html lang="it">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Riforma degli istituti tecnici — IIS J.C. Maxwell</title>
-    <meta
-      name="description"
-      content="I quadri orari delle articolazioni tecniche dell'IIS J.C. Maxwell secondo la riforma degli istituti tecnici."
-    />
-  </head>
-  <body>
-    <main>
+<Base
+  titolo="Riforma degli istituti tecnici — IIS J.C. Maxwell"
+  descrizione="I quadri orari delle articolazioni tecniche dell'IIS J.C. Maxwell secondo la riforma degli istituti tecnici, con le scelte già deliberate dalla scuola."
+>
+  <div class="home">
+    <section class="intro">
       <h1>Riforma degli istituti tecnici</h1>
       <p>
-        Questa pagina è in costruzione. Presto qui troverai i quadri orari delle articolazioni
-        tecniche dell'IIS "J.C. Maxwell", con le scelte già deliberate dalla scuola.
+        Dall'anno scolastico 2026/2027 le classi prime dei quattro indirizzi tecnici seguono il
+        nuovo quadro orario del <strong>Decreto ministeriale n. 29 del 19 febbraio 2026</strong>.
+        Qui trovi, indirizzo per indirizzo, le ore già assegnate dalla scuola alle discipline.
       </p>
-      <ul>
-        {percorsi.map(({ slug, percorso }) => <li><a href={`${base}${slug}/`}>{percorso.nome}</a></li>)}
+      <a class="intro__link" href={`${base}riforma-in-breve/`}>Cosa cambia, in breve →</a>
+    </section>
+
+    <section class="indirizzi" aria-labelledby="scegli">
+      <h2 id="scegli">Scegli il tuo indirizzo</h2>
+      <ul class="carte">
+        {
+          percorsi.map(({ slug, percorso }) => {
+            const sottotitolo =
+              percorso.tipo === 'tecnico' ? `Istituto tecnico · ${percorso.indirizzo}` : percorso.indirizzo;
+            return (
+              <li>
+                <a class="carta" href={`${base}${slug}/`} data-accento={percorso.icona}>
+                  <Icona nome={percorso.icona} class="carta__icona" />
+                  <span class="carta__nomi">
+                    <span class="carta__nome">{percorso.nome}</span>
+                    <span class="carta__sottotitolo">{sottotitolo}</span>
+                  </span>
+                </a>
+              </li>
+            );
+          })
+        }
       </ul>
-      <p><a href="https://www.jcmaxwell.edu.it/">Torna al sito della scuola</a></p>
-    </main>
-  </body>
-</html>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .home {
+    max-width: var(--larghezza-max);
+    margin-inline: auto;
+    padding: 10px var(--margine) 40px;
+  }
+
+  .intro {
+    max-width: 60ch;
+  }
+
+  h1 {
+    margin: 0 0 12px;
+    font-family: var(--font-titoli);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .intro p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--tenue);
+  }
+
+  .intro strong {
+    color: var(--inchiostro);
+    font-weight: 600;
+  }
+
+  .intro__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tocco);
+    margin-top: 6px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .indirizzi {
+    margin-top: 32px;
+  }
+
+  h2 {
+    margin: 0 0 14px;
+    font-family: var(--font-titoli);
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .carte {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .carta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 88px;
+    padding: 16px 18px;
+    border: 1px solid var(--bordo);
+    border-radius: var(--raggio);
+    text-decoration: none;
+    transition:
+      border-color 0.15s,
+      background 0.15s;
+  }
+
+  .carta:hover {
+    background: var(--carta-hover);
+    border-color: var(--accento);
+  }
+
+  .carta :global(.carta__icona) {
+    flex: none;
+    width: 40px;
+    height: 32px;
+    color: var(--accento);
+  }
+
+  .carta__nomi {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .carta__nome {
+    font-family: var(--font-titoli);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--inchiostro);
+    line-height: 1.2;
+  }
+
+  .carta__sottotitolo {
+    font-size: 13px;
+    color: var(--tenue);
+  }
+
+  @media (min-width: 600px) {
+    .carte {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .home {
+      padding: 48px var(--margine-largo) 64px;
+    }
+
+    h1 {
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -0.015em;
+    }
+
+    .intro p {
+      font-size: 18px;
+    }
+
+    .indirizzi {
+      margin-top: 48px;
+    }
+
+    h2 {
+      font-size: 26px;
+    }
+
+    .carte {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .carta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      min-height: 168px;
+      padding: 22px;
+    }
+
+    .carta :global(.carta__icona) {
+      width: 52px;
+      height: 42px;
+    }
+
+    .carta__nome {
+      font-size: 20px;
+    }
+  }
+</style>

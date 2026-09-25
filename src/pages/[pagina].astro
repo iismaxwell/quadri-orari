@@ -1,0 +1,177 @@
+---
+/**
+ * Pagine di contenuto (riforma in breve, FAQ, contatti…) dalla collection `pagine`. Il Markdown
+ * passa dal plugin rehype di src/markdown/domande-espandibili.ts, che trasforma i titoli di terzo
+ * livello in `<details>`: è così che le domande della FAQ diventano espandibili.
+ */
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { getPagine } from '../dati/astro';
+
+export async function getStaticPaths() {
+  const pagine = await getPagine();
+  return pagine.map((pagina) => ({ params: { pagina: pagina.id }, props: { pagina } }));
+}
+
+const { pagina } = Astro.props;
+const { Content } = await render(pagina);
+---
+
+<Base titolo={`${pagina.data.titolo} — IIS J.C. Maxwell`} descrizione={pagina.data.descrizione}>
+  <article class="pagina">
+    <h1>{pagina.data.titolo}</h1>
+    {
+      pagina.data.bozza && (
+        <p class="bozza">
+          <span aria-hidden="true">✎</span> Bozza — testo in revisione
+        </p>
+      )
+    }
+    <div class="testo">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .pagina {
+    max-width: 68ch;
+    margin-inline: auto;
+    padding: 10px var(--margine) 48px;
+  }
+
+  h1 {
+    margin: 0 0 12px;
+    font-family: var(--font-titoli);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .bozza {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 20px;
+    padding: 5px 12px;
+    border: 1px dashed var(--tratteggio-bordo);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--tenue);
+  }
+
+  .testo {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .testo :global(h2) {
+    margin: 32px 0 12px;
+    font-family: var(--font-titoli);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .testo :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .testo :global(p) {
+    margin: 0 0 14px;
+  }
+
+  .testo :global(ul),
+  .testo :global(ol) {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+
+  .testo :global(li + li) {
+    margin-top: 4px;
+  }
+
+  .testo :global(a) {
+    font-weight: 600;
+  }
+
+  .testo :global(strong) {
+    color: var(--inchiostro);
+  }
+
+  /* Domande della FAQ: <details> costruiti dal plugin rehype, una per riga con la freccetta. */
+  .testo :global(details.domanda) {
+    border-bottom: 1px solid var(--bordo);
+    padding: 14px 0;
+  }
+
+  .testo :global(details.domanda:first-of-type) {
+    border-top: 1px solid var(--bordo);
+  }
+
+  .testo :global(details.domanda summary) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: var(--tocco);
+    list-style: none;
+    cursor: pointer;
+    font-family: var(--font-titoli);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--inchiostro);
+  }
+
+  .testo :global(details.domanda summary::-webkit-details-marker) {
+    display: none;
+  }
+
+  .testo :global(details.domanda summary::after) {
+    flex: none;
+    content: '+';
+    color: var(--accento-forte);
+    font-family: var(--font-titoli);
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .testo :global(details.domanda[open] summary::after) {
+    content: '−';
+  }
+
+  .testo :global(details.domanda p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .testo :global(details.domanda summary:focus-visible) {
+    outline: 2px solid var(--accento-forte);
+    outline-offset: 4px;
+  }
+
+  @media (min-width: 960px) {
+    .pagina {
+      padding: 48px var(--margine-largo) 64px;
+    }
+
+    h1 {
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -0.015em;
+    }
+
+    .testo {
+      font-size: 17px;
+    }
+
+    .testo :global(h2) {
+      font-size: 25px;
+    }
+
+    .testo :global(details.domanda summary) {
+      font-size: 18px;
+    }
+  }
+</style>

@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Base titolo="Pagina non trovata — IIS J.C. Maxwell" descrizione="La pagina cercata non esiste o è stata spostata.">
+  <div class="errore">
+    <h1>Pagina non trovata</h1>
+    <p>L'indirizzo che hai seguito non esiste, o è cambiato.</p>
+    <a class="errore__link" href={base}>Torna alla scelta dell'indirizzo</a>
+  </div>
+</Base>
+
+<style>
+  .errore {
+    max-width: 60ch;
+    margin: 64px auto;
+    padding: 0 var(--margine);
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 12px;
+    font-family: var(--font-titoli);
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin: 0 0 20px;
+    font-size: 16px;
+    color: var(--tenue);
+  }
+
+  .errore__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tocco);
+    padding: 0 4px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  @media (min-width: 960px) {
+    .errore {
+      margin: 96px auto;
+    }
+
+    h1 {
+      font-size: 42px;
+    }
+
+    p {
+      font-size: 18px;
+    }
+  }
+</style>

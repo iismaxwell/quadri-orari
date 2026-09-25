@@ -1,8 +1,9 @@
 /**
- * Accesso ai quadri orari dalle pagine Astro. È l'unico modulo di `src/dati/` che dipende da
- * `astro:content`; tutto il resto è codice puro, usato anche dallo script e dai test.
+ * Accesso ai quadri orari e alle pagine di contenuto dalle pagine Astro. È l'unico modulo di
+ * `src/dati/` che dipende da `astro:content`; tutto il resto è codice puro, usato anche dallo
+ * script e dai test.
  */
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import { componiQuadro, type Quadro } from './quadro';
 import type { Dati, Percorso } from './schema';
 import { verificaDati } from './verifiche';
@@ -34,4 +35,10 @@ export async function getQuadro(slug: string): Promise<Quadro> {
   const percorso = dati.percorsi[slug];
   if (!percorso) throw new Error(`Percorso "${slug}" inesistente`);
   return componiQuadro(slug, percorso, dati.ordinamenti);
+}
+
+/** Le pagine di contenuto (riforma in breve, FAQ, contatti…), nell'ordine in cui il sito le elenca. */
+export async function getPagine(): Promise<CollectionEntry<'pagine'>[]> {
+  const pagine = await getCollection('pagine');
+  return pagine.sort((a, b) => a.data.ordine - b.data.ordine);
 }
