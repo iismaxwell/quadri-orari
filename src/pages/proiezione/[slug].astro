@@ -1,0 +1,205 @@
+---
+/**
+ * Modalità proiezione (F7): il quadro orario di un percorso a tutto schermo, come una slide per
+ * gli open day. Pagina a sé, senza il layout del sito (niente header/menu/footer): sui televisori
+ * delle aule deve restare solo nome, icona e quadro. Vedi AGENTS.md, "Modalità proiezione".
+ */
+import '@fontsource-variable/instrument-sans/wght.css';
+import '@fontsource-variable/newsreader/opsz.css';
+import '../../styles/base.css';
+import Icona from '../../components/Icona.astro';
+import QuadroProiezione from '../../components/QuadroProiezione.astro';
+import { ETICHETTE_FILTRI, FILTRI, FILTRO_PREDEFINITO, type Filtro } from '../../dati/filtri';
+import { getPercorsi, getQuadro } from '../../dati/astro';
+import { vistaQuadro } from '../../dati/vista';
+
+export async function getStaticPaths() {
+  const percorsi = await getPercorsi();
+  return percorsi.map(({ slug }) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const vista = vistaQuadro(await getQuadro(slug));
+const base = import.meta.env.BASE_URL;
+const scheda = `${base}${slug}/`;
+const filtri = Object.keys(FILTRI) as Filtro[];
+// "Tutti e 5" invece di "Quinquennio": più corto e leggibile su un pulsante toccato da qualche metro.
+const etichette: Record<Filtro, string> = { ...ETICHETTE_FILTRI, quinquennio: 'Tutti e 5' };
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{`${vista.nome}: proiezione — IIS J.C. Maxwell`}</title>
+    <meta name="robots" content="noindex, follow" />
+  </head>
+  <body data-accento={vista.icona}>
+    <div class="proiezione" data-proiezione data-periodo={FILTRO_PREDEFINITO} data-inattivo="no">
+      <header class="proiezione__intestazione">
+        <Icona nome={vista.icona} class="proiezione__icona" />
+        <h1>{vista.nome}</h1>
+      </header>
+
+      <div class="proiezione__corpo">
+        <QuadroProiezione vista={vista} />
+      </div>
+
+      <div class="proiezione__controlli" data-controlli>
+        <div class="filtro" role="group" aria-label="Anni da mostrare">
+          {
+            filtri.map((f) => (
+              <button type="button" data-filtro={f} aria-pressed={f === FILTRO_PREDEFINITO ? 'true' : 'false'}>
+                {etichette[f]}
+              </button>
+            ))
+          }
+        </div>
+        <div class="proiezione__azioni">
+          <button type="button" class="proiezione__pulsante" data-schermo-intero aria-pressed="false">
+            Schermo intero
+          </button>
+          <a class="proiezione__pulsante" href={scheda} data-segue-periodo>
+            Esci
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      import { avviaProiezione } from '../../scripts/proiezione';
+      avviaProiezione();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .proiezione {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    padding: 2.2vh 3vw 1.6vh;
+    gap: 1vh;
+  }
+
+  .proiezione__intestazione {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1.6vw;
+  }
+
+  .proiezione__intestazione .proiezione__icona {
+    display: block;
+    flex: none;
+    width: 6.2vh;
+    height: 5vh;
+    color: var(--accento);
+  }
+
+  .proiezione__intestazione h1 {
+    margin: 0;
+    font-family: var(--font-titoli);
+    font-weight: 600;
+    font-size: clamp(24px, 4.4vh, 54px);
+    line-height: 1.05;
+  }
+
+  .proiezione__corpo {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  /*
+   * Controlli: restano nel flusso, con un'altezza minima costante, e nascondersi cambia solo
+   * l'opacità. Così lo spazio riservato al quadro resta identico visibili o no, e i numeri non
+   * cambiano dimensione quando i controlli compaiono o scompaiono per inattività.
+   */
+
+  .proiezione__controlli {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+    min-height: 68px;
+    padding-top: 6px;
+    transition:
+      opacity 0.4s ease,
+      visibility 0.4s;
+  }
+
+  .proiezione[data-inattivo='si'] .proiezione__controlli {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .proiezione .filtro {
+    display: flex;
+    gap: 8px;
+    border: 1.5px solid var(--accento-forte);
+    border-radius: 999px;
+    padding: 4px;
+  }
+
+  .proiezione .filtro button {
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--inchiostro);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .proiezione .filtro button[aria-pressed='true'] {
+    background: var(--accento);
+    color: var(--accento-su);
+  }
+
+  .proiezione__azioni {
+    display: flex;
+    gap: 10px;
+  }
+
+  .proiezione__pulsante {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0 20px;
+    border: 1.5px solid var(--bordo);
+    border-radius: 999px;
+    background: var(--carta);
+    color: var(--inchiostro);
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .proiezione__pulsante[aria-pressed='true'] {
+    border-color: var(--accento-forte);
+    color: var(--accento-forte);
+  }
+
+  @media (min-width: 960px) {
+    .proiezione .filtro button,
+    .proiezione__pulsante {
+      font-size: 18px;
+      padding: 0 28px;
+    }
+  }
+</style>

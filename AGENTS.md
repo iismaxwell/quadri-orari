@@ -267,10 +267,12 @@ informazioni raggiungibili solo con l'hover.
 | `src/layouts/Base.astro` | Header con logo e menu del sito, footer, font, meta Open Graph. Il menu unisce `getPagine()` (collection `pagine`) con la voce "Documenti". |
 | `src/components/Icona.astro` | Icona di un indirizzo, inline con `currentColor`. |
 | `src/dati/vista.ts` | `vistaQuadro`: dal quadro di `componiQuadro` a ciò che la tabella mostra (celle "non attive", barrette, ripartizioni). Funzione pura, testata in `tests/dati/vista.test.ts`. |
-| `src/dati/filtri.ts` | I tre periodi del filtro. Senza dipendenze, perché lo usa anche lo script del browser. |
+| `src/dati/filtri.ts` | I tre periodi del filtro, e `conPeriodo`/`filtroDaUrl`/`filtroAdiacente` che leggono e scrivono `?periodo=` nell'URL. Senza dipendenze, perché lo usano anche gli script del browser. |
 | `src/components/QuadroOrario.astro` | La tabella, con controlli e legenda. Tutto l'HTML è generato alla build, in entrambe le unità e per tutti gli anni; `src/scripts/quadro-orario.ts` cambia solo attributi. |
 | `src/pages/index.astro` | Home: introduzione alla riforma e scelta dell'indirizzo, con le icone. |
-| `src/pages/[slug].astro` | Scheda di indirizzo, una per percorso (`/quadri-orari/informatica/`…). |
+| `src/pages/[slug].astro` | Scheda di indirizzo, una per percorso (`/quadri-orari/informatica/`…), con il link "A tutto schermo" alla proiezione. |
+| `src/pages/proiezione/[slug].astro` | Modalità proiezione (vedi sotto): pagina a sé, senza il layout del sito. |
+| `src/components/QuadroProiezione.astro` | Il quadro della proiezione: solo la tabella essenziale (niente dettaglio ore, note o ripartizioni), a righe di altezza proporzionale (flexbox, non `<table>`) così sta tutta in una schermata; `src/scripts/proiezione.ts` gestisce periodo, tastiera, inattività e schermo intero. |
 | `src/pages/[pagina].astro` | Una pagina per ogni file di `src/content/pagine/` (vedi "Pagine di contenuto"). |
 | `src/pages/documenti.astro` | Elenco dei PDF ministeriali di `public/documenti/`. |
 | `src/pages/404.astro` | Pagina non trovata. |

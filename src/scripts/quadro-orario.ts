@@ -4,16 +4,7 @@
  * Il periodo scelto finisce nell'URL (`?periodo=biennio`), così una vista si può salvare nei
  * preferiti, e segue i link marcati con `data-segue-periodo` (il pulsante "A tutto schermo").
  */
-import { FILTRI, FILTRO_PREDEFINITO, isFiltro, type Filtro } from '../dati/filtri';
-
-const PARAMETRO = 'periodo';
-
-function conPeriodo(href: string, filtro: Filtro): string {
-  const url = new URL(href, location.href);
-  if (filtro === FILTRO_PREDEFINITO) url.searchParams.delete(PARAMETRO);
-  else url.searchParams.set(PARAMETRO, filtro);
-  return url.href;
-}
+import { conPeriodo, filtroDaUrl, FILTRI, isFiltro, type Filtro } from '../dati/filtri';
 
 function applicaFiltro(quadro: HTMLElement, filtro: Filtro): void {
   quadro.dataset.periodo = filtro;
@@ -35,8 +26,7 @@ const INTERRUTTORI: Record<string, { attributo: 'unita' | 'dettaglio'; acceso: s
 };
 
 function avvia(quadro: HTMLElement): void {
-  const richiesto = new URL(location.href).searchParams.get(PARAMETRO);
-  applicaFiltro(quadro, isFiltro(richiesto) ? richiesto : FILTRO_PREDEFINITO);
+  applicaFiltro(quadro, filtroDaUrl());
 
   quadro.addEventListener('click', (evento) => {
     const bersaglio = evento.target instanceof Element ? evento.target : null;

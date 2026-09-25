@@ -91,7 +91,10 @@ const TITOLI_TOTALE: Record<Area['area'], string> = {
   liceo: 'Totale',
 };
 
-const RIGA_QUOTA = { id: 'quota-a-disposizione', nome: 'Quota a disposizione della scuola' };
+/** Id della riga "Quota a disposizione della scuola" in `AreaVista.righe`: la usa anche F7, che non la mostra. */
+export const ID_RIGA_QUOTA = 'quota-a-disposizione';
+
+const RIGA_QUOTA = { id: ID_RIGA_QUOTA, nome: 'Quota a disposizione della scuola' };
 
 function numero(o: { settimanali: number; annue: number }): NumeroOre {
   return { settimanali: o.settimanali, annue: o.annue };

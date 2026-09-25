@@ -1,0 +1,252 @@
+---
+/**
+ * Il quadro orario nella modalità proiezione (F7): solo la tabella essenziale, pensata per stare
+ * intera in una schermata 16:9 anche con tutti e 5 gli anni, letta da qualche metro di distanza.
+ *
+ * Rispetto al componente QuadroOrario (scheda di indirizzo):
+ * - niente interruttori "Ore annue" e "Dettaglio ore" (barrette, compresenze): sono informazioni
+ *   di dettaglio pensate per essere lette da vicino, non per un televisore;
+ * - niente note dei decreti né ripartizione di Scienze sperimentali espandibili: richiederebbero
+ *   di avvicinarsi e toccare lo schermo riga per riga, mentre la proiezione deve restare una
+ *   sequenza di poche azioni (periodo, schermo intero, uscita);
+ * - niente riga "Quota a disposizione della scuola": lo stesso segnale ("da definire") è già nella
+ *   didascalia dell'anno in intestazione, ed evitare la riga lascia più spazio verticale alle
+ *   discipline, che sono l'informazione principale.
+ * L'uso di `data-anno`/`data-biennio`/`data-triennio` e del filtro sul contenitore `[data-periodo]`
+ * è lo stesso meccanismo di QuadroOrario, così il CSS del periodo è identico nelle due viste.
+ *
+ * Le righe non sono una `<table>`: l'altezza di ognuna deve potersi ridurre in proporzione alle
+ * altre per stare tutte nello schermo (flexbox con `flex-basis` diverso per riga), cosa che il
+ * modello di layout delle tabelle non permette. La semantica di tabella resta tramite i ruoli ARIA.
+ */
+import { ANNI } from '../dati/schema';
+import { FILTRI, type Filtro } from '../dati/filtri';
+import { ID_RIGA_QUOTA, type QuadroVista, type RigaVista } from '../dati/vista';
+
+interface Props {
+  vista: QuadroVista;
+}
+
+const { vista } = Astro.props;
+const nelFiltro = (r: RigaVista, f: Filtro) =>
+  r.anni.some((anno) => (FILTRI[f] as readonly number[]).includes(anno)) ? 'si' : 'no';
+const filtriRiga = (r: RigaVista) => ({ 'data-biennio': nelFiltro(r, 'biennio'), 'data-triennio': nelFiltro(r, 'triennio') });
+const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_QUOTA);
+---
+
+<div class="proiezione__quadro" role="table" aria-label={`Quadro orario di ${vista.nome}`}>
+  <div class="riga riga--intestazione" role="row">
+    <div class="cella cella--disc" role="columnheader"><span class="sr-only">Disciplina</span></div>
+    {
+      vista.anni.map((a) => (
+        <div class="cella" role="columnheader" data-anno={a.anno}>
+          <span class="cella__anno">{a.etichetta}</span>
+          {a.didascalia === 'quota da definire' && <span class="cella__nota">quota da definire</span>}
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    vista.aree.map((area) => (
+      <>
+        {area.titolo && (
+          <div class="riga riga--titolo-area" role="row">
+            <div class="cella cella--disc" role="rowheader">
+              {area.titolo}
+            </div>
+            {ANNI.map((anno) => (
+              <div class="cella" role="cell" data-anno={anno} />
+            ))}
+          </div>
+        )}
+        {discipline(area.righe).map((r) => (
+          <div class="riga riga--disciplina" role="row" {...filtriRiga(r)}>
+            <div class="cella cella--disc" role="rowheader">
+              <span class="cella__nome">{r.nome}</span>
+            </div>
+            {r.celle.map((c, i) => (
+              <div class="cella" role="cell" data-anno={i + 1}>
+                {c.tipo === 'ore' && <span class="cella__numero">{c.settimanali}</span>}
+                {c.tipo === 'vuota' && (
+                  <span class="cella__vuota" aria-hidden="true">
+                    ·
+                  </span>
+                )}
+                {c.tipo === 'non-attiva' && (
+                  <span class="cella__non-attiva" aria-hidden="true">
+                    –
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+        <div class="riga riga--totale-area" role="row">
+          <div class="cella cella--disc" role="rowheader">
+            {area.titoloTotale}
+          </div>
+          {area.totali.map((t, i) => (
+            <div class="cella" role="cell" data-anno={i + 1}>
+              <span class="cella__numero">{t.settimanali}</span>
+            </div>
+          ))}
+        </div>
+      </>
+    ))
+  }
+
+  <div class="riga riga--totale" role="row">
+    <div class="cella cella--disc" role="rowheader">
+      Totale ore a settimana
+    </div>
+    {
+      vista.totali.map((t, i) => (
+        <div class="cella" role="cell" data-anno={i + 1}>
+          <span class="cella__numero">{t.settimanali}</span>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style is:global>
+  .proiezione__quadro {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .proiezione .riga {
+    display: flex;
+    align-items: stretch;
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
+    border-bottom: 1px solid var(--bordo);
+  }
+
+  .proiezione .riga--intestazione,
+  .proiezione .riga--titolo-area,
+  .proiezione .riga--totale-area,
+  .proiezione .riga--totale {
+    flex: 0 1 auto;
+  }
+
+  .proiezione .riga--intestazione {
+    padding-block-end: 0.8vh;
+    border-bottom: 2px solid var(--inchiostro);
+  }
+
+  .proiezione .riga--titolo-area {
+    padding-block: 1.4vh 0.3vh;
+    border-bottom: 0;
+  }
+
+  .proiezione .riga--totale-area {
+    border-top: 1px solid var(--bordo);
+    border-bottom: 2px solid var(--bordo);
+  }
+
+  .proiezione .riga--totale {
+    padding-block-start: 1vh;
+    border-bottom: 0;
+    border-top: 2px solid var(--inchiostro);
+  }
+
+  .proiezione .cella {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .proiezione .cella--disc {
+    flex: 0 0 32%;
+    justify-content: flex-start;
+    text-align: left;
+    padding-inline-end: 1.2vw;
+    font-size: clamp(13px, 2.1vh, 24px);
+    line-height: 1.15;
+  }
+
+  .proiezione .cella__nome {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .proiezione .riga--titolo-area .cella--disc {
+    font-family: var(--font-titoli);
+    font-style: italic;
+    font-size: clamp(13px, 1.9vh, 20px);
+    color: var(--tenue);
+  }
+
+  .proiezione .riga--totale-area .cella--disc,
+  .proiezione .riga--totale .cella--disc {
+    font-weight: 700;
+  }
+
+  .proiezione .cella__anno {
+    display: block;
+    font-family: var(--font-titoli);
+    font-weight: 600;
+    font-size: clamp(16px, 2.8vh, 36px);
+    line-height: 1;
+  }
+
+  .proiezione .cella__nota {
+    display: block;
+    margin-top: 0.3vh;
+    font-size: clamp(9px, 1.1vh, 13px);
+    font-style: italic;
+    color: var(--tenue);
+  }
+
+  .proiezione .cella__numero {
+    font-family: var(--font-titoli);
+    font-size: clamp(16px, 2.6vh, 40px);
+    line-height: 1;
+  }
+
+  .proiezione .riga--totale-area .cella__numero {
+    font-weight: 700;
+    font-size: clamp(17px, 2.9vh, 44px);
+  }
+
+  .proiezione .riga--totale .cella__numero {
+    font-weight: 700;
+    color: var(--accento-forte);
+    font-size: clamp(19px, 3.4vh, 52px);
+  }
+
+  .proiezione .cella__vuota {
+    color: var(--debole);
+    font-size: clamp(16px, 2.4vh, 32px);
+  }
+
+  .proiezione .cella__non-attiva {
+    color: var(--debole);
+    font-size: clamp(14px, 2vh, 26px);
+  }
+
+  /* ---------- Filtro per periodo: stesso meccanismo di QuadroOrario ---------- */
+
+  .proiezione[data-periodo='biennio'] [data-anno='3'],
+  .proiezione[data-periodo='biennio'] [data-anno='4'],
+  .proiezione[data-periodo='biennio'] [data-anno='5'],
+  .proiezione[data-periodo='triennio'] [data-anno='1'],
+  .proiezione[data-periodo='triennio'] [data-anno='2'],
+  .proiezione[data-periodo='biennio'] .riga[data-biennio='no'],
+  .proiezione[data-periodo='triennio'] .riga[data-triennio='no'] {
+    display: none;
+  }
+</style>

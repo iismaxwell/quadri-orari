@@ -13,7 +13,6 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 const vista = vistaQuadro(await getQuadro(slug));
-// La rotta di proiezione arriva con F7.
 const proiezione = `${import.meta.env.BASE_URL}proiezione/${slug}/`;
 ---
 
