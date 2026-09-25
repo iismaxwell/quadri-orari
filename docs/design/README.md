@@ -49,6 +49,11 @@ ripartizione di Scienze sperimentali): non vanno presi come fonte.
 - **"A tutto schermo".** Il prototipo non lo prevedeva. È un link sotto il nome dell'indirizzo,
   visibile da 960 px in su (serve sui PC e sui televisori delle aule, non sullo smartphone).
 - **Menu del sito.** Le voci dell'header del prototipo (Indirizzi, La riforma in breve,
-  Documenti, FAQ e contatti) arrivano con le pagine a cui puntano.
+  Documenti, FAQ e contatti) sono arrivate con le pagine a cui puntano (F6).
+- **`--accento-forte` per ogni indirizzo.** La prima trascrizione in `token.css` lo dichiarava
+  come `var(--accento)` solo su `:root`; un custom property ereditato porta con sé il valore già
+  risolto dove è stato dichiarato, quindi restava bloccato sul blu di `:root` per tutti gli
+  indirizzi che non lo ridichiaravano (tutti tranne Energia, che ha un valore suo). Corretto in F6
+  ridichiarandolo in ogni blocco `[data-accento=…]` (vedi il commento in `token.css`).
 - L'indirizzo `quadri.jcmaxwell.edu.it` nella barra del browser del prototipo è solo
   un'illustrazione: il sito resta in `/quadri-orari/`.

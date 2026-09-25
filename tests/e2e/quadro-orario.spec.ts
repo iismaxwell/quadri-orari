@@ -15,6 +15,20 @@ for (const slug of SCHEDE) {
   });
 }
 
+test('--accento-forte segue il colore di ciascun indirizzo, non resta bloccato sul blu di default', async ({ page }) => {
+  // --accento-forte è definito in :root come var(--accento): un custom property ereditato porta
+  // con sé il valore già risolto dove è stato dichiarato, quindi se un [data-accento=…] ridefinisce
+  // --accento ma non --accento-forte, quest'ultimo resta congelato sul blu di :root (vedi
+  // src/styles/token.css). Il bordo del filtro (border: var(--accento-forte)) rende il difetto
+  // visibile: se due indirizzi diversi finiscono con lo stesso colore, uno dei due è rimasto sul blu.
+  const colori = new Map<string, string>();
+  for (const slug of SCHEDE) {
+    await page.goto(`${slug}/`);
+    colori.set(slug, await page.locator('.filtro').evaluate((el) => getComputedStyle(el).borderColor));
+  }
+  expect(new Set(colori.values()).size).toBe(colori.size);
+});
+
 test('il filtro mostra solo le colonne e le righe del periodo', async ({ page }) => {
   await page.goto('informatica/');
   const sistemiReti = page.getByRole('rowheader', { name: 'Sistemi e reti' });

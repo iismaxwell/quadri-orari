@@ -36,6 +36,11 @@
    * --accento-forte  testo, link, bordi e tacche sulla carta (≥ 4.5:1, AA);
    * --accento-tenue  sfondo di legenda, ripartizioni e note;
    * --accento-scuro  tacche delle ore scelte dalla scuola.
+   *
+   * --accento-forte va ridichiarato in ogni blocco [data-accento=…], anche solo come
+   * `var(--accento)`: un custom property ereditato porta con sé il valore già risolto nel punto
+   * in cui è stato dichiarato, quindi lasciarlo solo qui lo blocca su questo --accento (il blu),
+   * qualunque sia l'indirizzo. Per Energia va scritto un valore diverso da --accento (vedi sotto).
    */
   --accento: oklch(0.47 0.15 262);
   --accento-su: #fff;
@@ -46,6 +51,7 @@
 
 [data-accento='informatica'] {
   --accento: oklch(0.47 0.15 262);
+  --accento-forte: var(--accento);
   --accento-tenue: oklch(0.94 0.02 262);
   --accento-scuro: oklch(0.3 0.1 262);
 }
@@ -54,12 +60,14 @@
    arrivino ad AA (erano 3.9:1 e 3.8:1). */
 [data-accento='telecomunicazioni'] {
   --accento: oklch(0.57 0.18 45);
+  --accento-forte: var(--accento);
   --accento-tenue: oklch(0.95 0.04 45);
   --accento-scuro: oklch(0.4 0.15 45);
 }
 
 [data-accento='biotecnologie-ambientali'] {
   --accento: oklch(0.48 0.13 150);
+  --accento-forte: var(--accento);
   --accento-tenue: oklch(0.93 0.03 150);
   --accento-scuro: oklch(0.3 0.1 150);
 }
@@ -77,12 +85,14 @@
 /* Licei (F10). Il ciano di Scienze applicate è provvisorio anche nel design. */
 [data-accento='liceo-economico-sociale'] {
   --accento: oklch(0.5 0.19 25);
+  --accento-forte: var(--accento);
   --accento-tenue: oklch(0.94 0.03 25);
   --accento-scuro: oklch(0.32 0.14 25);
 }
 
 [data-accento='liceo-scienze-applicate'] {
   --accento: oklch(0.52 0.12 200);
+  --accento-forte: var(--accento);
   --accento-tenue: oklch(0.94 0.025 200);
   --accento-scuro: oklch(0.32 0.09 200);
 }
