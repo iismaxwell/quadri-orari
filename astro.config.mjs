@@ -3,11 +3,11 @@ import { defineConfig } from 'astro/config';
 import { unified } from '@astrojs/markdown-remark';
 import { domandeEspandibili } from './src/markdown/domande-espandibili.ts';
 
-// Lo stesso output va su GitHub Pages e su www.jcmaxwell.it: cambia solo `site`.
-// `base` è stampato nel QR code della brochure e non si cambia (vedi AGENTS.md).
+// Il sito sta alla radice del sottodominio quadri.jcmaxwell.it (CNAME verso GitHub Pages):
+// `base` è `/` (vedi AGENTS.md).
 export default defineConfig({
-  site: process.env.SITE_URL ?? 'https://iismaxwell.github.io',
-  base: '/quadri-orari/',
+  site: process.env.SITE_URL ?? 'https://quadri.jcmaxwell.it',
+  base: '/',
   output: 'static',
   build: {
     format: 'directory',

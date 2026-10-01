@@ -58,7 +58,7 @@ test('il periodo nell’URL sceglie il filtro e segue il link alla proiezione', 
   await expect(page.getByRole('button', { name: 'Triennio' })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('link', { name: 'A tutto schermo' })).toHaveAttribute(
     'href',
-    /\/quadri-orari\/proiezione\/informatica\/\?periodo=triennio$/,
+    /\/proiezione\/informatica\/\?periodo=triennio$/,
   );
 });
 

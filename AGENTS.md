@@ -31,12 +31,13 @@ percorso senza quelle parti fin dall'inizio, senza doverlo rifare.
 - Node ≥ 22.12. **TypeScript resta alla 6** finché `@astrojs/check` non supporta la 7; **Vitest
   resta alla 4** perché la 5 non supporta le versioni dispari di Node (25).
 - `site` si imposta con la variabile d'ambiente `SITE_URL` (predefinito
-  `https://iismaxwell.github.io`); `base` è fisso.
+  `https://quadri.jcmaxwell.it`); `base` è fisso a `/`.
 - **Ore mostrate come settimanali**, con il monte ore annuo visibile a richiesta.
 - **Font ospitati dal sito** (pacchetti Fontsource), niente Google Fonts né altre CDN.
-- **Pubblicazione:** GitHub Pages (`https://iismaxwell.github.io/quadri-orari/`) e deploy
-  automatico, tramite GitHub Action, verso `www.jcmaxwell.it/quadri-orari/`. Le credenziali
-  dell'hosting stanno nei secrets dell'organizzazione `iismaxwell`, mai nel repo.
+- **Pubblicazione:** GitHub Pages, tramite GitHub Action, con dominio personalizzato
+  `https://quadri.jcmaxwell.it/` (record CNAME `quadri` sul DNS di `jcmaxwell.it`, che punta a
+  `iismaxwell.github.io`). Niente FTP né credenziali di hosting. L'indirizzo
+  `https://iismaxwell.github.io/quadri-orari/` reindirizza al dominio personalizzato.
 
 ## Comandi
 
@@ -48,7 +49,7 @@ npx astro check         # controllo dei tipi
 npm run build           # esegue prima verifica-dati, poi genera dist/
 npm run dev             # server di sviluppo
 npx playwright test     # test end-to-end (tests/e2e/*.spec.ts) sul dist/ già costruito
-SITE_URL=https://www.jcmaxwell.it npm run build   # build per jcmaxwell.it
+SITE_URL=https://esempio.it npm run build         # build per un altro dominio
 ```
 
 I test end-to-end usano il suffisso `.spec.ts`, che Vitest ignora, e girano su `astro preview`
@@ -57,13 +58,15 @@ li esegue dopo la build.
 
 ## Vincoli che non si vedono dal codice
 
-- **`/quadri-orari/` è stampato nel QR code della brochure.** Non si cambia. In Astro il `base`
-  è `/quadri-orari/` sia su GitHub Pages sia su jcmaxwell.it; tra i due ambienti cambia solo
-  `site`. Nessun link interno deve essere assoluto rispetto alla radice del dominio.
-- Il sito sta su `jcmaxwell.it`, il dominio **secondario** della scuola, dove si possono creare
-  sotto-cartelle. Il sito principale `jcmaxwell.edu.it` ha un tema bloccato e non c'entra.
-- L'output di build deve funzionare come file statici caricati in una sotto-cartella di un hosting
-  condiviso: niente SSR, niente adapter, niente dipendenze da funzioni lato server.
+- **Il sito sta alla radice di `quadri.jcmaxwell.it`, quindi `base` è `/`.** Il QR code della
+  brochure punta a un indirizzo che non si può più cambiare: finché quell'indirizzo continua a
+  portare qui (anche solo con un reindirizzamento) va bene. Se si cambia dominio o si sposta il
+  sito in una sotto-cartella, `base` e `site` vanno aggiornati insieme. Nel codice i link interni
+  si costruiscono sempre con `import.meta.env.BASE_URL`, mai a mano.
+- Il dominio `jcmaxwell.it` è il **secondario** della scuola; il sito principale
+  `jcmaxwell.edu.it` ha un tema bloccato e non c'entra.
+- L'output di build deve restare statico: niente SSR, niente adapter, niente dipendenze da funzioni
+  lato server.
 
 ## Dominio: come si leggono i quadri orari
 
@@ -270,7 +273,7 @@ informazioni raggiungibili solo con l'hover.
 | `src/dati/filtri.ts` | I tre periodi del filtro, e `conPeriodo`/`filtroDaUrl`/`filtroAdiacente` che leggono e scrivono `?periodo=` nell'URL. Senza dipendenze, perché lo usano anche gli script del browser. |
 | `src/components/QuadroOrario.astro` | La tabella, con controlli e legenda. Tutto l'HTML è generato alla build, in entrambe le unità e per tutti gli anni; `src/scripts/quadro-orario.ts` cambia solo attributi. |
 | `src/pages/index.astro` | Home: introduzione alla riforma e scelta dell'indirizzo, con le icone. |
-| `src/pages/[slug].astro` | Scheda di indirizzo, una per percorso (`/quadri-orari/informatica/`…), con il link "A tutto schermo" alla proiezione. |
+| `src/pages/[slug].astro` | Scheda di indirizzo, una per percorso (`/informatica/`…), con il link "A tutto schermo" alla proiezione. |
 | `src/pages/proiezione/[slug].astro` | Modalità proiezione (vedi sotto): pagina a sé, senza il layout del sito. |
 | `src/components/QuadroProiezione.astro` | Il quadro della proiezione: solo la tabella essenziale (niente dettaglio ore, note o ripartizioni), a righe di altezza proporzionale (flexbox, non `<table>`) così sta tutta in una schermata; `src/scripts/proiezione.ts` gestisce periodo, tastiera, inattività e schermo intero. |
 | `src/pages/[pagina].astro` | Una pagina per ogni file di `src/content/pagine/` (vedi "Pagine di contenuto"). |

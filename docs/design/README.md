@@ -56,4 +56,4 @@ ripartizione di Scienze sperimentali): non vanno presi come fonte.
   indirizzi che non lo ridichiaravano (tutti tranne Energia, che ha un valore suo). Corretto in F6
   ridichiarandolo in ogni blocco `[data-accento=…]` (vedi il commento in `token.css`).
 - L'indirizzo `quadri.jcmaxwell.edu.it` nella barra del browser del prototipo è solo
-  un'illustrazione: il sito resta in `/quadri-orari/`.
+  un'illustrazione: il sito sta alla radice di `quadri.jcmaxwell.it`.

@@ -12,7 +12,7 @@ test('la home elenca i quattro indirizzi tecnici e il menu ha tutte le voci', as
   await expect(menu).toHaveText(VOCI_MENU);
 
   for (const slug of SCHEDE) {
-    await expect(page.locator(`.carta[href="/quadri-orari/${slug}/"]`)).toBeVisible();
+    await expect(page.locator(`.carta[href="/${slug}/"]`)).toBeVisible();
   }
 });
 
@@ -52,5 +52,5 @@ test('una URL inesistente mostra la pagina 404 con il link alla home', async ({ 
   const risposta = await page.goto('./pagina-inesistente/');
   expect(risposta?.status()).toBe(404);
   await expect(page.locator('h1')).toHaveText('Pagina non trovata');
-  await expect(page.getByRole('link', { name: /Torna alla scelta dell'indirizzo/ })).toHaveAttribute('href', '/quadri-orari/');
+  await expect(page.getByRole('link', { name: /Torna alla scelta dell'indirizzo/ })).toHaveAttribute('href', '/');
 });

@@ -49,7 +49,7 @@ test('le frecce e i tasti pagina cambiano il periodo e aggiornano l’URL', asyn
 test('il pulsante del periodo aggiorna anche il link "Esci"', async ({ page }) => {
   await page.goto('proiezione/informatica/');
   await page.getByRole('button', { name: 'Biennio' }).click();
-  await expect(page.getByRole('link', { name: 'Esci' })).toHaveAttribute('href', /\/quadri-orari\/informatica\/\?periodo=biennio$/);
+  await expect(page.getByRole('link', { name: 'Esci' })).toHaveAttribute('href', /\/informatica\/\?periodo=biennio$/);
 });
 
 test('i bersagli dei controlli sono grandi almeno 48 px', async ({ page }) => {

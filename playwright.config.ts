@@ -10,13 +10,13 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: `http://localhost:${porta}/quadri-orari/`,
+    baseURL: `http://localhost:${porta}/`,
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
     // --ignore-lock: un server di anteprima già aperto a mano non blocca quello dei test.
     command: `npx astro preview --port ${porta} --ignore-lock`,
-    url: `http://localhost:${porta}/quadri-orari/`,
+    url: `http://localhost:${porta}/`,
     reuseExistingServer: false,
   },
 });

@@ -7,5 +7,5 @@ lasciati come generati: sono convenzioni riconosciute dai browser, non vanno cam
 
 `site.webmanifest`: `name` e `short_name` sono già compilati. **Da rivedere in F6**, quando si
 integrano questi file nel sito: i percorsi delle icone sono assoluti (`/android-chrome-*.png`) e
-non tengono conto di `base: '/quadri-orari/'`; `theme_color` e `background_color` sono ancora i
+non tengono conto di un eventuale `base` diverso da `/`; `theme_color` e `background_color` sono ancora i
 default del generatore (bianco), da allineare ai design token scelti in F5.
