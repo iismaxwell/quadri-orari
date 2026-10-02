@@ -307,19 +307,22 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
     display: inline-flex;
     align-items: baseline;
     margin: 0;
-    padding: 0.2vh 1.3vh;
-    border: 2px solid var(--accento-scuola);
+    padding: 0.42vh 1.3vh;
+    border: 0;
     border-radius: 0.8vh;
-    background: color-mix(in oklch, var(--accento-scuola) 22%, transparent);
+    background: color-mix(in oklch, var(--accento-scuola) 30%, transparent);
     color: inherit;
     font: inherit;
     cursor: pointer;
   }
 
-  /* Le righe hanno altezza fissa e overflow nascosto: il riquadro deve stare nella riga, con
-     lo stesso spazio attorno al numero, che qui ha un'altezza di riga più bassa del solito. */
+  /* Le righe hanno altezza fissa e overflow nascosto: il riquadro deve stare nella riga. Le cifre
+     di Newsreader hanno sotto più spazio che sopra (il riquadro le farebbe sembrare attaccate al
+     bordo alto), quindi i margini in em tolgono lo spazio in eccesso e il padding resta uguale
+     sui quattro lati. */
   .proiezione .cella__scuola .cella__numero {
-    line-height: 0.8;
+    line-height: 1;
+    margin-block: -0.05em -0.24em;
   }
 
   .proiezione .cella__scuola:focus-visible {
@@ -331,9 +334,8 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
     display: inline-block;
     width: 1.6em;
     height: 1em;
-    border: 2px solid var(--accento-scuola);
     border-radius: 4px;
-    background: color-mix(in oklch, var(--accento-scuola) 22%, transparent);
+    background: color-mix(in oklch, var(--accento-scuola) 30%, transparent);
   }
 
   .proiezione__legenda-segno {
