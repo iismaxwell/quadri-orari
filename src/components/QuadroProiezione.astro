@@ -14,7 +14,7 @@
  *   tabella, ed evitare la riga lascia più spazio verticale alle discipline, che sono
  *   l'informazione principale.
  *
- * Le ore aggiunte dalla scuola hanno un segno (numero su fondo colorato e "+N"): toccandolo, o
+ * Le ore aggiunte dalla scuola hanno un segno (numero su fondo colorato): toccandolo, o
  * passandoci sopra con il mouse, si apre un riquadro con ore del decreto, ore aggiunte,
  * compresenza e materie interne, solo per i dati che la scuola ha comunicato. Il riquadro è uno
  * solo, per tutta la pagina (src/scripts/proiezione.ts): le righe hanno overflow nascosto e lo
@@ -81,9 +81,6 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
                 {c.tipo === 'ore' && c.scuola > 0 && (
                   <button type="button" class="cella__scuola" data-dettaglio aria-haspopup="true">
                     <span class="cella__numero">{c.settimanali}</span>
-                    <span class="cella__piu" aria-hidden="true">
-                      +{c.scuola}
-                    </span>
                     <span class="sr-only" data-info>
                       <span class="info__titolo">
                         {r.nome} · {vista.anni[i].etichetta}
@@ -166,9 +163,7 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
       <p class="proiezione__legenda">
         {conScuola && (
           <span class="proiezione__legenda-voce">
-            <span class="cella__piu cella__piu--legenda" aria-hidden="true">
-              +2
-            </span>
+            <span class="cella__segno-legenda" aria-hidden="true" />
             ore aggiunte dalla scuola: tocca il numero per il dettaglio
           </span>
         )}
@@ -307,20 +302,24 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
     gap: 0.5em;
   }
 
-  /* Ore aggiunte dalla scuola: numero su fondo ambra/blu (--accento-scuola) con il "+N" accanto. */
+  /* Ore aggiunte dalla scuola: numero su fondo ambra/blu (--accento-scuola) */
   .proiezione .cella__scuola {
     display: inline-flex;
     align-items: baseline;
-    gap: 0.35em;
     margin: 0;
-    padding: 0.2vh 0.7vh 0.1vh 0.9vh;
-    border: 0;
-    border-bottom: 0.45vh solid var(--accento-scuola);
-    border-radius: 0.8vh 0.8vh 0 0;
+    padding: 0.2vh 1.3vh;
+    border: 2px solid var(--accento-scuola);
+    border-radius: 0.8vh;
     background: color-mix(in oklch, var(--accento-scuola) 22%, transparent);
     color: inherit;
     font: inherit;
     cursor: pointer;
+  }
+
+  /* Le righe hanno altezza fissa e overflow nascosto: il riquadro deve stare nella riga, con
+     lo stesso spazio attorno al numero, che qui ha un'altezza di riga più bassa del solito. */
+  .proiezione .cella__scuola .cella__numero {
+    line-height: 0.8;
   }
 
   .proiezione .cella__scuola:focus-visible {
@@ -328,19 +327,13 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
     outline-offset: 2px;
   }
 
-  .proiezione .cella__piu {
-    font-family: var(--font-testo);
-    font-size: clamp(11px, 1.6vh, 20px);
-    font-weight: 700;
-    color: var(--inchiostro);
-  }
-
-  .proiezione .cella__piu--legenda {
-    padding: 0 0.5em;
-    border-bottom: 3px solid var(--accento-scuola);
-    border-radius: 4px 4px 0 0;
+  .cella__segno-legenda {
+    display: inline-block;
+    width: 1.6em;
+    height: 1em;
+    border: 2px solid var(--accento-scuola);
+    border-radius: 4px;
     background: color-mix(in oklch, var(--accento-scuola) 22%, transparent);
-    font-size: 1em;
   }
 
   .proiezione__legenda-segno {
