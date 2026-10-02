@@ -9,9 +9,10 @@
  * - niente note dei decreti né ripartizione di Scienze sperimentali espandibili: richiederebbero
  *   di avvicinarsi e toccare lo schermo riga per riga, mentre la proiezione deve restare una
  *   sequenza di poche azioni (periodo, schermo intero, uscita);
- * - niente riga "Quota a disposizione della scuola": lo stesso segnale ("da definire") è già nella
- *   didascalia dell'anno in intestazione, ed evitare la riga lascia più spazio verticale alle
- *   discipline, che sono l'informazione principale.
+ * - niente riga "Quota a disposizione della scuola": lo stesso segnale è già nell'etichetta
+ *   "provvisorio" dell'anno in intestazione, spiegata da una riga di legenda sotto la tabella, ed
+ *   evitare la riga lascia più spazio verticale alle discipline, che sono l'informazione
+ *   principale.
  * L'uso di `data-anno`/`data-biennio`/`data-triennio` e del filtro sul contenitore `[data-periodo]`
  * è lo stesso meccanismo di QuadroOrario, così il CSS del periodo è identico nelle due viste.
  *
@@ -31,6 +32,7 @@ const { vista } = Astro.props;
 const nelFiltro = (r: RigaVista, f: Filtro) =>
   r.anni.some((anno) => (FILTRI[f] as readonly number[]).includes(anno)) ? 'si' : 'no';
 const filtriRiga = (r: RigaVista) => ({ 'data-biennio': nelFiltro(r, 'biennio'), 'data-triennio': nelFiltro(r, 'triennio') });
+const provvisori = vista.anni.some((a) => a.didascalia === 'quota da definire');
 const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_QUOTA);
 ---
 
@@ -41,7 +43,7 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
       vista.anni.map((a) => (
         <div class="cella" role="columnheader" data-anno={a.anno}>
           <span class="cella__anno">{a.etichetta}</span>
-          {a.didascalia === 'quota da definire' && <span class="cella__nota">quota da definire</span>}
+          {a.didascalia === 'quota da definire' && <span class="cella__nota">provvisorio</span>}
         </div>
       ))
     }
@@ -108,6 +110,15 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
       ))
     }
   </div>
+
+  {
+    provvisori && (
+      <p class="proiezione__legenda">
+        <span class="proiezione__legenda-segno">Provvisorio</span>
+        la scuola non ha ancora deliberato come usare le ore a sua disposizione
+      </p>
+    )
+  }
 </div>
 
 <style is:global>
@@ -139,12 +150,18 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
     border-bottom: 2px solid var(--inchiostro);
   }
 
+  .proiezione .riga--intestazione .cella {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
   .proiezione .riga--titolo-area {
     padding-block: 1.4vh 0.3vh;
     border-bottom: 0;
   }
 
   .proiezione .riga--totale-area {
+    padding-block: 1.1vh 0.7vh;
     border-top: 1px solid var(--bordo);
     border-bottom: 2px solid var(--bordo);
   }
@@ -205,10 +222,27 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
 
   .proiezione .cella__nota {
     display: block;
-    margin-top: 0.3vh;
-    font-size: clamp(9px, 1.1vh, 13px);
+    margin-top: 0.5vh;
+    font-size: clamp(10px, 1.5vh, 18px);
     font-style: italic;
     color: var(--tenue);
+  }
+
+  .proiezione__legenda {
+    flex: 0 0 auto;
+    margin: 0;
+    padding-top: 0.8vh;
+    font-size: clamp(11px, 1.6vh, 19px);
+    color: var(--tenue);
+  }
+
+  .proiezione__legenda-segno {
+    font-style: italic;
+    margin-inline-end: 0.5em;
+  }
+
+  .proiezione__legenda-segno::after {
+    content: ':';
   }
 
   .proiezione .cella__numero {
