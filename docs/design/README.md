@@ -30,7 +30,8 @@ ripartizione di Scienze sperimentali): non vanno presi come fonte.
 - Il filtro si chiama **Biennio / Triennio / Quinquennio**, con Quinquennio come default.
 - Su smartphone la prima colonna resta ferma e la tabella scorre di lato; sotto compare
   "Scorri di lato per vedere tutti gli anni" solo quando le colonne sono cinque.
-- Nell'area di indirizzo una cella senza ore è "non attiva"; nell'area generale è un punto.
+- Nell'area di indirizzo una cella senza ore è "non attiva", resa con un trattino (come nella
+  proiezione) e letta come "non attiva" dagli screen reader; nell'area generale è un punto.
 - La riga "Quota a disposizione della scuola" mostra la quota "assegnata ↑" dove è deliberata e
   le ore in corsivo dove è da definire.
 
@@ -39,8 +40,9 @@ ripartizione di Scienze sperimentali): non vanno presi come fonte.
 - **Contrasto AA.** Il prototipo usava il colore d'accento anche per link e numeri. Per
   Telecomunicazioni l'arancio è stato scurito da `oklch(0.62 0.19 45)` a `oklch(0.57 0.18 45)`.
   Per Energia il giallo resta su icona e pillola del filtro, mentre testo, bordi e barrette usano
-  l'ocra del prototipo (`--accento-forte`). Il testo "non attiva" usa il grigio `--tenue` invece
-  del grigio chiaro, che era a 1,9:1.
+  l'ocra del prototipo (`--accento-forte`). Il testo
+  "non attiva", che il prototipo scriveva per esteso in grigio chiaro (1,9:1), è un trattino
+  decorativo: il significato resta nel testo per gli screen reader.
 - **Dati mancanti.** "Vedi le 4 materie" e le barrette di compresenza compaiono solo quando i
   dati sono nei file dei percorsi: fino ad allora non si mostra nulla al loro posto.
 - **Aperture per riga.** Nel prototipo "Nota" e "Vedi le materie" aprivano tutto insieme; nel

@@ -168,7 +168,12 @@ const tacche = (c: CellaVista) => (c.tipo === 'ore' || c.tipo === 'da-definire' 
                             <span class="sr-only">nessuna ora</span>
                           </span>
                         )}
-                        {c.tipo === 'non-attiva' && <span class="cella__testo cella__non-attiva">non attiva</span>}
+                        {c.tipo === 'non-attiva' && (
+                          <span class="cella__non-attiva">
+                            <span aria-hidden="true">–</span>
+                            <span class="sr-only">non attiva</span>
+                          </span>
+                        )}
                         {tacche(c).length > 0 && (
                           <span class="tacche" aria-hidden="true">
                             {tacche(c).map((t) => (
@@ -644,10 +649,8 @@ const tacche = (c: CellaVista) => (c.tipo === 'ore' || c.tipo === 'da-definire' 
     font-weight: 600;
   }
 
-  .cella__non-attiva {
-    font-style: italic;
-  }
-
+  /* Un trattino al posto del testo: lo legge "non attiva" solo chi usa uno screen reader. */
+  .cella__non-attiva,
   .cella__vuota {
     color: var(--debole);
   }
