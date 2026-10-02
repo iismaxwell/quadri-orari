@@ -35,7 +35,10 @@
    * --accento-su     testo sopra --accento;
    * --accento-forte  testo, link, bordi e tacche sulla carta (≥ 4.5:1, AA);
    * --accento-tenue  sfondo di legenda, ripartizioni e note;
-   * --accento-scuro  tacche delle ore scelte dalla scuola.
+   * --accento-scuola tacche delle ore scelte dalla scuola: un colore a parte, non una variante
+   *                  dell'accento, perché a colpo d'occhio si distingua dalle ore ministeriali
+   *                  (≥ 3:1 sulla carta, come richiesto per i grafici). Ambra sugli indirizzi
+   *                  freddi (blu, verde, ciano), blu sugli indirizzi caldi (arancio, ocra, rosso).
    *
    * --accento-forte va ridichiarato in ogni blocco [data-accento=…], anche solo come
    * `var(--accento)`: un custom property ereditato porta con sé il valore già risolto nel punto
@@ -46,14 +49,14 @@
   --accento-su: #fff;
   --accento-forte: var(--accento);
   --accento-tenue: oklch(0.94 0.02 262);
-  --accento-scuro: oklch(0.3 0.1 262);
+  --accento-scuola: oklch(0.66 0.15 62);
 }
 
 [data-accento='informatica'] {
   --accento: oklch(0.47 0.15 262);
   --accento-forte: var(--accento);
   --accento-tenue: oklch(0.94 0.02 262);
-  --accento-scuro: oklch(0.3 0.1 262);
+  --accento-scuola: oklch(0.66 0.15 62);
 }
 
 /* Design: oklch(0.62 0.19 45). Scurito a 0.57 perché il bianco sopra e il testo sulla carta
@@ -62,14 +65,14 @@
   --accento: oklch(0.57 0.18 45);
   --accento-forte: var(--accento);
   --accento-tenue: oklch(0.95 0.04 45);
-  --accento-scuro: oklch(0.4 0.15 45);
+  --accento-scuola: oklch(0.45 0.13 255);
 }
 
 [data-accento='biotecnologie-ambientali'] {
   --accento: oklch(0.48 0.13 150);
   --accento-forte: var(--accento);
   --accento-tenue: oklch(0.93 0.03 150);
-  --accento-scuro: oklch(0.3 0.1 150);
+  --accento-scuola: oklch(0.66 0.15 62);
 }
 
 /* Il giallo del design ha 1.6:1 sulla carta: resta per icona e pillola, mentre testo e tacche
@@ -79,7 +82,7 @@
   --accento-su: oklch(0.26 0.03 100);
   --accento-forte: oklch(0.48 0.13 80);
   --accento-tenue: oklch(0.96 0.04 100);
-  --accento-scuro: oklch(0.34 0.09 80);
+  --accento-scuola: oklch(0.45 0.13 255);
 }
 
 /* Licei (F10). Il ciano di Scienze applicate è provvisorio anche nel design. */
@@ -87,12 +90,12 @@
   --accento: oklch(0.5 0.19 25);
   --accento-forte: var(--accento);
   --accento-tenue: oklch(0.94 0.03 25);
-  --accento-scuro: oklch(0.32 0.14 25);
+  --accento-scuola: oklch(0.45 0.13 255);
 }
 
 [data-accento='liceo-scienze-applicate'] {
   --accento: oklch(0.52 0.12 200);
   --accento-forte: var(--accento);
   --accento-tenue: oklch(0.94 0.025 200);
-  --accento-scuro: oklch(0.32 0.09 200);
+  --accento-scuola: oklch(0.66 0.15 62);
 }
