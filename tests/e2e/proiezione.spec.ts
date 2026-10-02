@@ -62,3 +62,34 @@ test('i bersagli dei controlli sono grandi almeno 48 px', async ({ page }) => {
     expect(box?.height ?? 0).toBeGreaterThanOrEqual(48);
   }
 });
+
+test('le ore aggiunte dalla scuola si aprono in un riquadro, col mouse e con il tocco', async ({ page }) => {
+  await page.goto('proiezione/informatica/');
+  const numero = page.locator('[data-dettaglio]').first();
+  const riquadro = page.locator('[data-dettaglio-riquadro]');
+  await expect(riquadro).toBeHidden();
+
+  await numero.hover();
+  await expect(riquadro).toBeVisible();
+  await expect(riquadro).toContainText('Scienze sperimentali');
+  await expect(riquadro).toContainText('Ore del decreto');
+  await expect(riquadro).toContainText('Aggiunte dalla scuola');
+  // Compresenze e materie interne non sono ancora state comunicate: non compaiono.
+  await expect(riquadro).not.toContainText('compresenza');
+  await expect(riquadro).not.toContainText('Materie interne');
+
+  await page.mouse.move(5, 500);
+  await expect(riquadro).toBeHidden();
+
+  await page.keyboard.press('ArrowLeft');
+  await numero.focus();
+  await page.keyboard.press('Escape');
+  await expect(riquadro).toBeHidden();
+});
+
+test('in intestazione compaiono le ore della quota ancora da assegnare', async ({ page }) => {
+  await page.goto('proiezione/informatica/');
+  const intestazione = page.getByRole('row').first();
+  await expect(intestazione).toContainText('2 ore da assegnare');
+  await expect(intestazione).toContainText('7 ore da assegnare');
+});

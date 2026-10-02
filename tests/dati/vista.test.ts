@@ -60,6 +60,11 @@ describe('vista del quadro di Informatica, dati reali', () => {
     expect(quota.anni).toEqual([1, 2, 3, 4, 5]);
   });
 
+  it('indica le ore della quota non ancora assegnate, classe per classe', async () => {
+    const v = await vistaInformatica();
+    expect(v.anni.map((a) => a.daAssegnare)).toEqual([0, 2, 3, 3, 7]);
+  });
+
   it('non mostra compresenze né ripartizioni che la scuola non ha ancora comunicato', async () => {
     const v = await vistaInformatica();
     expect(v.legenda).toEqual({ compresenza: false, scuola: true, daDefinire: true });
@@ -103,6 +108,7 @@ describe('vista con dati FITTIZI', () => {
     expect(v.aree.map((a) => a.titolo)).toEqual([null]);
     expect(v.anni.every((a) => a.didascalia === null)).toBe(true);
     expect(v.aree[0].righe.map((r) => r.id)).toEqual(['lingua-inglese', 'fisica']);
+    expect(v.anni.every((a) => a.daAssegnare === 0)).toBe(true);
     expect(v.legenda.daDefinire).toBe(false);
   });
 });

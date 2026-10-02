@@ -275,7 +275,7 @@ informazioni raggiungibili solo con l'hover.
 | `src/pages/index.astro` | Home: introduzione alla riforma e scelta dell'indirizzo, con le icone. |
 | `src/pages/[slug].astro` | Scheda di indirizzo, una per percorso (`/informatica/`…), con il link "A tutto schermo" alla proiezione. |
 | `src/pages/proiezione/[slug].astro` | Modalità proiezione (vedi sotto): pagina a sé, senza il layout del sito. |
-| `src/components/QuadroProiezione.astro` | Il quadro della proiezione: solo la tabella essenziale (niente dettaglio ore, note o ripartizioni), a righe di altezza proporzionale (flexbox, non `<table>`) così sta tutta in una schermata; `src/scripts/proiezione.ts` gestisce periodo, tastiera, inattività e schermo intero. |
+| `src/components/QuadroProiezione.astro` | Il quadro della proiezione: solo la tabella essenziale (niente barrette del dettaglio ore, note o ripartizioni espandibili), con due eccezioni: le ore aggiunte dalla scuola hanno un segno (numero su fondo colorato e "+N") e un riquadro con ore del decreto, ore aggiunte, compresenza e materie interne (solo i dati già comunicati), e sotto gli anni non deliberati l'intestazione dice quante ore della quota sono ancora "da assegnare". Righe di altezza proporzionale (flexbox, non `<table>`) così sta tutta in una schermata; `src/scripts/proiezione.ts` gestisce periodo, tastiera, inattività e schermo intero. |
 | `src/pages/[pagina].astro` | Una pagina per ogni file di `src/content/pagine/` (vedi "Pagine di contenuto"). |
 | `src/pages/documenti.astro` | Elenco dei PDF ministeriali di `public/documenti/`. |
 | `src/pages/404.astro` | Pagina non trovata. |

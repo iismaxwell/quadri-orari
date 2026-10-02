@@ -10,9 +10,15 @@
  *   di avvicinarsi e toccare lo schermo riga per riga, mentre la proiezione deve restare una
  *   sequenza di poche azioni (periodo, schermo intero, uscita);
  * - niente riga "Quota a disposizione della scuola": lo stesso segnale è già nell'etichetta
- *   "provvisorio" dell'anno in intestazione, spiegata da una riga di legenda sotto la tabella, ed
- *   evitare la riga lascia più spazio verticale alle discipline, che sono l'informazione
- *   principale.
+ *   "N ore da assegnare" dell'anno in intestazione, spiegata da una riga di legenda sotto la
+ *   tabella, ed evitare la riga lascia più spazio verticale alle discipline, che sono
+ *   l'informazione principale.
+ *
+ * Le ore aggiunte dalla scuola hanno un segno (numero su fondo colorato e "+N"): toccandolo, o
+ * passandoci sopra con il mouse, si apre un riquadro con ore del decreto, ore aggiunte,
+ * compresenza e materie interne, solo per i dati che la scuola ha comunicato. Il riquadro è uno
+ * solo, per tutta la pagina (src/scripts/proiezione.ts): le righe hanno overflow nascosto e lo
+ * taglierebbero.
  * L'uso di `data-anno`/`data-biennio`/`data-triennio` e del filtro sul contenitore `[data-periodo]`
  * è lo stesso meccanismo di QuadroOrario, così il CSS del periodo è identico nelle due viste.
  *
@@ -32,7 +38,9 @@ const { vista } = Astro.props;
 const nelFiltro = (r: RigaVista, f: Filtro) =>
   r.anni.some((anno) => (FILTRI[f] as readonly number[]).includes(anno)) ? 'si' : 'no';
 const filtriRiga = (r: RigaVista) => ({ 'data-biennio': nelFiltro(r, 'biennio'), 'data-triennio': nelFiltro(r, 'triennio') });
-const provvisori = vista.anni.some((a) => a.didascalia === 'quota da definire');
+const daAssegnare = vista.anni.some((a) => a.daAssegnare > 0);
+const conScuola = vista.legenda.scuola;
+const ore = (n: number) => `${n} ${n === 1 ? 'ora' : 'ore'}`;
 const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_QUOTA);
 ---
 
@@ -43,7 +51,7 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
       vista.anni.map((a) => (
         <div class="cella" role="columnheader" data-anno={a.anno}>
           <span class="cella__anno">{a.etichetta}</span>
-          {a.didascalia === 'quota da definire' && <span class="cella__nota">provvisorio</span>}
+          {a.daAssegnare > 0 && <span class="cella__nota">{ore(a.daAssegnare)} da assegnare</span>}
         </div>
       ))
     }
@@ -69,7 +77,49 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
             </div>
             {r.celle.map((c, i) => (
               <div class="cella" role="cell" data-anno={i + 1}>
-                {c.tipo === 'ore' && <span class="cella__numero">{c.settimanali}</span>}
+                {c.tipo === 'ore' && c.scuola === 0 && <span class="cella__numero">{c.settimanali}</span>}
+                {c.tipo === 'ore' && c.scuola > 0 && (
+                  <button type="button" class="cella__scuola" data-dettaglio aria-haspopup="true">
+                    <span class="cella__numero">{c.settimanali}</span>
+                    <span class="cella__piu" aria-hidden="true">
+                      +{c.scuola}
+                    </span>
+                    <span class="sr-only" data-info>
+                      <span class="info__titolo">
+                        {r.nome} · {vista.anni[i].etichetta}
+                      </span>
+                      <span class="info__riga">
+                        <span>Ore del decreto</span>
+                        <span>{c.settimanali - c.scuola}</span>
+                      </span>
+                      <span class="info__riga info__riga--scuola">
+                        <span>Aggiunte dalla scuola</span>
+                        <span>+{c.scuola}</span>
+                      </span>
+                      <span class="info__riga info__riga--totale">
+                        <span>Ore a settimana</span>
+                        <span>{c.settimanali}</span>
+                      </span>
+                      {c.compresenza !== null && c.compresenza > 0 && (
+                        <span class="info__riga">
+                          <span>di cui in compresenza</span>
+                          <span>{c.compresenza}</span>
+                        </span>
+                      )}
+                      {r.ripartizione?.celle[i].tipo === 'ore' && (
+                        <>
+                          <span class="info__titolo info__titolo--sotto">Materie interne</span>
+                          {r.ripartizione.celle[i].materie.map((m) => (
+                            <span class="info__riga">
+                              <span>{m.nome}</span>
+                              <span>{m.settimanali}</span>
+                            </span>
+                          ))}
+                        </>
+                      )}
+                    </span>
+                  </button>
+                )}
                 {c.tipo === 'vuota' && (
                   <span class="cella__vuota" aria-hidden="true">
                     ·
@@ -112,10 +162,22 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
   </div>
 
   {
-    provvisori && (
+    (conScuola || daAssegnare) && (
       <p class="proiezione__legenda">
-        <span class="proiezione__legenda-segno">Provvisorio</span>
-        la scuola non ha ancora deliberato come usare le ore a sua disposizione
+        {conScuola && (
+          <span class="proiezione__legenda-voce">
+            <span class="cella__piu cella__piu--legenda" aria-hidden="true">
+              +2
+            </span>
+            ore aggiunte dalla scuola: tocca il numero per il dettaglio
+          </span>
+        )}
+        {daAssegnare && (
+          <span class="proiezione__legenda-voce">
+            <span class="proiezione__legenda-segno">Da assegnare</span>
+            ore a disposizione della scuola non ancora attribuite a una disciplina, già comprese nei totali
+          </span>
+        )}
       </p>
     )
   }
@@ -230,15 +292,59 @@ const discipline = (righe: RigaVista[]) => righe.filter((r) => r.id !== ID_RIGA_
 
   .proiezione__legenda {
     flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3vh 2.4vw;
     margin: 0;
     padding-top: 0.8vh;
     font-size: clamp(11px, 1.6vh, 19px);
     color: var(--tenue);
   }
 
+  .proiezione__legenda-voce {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  /* Ore aggiunte dalla scuola: numero su fondo ambra/blu (--accento-scuola) con il "+N" accanto. */
+  .proiezione .cella__scuola {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35em;
+    margin: 0;
+    padding: 0.2vh 0.7vh 0.1vh 0.9vh;
+    border: 0;
+    border-bottom: 0.45vh solid var(--accento-scuola);
+    border-radius: 0.8vh 0.8vh 0 0;
+    background: color-mix(in oklch, var(--accento-scuola) 22%, transparent);
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .proiezione .cella__scuola:focus-visible {
+    outline: 2px solid var(--inchiostro);
+    outline-offset: 2px;
+  }
+
+  .proiezione .cella__piu {
+    font-family: var(--font-testo);
+    font-size: clamp(11px, 1.6vh, 20px);
+    font-weight: 700;
+    color: var(--inchiostro);
+  }
+
+  .proiezione .cella__piu--legenda {
+    padding: 0 0.5em;
+    border-bottom: 3px solid var(--accento-scuola);
+    border-radius: 4px 4px 0 0;
+    background: color-mix(in oklch, var(--accento-scuola) 22%, transparent);
+    font-size: 1em;
+  }
+
   .proiezione__legenda-segno {
     font-style: italic;
-    margin-inline-end: 0.5em;
   }
 
   .proiezione__legenda-segno::after {

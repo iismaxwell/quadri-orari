@@ -70,7 +70,13 @@ export interface QuadroVista {
   /** Riga sotto il nome, per esempio "Istituto tecnico · Informatica e telecomunicazioni". */
   sottotitolo: string;
   icona: string;
-  anni: Array<{ anno: Anno; etichetta: string; didascalia: string | null }>;
+  anni: Array<{
+    anno: Anno;
+    etichetta: string;
+    didascalia: string | null;
+    /** Ore settimanali della quota a disposizione non ancora assegnate; 0 se non ce ne sono. */
+    daAssegnare: number;
+  }>;
   aree: AreaVista[];
   totali: NumeroOre[];
   /** Voci della legenda del "Dettaglio ore" che hanno senso per questi dati. */
@@ -201,6 +207,7 @@ export function vistaQuadro(q: Quadro): QuadroVista {
       anno: a.anno,
       etichetta: ORDINALI[a.anno - 1],
       didascalia: q.tipo === 'liceo' ? null : a.daDefinire ? 'quota da definire' : 'deliberata',
+      daAssegnare: q.aree.find((area) => area.quota)?.quota?.[a.anno - 1].daDefinire.settimanali ?? 0,
     })),
     aree,
     totali: q.totali.map(numero),

@@ -46,6 +46,8 @@ const etichette: Record<Filtro, string> = { ...ETICHETTE_FILTRI, quinquennio: 'T
         <QuadroProiezione vista={vista} />
       </div>
 
+      <div class="dettaglio" data-dettaglio-riquadro role="status" hidden></div>
+
       <div class="proiezione__controlli" data-controlli>
         <div class="filtro" role="group" aria-label="Anni da mostrare">
           {
@@ -111,6 +113,73 @@ const etichette: Record<Filtro, string> = { ...ETICHETTE_FILTRI, quinquennio: 'T
     font-weight: 600;
     font-size: clamp(24px, 4.4vh, 54px);
     line-height: 1.05;
+  }
+
+  /* Riquadro di dettaglio delle ore aggiunte dalla scuola: il contenuto lo copia lo script. */
+  .dettaglio {
+    position: fixed;
+    z-index: 30;
+    width: min(32vw, 460px);
+    min-width: 260px;
+    padding: 1.4vh 1.2vw;
+    border: 1px solid var(--bordo);
+    border-radius: var(--raggio);
+    background: var(--carta);
+    box-shadow: 0 1.5vh 4vh -1vh rgb(31 32 35 / 0.35);
+    font-size: clamp(14px, 2vh, 24px);
+    line-height: 1.25;
+    pointer-events: none;
+  }
+
+  .dettaglio[hidden] {
+    display: none;
+  }
+
+  .dettaglio span {
+    display: block;
+  }
+
+  .dettaglio .info__titolo {
+    margin-bottom: 0.8vh;
+    font-family: var(--font-titoli);
+    font-size: 1.15em;
+    font-weight: 600;
+  }
+
+  .dettaglio .info__titolo--sotto {
+    margin: 1.2vh 0 0.4vh;
+    font-family: var(--font-testo);
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--tenue);
+  }
+
+  .dettaglio .info__riga {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+    padding-block: 0.3vh;
+  }
+
+  .dettaglio .info__riga > span:last-child {
+    flex: none;
+    font-family: var(--font-titoli);
+    font-weight: 600;
+  }
+
+  .dettaglio .info__riga--scuola {
+    margin-inline: -0.5em;
+    padding-inline: 0.5em;
+    border-radius: 6px;
+    background: color-mix(in oklch, var(--accento-scuola) 22%, transparent);
+  }
+
+  .dettaglio .info__riga--totale {
+    margin-top: 0.4vh;
+    border-top: 1px solid var(--bordo);
+    font-weight: 700;
   }
 
   .proiezione__corpo {
