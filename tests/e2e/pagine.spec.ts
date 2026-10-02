@@ -54,3 +54,38 @@ test('una URL inesistente mostra la pagina 404 con il link alla home', async ({ 
   await expect(page.locator('h1')).toHaveText('Pagina non trovata');
   await expect(page.getByRole('link', { name: /Torna alla scelta dell'indirizzo/ })).toHaveAttribute('href', '/');
 });
+
+test('la tendina del menu porta a un altro indirizzo senza passare dalla home', async ({ page }) => {
+  await page.goto('./informatica/');
+  const pulsante = page.getByRole('button', { name: 'Scegli un indirizzo' });
+  const tendina = page.locator('#tendina-indirizzi');
+  await expect(tendina).toBeHidden();
+
+  await pulsante.click();
+  await expect(pulsante).toHaveAttribute('aria-expanded', 'true');
+  await expect(tendina.getByRole('link')).toHaveText([
+    'Informatica',
+    'Telecomunicazioni',
+    'Biotecnologie ambientali',
+    'Energia',
+    'Tutti gli indirizzi',
+  ]);
+  await expect(tendina.locator('a[aria-current="page"]')).toHaveText('Informatica');
+
+  await page.keyboard.press('Escape');
+  await expect(tendina).toBeHidden();
+  await expect(pulsante).toBeFocused();
+
+  await pulsante.click();
+  await tendina.getByRole('link', { name: 'Energia' }).click();
+  await expect(page).toHaveURL(/\/energia\/$/);
+});
+
+test('la tendina del menu su smartphone sta nello schermo', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 700 });
+  await page.goto('./');
+  await page.getByRole('button', { name: 'Scegli un indirizzo' }).click();
+  const riquadro = await page.locator('#tendina-indirizzi').boundingBox();
+  expect(riquadro!.x).toBeGreaterThanOrEqual(0);
+  expect(riquadro!.x + riquadro!.width).toBeLessThanOrEqual(375);
+});

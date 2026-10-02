@@ -267,7 +267,7 @@ informazioni raggiungibili solo con l'hover.
 |---|---|
 | `src/styles/token.css` | Design token: colori, font, spazi, accento per indirizzo (`data-accento`). |
 | `src/styles/base.css` | Stili di base comuni a tutte le pagine. |
-| `src/layouts/Base.astro` | Header con logo e menu del sito, footer, font, meta Open Graph. Il menu unisce `getPagine()` (collection `pagine`) con la voce "Documenti". |
+| `src/layouts/Base.astro` | Header con logo e menu del sito, footer, font, meta Open Graph. Il menu unisce `getPagine()` (collection `pagine`) con la voce "Documenti". La voce "Indirizzi" resta un link alla home e ha accanto un pulsante che apre una tendina con le schede di indirizzo (`getPercorsi()`); la tendina sta fuori dal `nav`, che su smartphone scorre di lato, e la attiva `src/scripts/tendina-indirizzi.ts` (senza JavaScript il pulsante resta nascosto). |
 | `src/components/Icona.astro` | Icona di un indirizzo, inline con `currentColor`. |
 | `src/dati/vista.ts` | `vistaQuadro`: dal quadro di `componiQuadro` a ciò che la tabella mostra (celle "non attive", barrette, ripartizioni). Funzione pura, testata in `tests/dati/vista.test.ts`. |
 | `src/dati/filtri.ts` | I tre periodi del filtro, e `conPeriodo`/`filtroDaUrl`/`filtroAdiacente` che leggono e scrivono `?periodo=` nell'URL. Senza dipendenze, perché lo usano anche gli script del browser. |
