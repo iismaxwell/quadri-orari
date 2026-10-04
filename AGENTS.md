@@ -209,9 +209,13 @@ la scuola ha deciso e di ciò che manca.
   settimanali (da 132 a 198 annue).
 - **Ripartizione interna di Scienze sperimentali nelle prime:** deliberata (ore di Scienze della
   Terra, Biologia, Chimica e Fisica), numeri non ancora ricevuti.
-- **Compresenze delle prime:** non ancora ricevute. Il decreto fissa solo il totale (165 ore annue,
-  5 settimanali, per l'area di indirizzo della prima); la ripartizione tra le discipline la decide
-  la scuola.
+- **Compresenze delle prime:** il decreto fissa il totale (165 ore annue, 5 settimanali, per l'area
+  di indirizzo della prima); la ripartizione tra le discipline la decide la scuola.
+  - *Biotecnologie ambientali* (deliberate, nei dati): Chimica applicata 2 ore settimanali, Scienze
+    sperimentali 1 (è l'ora di Fisica, ma la ripartizione interna non è ancora nei dati),
+    Tecnologie dell'informazione e della comunicazione 1, Tecnologie e tecniche di rappresentazione
+    grafica 1.
+  - *Informatica, Telecomunicazioni, Energia*: non ancora ricevute.
 - **Classi dalla seconda alla quinta:** non deliberate.
 - **Licei:** quadri orari non ancora ricevuti. Serve anche sapere se la scuola usa quote di
   autonomia o potenziamenti rispetto all'ordinamento nazionale.

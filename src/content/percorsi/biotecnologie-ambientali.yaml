@@ -15,7 +15,14 @@ anni:
     # Classi prime 2026/27: le 2 ore settimanali della quota vanno a Scienze sperimentali (da 4 a 6).
     quota:
       scienze-sperimentali: 66
-    # Compresenze e ripartizione di Scienze sperimentali: deliberate, numeri non ancora ricevuti.
+    # Compresenze delle prime (5 ore settimanali, 165 annue). L'ora di Scienze sperimentali è
+    # quella di Fisica; la ripartizione interna di Scienze sperimentali non è ancora arrivata.
+    compresenze:
+      scienze-sperimentali: 33
+      chimica-applicata: 66
+      tecnologie-informazione-comunicazione: 33
+      tecnologie-rappresentazione-grafica: 33
+    # Ripartizione di Scienze sperimentali: deliberata, numeri non ancora ricevuti.
   2:
     stato: da-definire
   3:

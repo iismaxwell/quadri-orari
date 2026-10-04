@@ -53,9 +53,12 @@ totale della materia. Nel quadro orario del sito sono segnalate in modo da resta
 senza sommarsi al totale.
 
 Per le classi prime, i decreti fissano un totale di 5 ore settimanali in compresenza nell'area di
-indirizzo, ma quali materie ne fanno parte non è ancora stato deciso.
-[DA COMPLETARE: ripartizione delle 5 ore di compresenza tra le materie, per ciascuna delle quattro
-articolazioni delle prime.]
+indirizzo. La scuola le ha già ripartite per Biotecnologie ambientali: 2 ore in Chimica applicata, 1
+in Scienze sperimentali (quella di Fisica), 1 in Tecnologie dell'informazione e della comunicazione
+e 1 in Tecnologie e tecniche di rappresentazione grafica. Per le altre articolazioni la ripartizione
+non è ancora stata deliberata.
+[DA COMPLETARE: ripartizione delle 5 ore di compresenza tra le materie per Informatica,
+Telecomunicazioni ed Energia.]
 
 ## Chi è già iscritto
 
