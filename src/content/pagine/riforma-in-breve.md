@@ -35,11 +35,9 @@ scuola"** — non è fissata dal decreto: è la scuola a decidere a quale materi
 stessa quota che nella brochure compare come "ore libere". Nei decreti vale 2 ore settimanali
 nelle prime due classi, 3 nella terza e nella quarta, 7 nella quinta.
 
-**Per le classi prime del 2026/27**, la scuola ha deciso di assegnare tutte e due le ore della
+**Per le classi prime del 2025/26**, la scuola ha deciso di assegnare tutte e due le ore della
 quota a **Scienze sperimentali**, che passa così da 4 a 6 ore settimanali. Scienze sperimentali è
-una materia unica che comprende Scienze della Terra, Biologia, Chimica e Fisica: la scuola ha
-anche deciso come dividere le sue ore tra le quattro parti, ma i numeri non sono ancora arrivati.
-[DA COMPLETARE: ore di Scienze della Terra, Biologia, Chimica e Fisica nelle prime.]
+una materia unica che comprende Scienze della Terra, Biologia, Chimica e Fisica.
 
 Le classi dalla seconda alla quinta non sono ancora state deliberate: la scuola decide un anno alla
 volta, man mano che le classi arrivano. Fino a quel momento, il quadro orario di quelle classi
@@ -53,12 +51,7 @@ totale della materia. Nel quadro orario del sito sono segnalate in modo da resta
 senza sommarsi al totale.
 
 Per le classi prime, i decreti fissano un totale di 5 ore settimanali in compresenza nell'area di
-indirizzo. La scuola le ha già ripartite per Biotecnologie ambientali: 2 ore in Chimica applicata, 1
-in Scienze sperimentali (quella di Fisica), 1 in Tecnologie dell'informazione e della comunicazione
-e 1 in Tecnologie e tecniche di rappresentazione grafica. Per le altre articolazioni la ripartizione
-non è ancora stata deliberata.
-[DA COMPLETARE: ripartizione delle 5 ore di compresenza tra le materie per Informatica,
-Telecomunicazioni ed Energia.]
+indirizzo.
 
 ## Chi è già iscritto
 
